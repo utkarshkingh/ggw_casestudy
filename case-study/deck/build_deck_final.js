@@ -217,13 +217,13 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   s.addShape(pres.ShapeType.roundRect, { x: 0.5, y: 5.52, w: 6.15, h: 1.0, rectRadius: 0.06, fill: { color: "FFFFFF" }, line: { color: LINE, width: 1 } });
   s.addText([
     { text: "What “€153k” means:  ", options: { bold: true, color: MAG } },
-    { text: "4,370 hours a year × €34.92, the true cost of one handler-hour. It is capacity, not cash. It turns into money only if those hours go to the backlog, or are absorbed by normal staff turnover.", options: { color: "3A3A3A" } },
+    { text: "4,370 hours a year × €34.92, the real cost of a handler-hour. This is capacity, not cash. It becomes money only if the hours go to the backlog, or are absorbed by normal staff turnover.", options: { color: "3A3A3A" } },
   ], { x: 0.68, y: 5.52, w: 5.8, h: 1.0, fontFace: FONT_BODY, fontSize: 8.5, isTextBox: true, margin: 0, valign: "middle", lineSpacingMultiple: 1.18 });
 
   s.addShape(pres.ShapeType.roundRect, { x: 6.85, y: 5.52, w: 5.98, h: 1.0, rectRadius: 0.06, fill: { color: MAG_BG }, line: { color: MAG, width: 1.2 } });
   s.addText([
     { text: "So what:  ", options: { bold: true, color: MAG } },
-    { text: "running it costs €27k a year — 18% of the value released, and that already counts the quarter of an engineer who maintains it. So cost is not the decision. Governance is: proving a person reviewed anything that goes against a claimant, and whether handlers trust the drafts.", options: { color: "3A2A32" } },
+    { text: "cost is not what decides this. The AI costs €2,400 a year to run — under 2% of the value it releases. What decides it is governance: proving a person reviewed anything that can go against a claimant, and whether handlers trust the drafts enough to approve them.", options: { color: "3A2A32" } },
   ], { x: 7.03, y: 5.52, w: 5.62, h: 1.0, fontFace: FONT_BODY, fontSize: 8.5, isTextBox: true, margin: 0, valign: "middle", lineSpacingMultiple: 1.18 });
 
   s.addText("Conservative throughout: the 21-minute saving is a three-point estimate (best 30 / likely 21 / worst 12), not the design maximum. Build-up on slide 6, sources on slide 7.",
@@ -465,7 +465,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
     fy += 0.79;
   });
 
-  s.addText("AES rulings and underwriting authority are deliberately absent — those decisions are not ours to make, so placing them here would imply a choice we do not have · frequencies from the case study", { x: 0.4, y: 6.6, w: 12.5, h: 0.28, fontFace: FONT_BODY, fontSize: 7, color: MUTED, isTextBox: true, margin: 0 });
+  s.addText("AES rulings and underwriting authority are deliberately absent — those decisions are not ours to make · frequencies from the case study", { x: 0.4, y: 6.6, w: 12.5, h: 0.28, fontFace: FONT_BODY, fontSize: 7, color: MUTED, isTextBox: true, margin: 0 });
   footer(s, 5);
 }
 
@@ -483,12 +483,12 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   s.addText("HOW THE NUMBERS ARE BUILT", { x: 8.9, y: 0.16, w: 4.03, h: 0.3, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: MUTED, charSpacing: 1.4, align: "right", isTextBox: true, margin: 0 });
 
   const L = 0.4, R = 6.85, CW = 6.0, RH = 0.235;
-  const blockHead = (t, x, y, col) => s.addText(t, { x, y, w: CW, h: 0.24, fontFace: FONT_BODY, fontSize: 9, bold: true, color: col, charSpacing: 0.8, isTextBox: true, margin: 0 });
+  const blockHead = (t, x, y, col, w) => s.addText(t, { x, y, w: w || CW, h: 0.24, fontFace: FONT_BODY, fontSize: 9, bold: true, color: col, charSpacing: 0.8, isTextBox: true, margin: 0 });
   const note = (t, x, y, h) => s.addText(t, { x, y, w: CW, h, fontFace: FONT_BODY, fontSize: 7.4, italic: true, color: "6A6A6A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
-  const tbl = (rows, x, y, colW) => s.addTable(rows, {
+  const tbl = (rows, x, y, colW, rh) => s.addTable(rows, {
     x, y, w: CW, colW, fontFace: FONT_BODY, fontSize: 7.8,
     border: { type: "solid", color: "E4E4E0", pt: 0.5 }, color: "3A3A3A",
-    align: "left", valign: "middle", rowH: RH, autoPage: false, fill: { color: "FFFFFF" } });
+    align: "left", valign: "middle", rowH: rh || RH, autoPage: false, fill: { color: "FFFFFF" } });
   const B = (t) => ({ text: t, options: { bold: true } });
 
   // ---------- A · time (left) ----------
@@ -504,36 +504,44 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
     [B("Touch time"), B("30.8"), B("7.8")],
     ["Breaks, fatigue, interruptions, rework (+30%)", "9.2", "2.3"],
     [B("Standard time"), B("40.0"), B("10.1")],
-  ], L, 0.86, [4.0, 1.0, 1.0]);
-  note("If everything landed, the saving would be 29.9 min. We do not bank that. Three-point estimate used instead: (best 30 + 4 × likely 21 + worst 12) ÷ 6 = 21.0 min, a 52% cut.", L, 3.24, 0.36);
+  ], L, 0.86, [4.0, 1.0, 1.0], 0.225);
+  note("The full saving would be 29.9 min. We do not bank that. Three-point estimate instead: (best 30 + 4 × likely 21 + worst 12) ÷ 6 = 21.0 min, a 52% cut.", L, 3.14, 0.32);
 
-  s.addShape(pres.ShapeType.roundRect, { x: L, y: 3.66, w: CW, h: 0.70, rectRadius: 0.05, fill: { color: "FDF3E3" }, line: { color: AMBER, width: 1 } });
+  s.addShape(pres.ShapeType.roundRect, { x: L, y: 3.50, w: CW, h: 0.68, rectRadius: 0.05, fill: { color: "FDF3E3" }, line: { color: AMBER, width: 1 } });
   s.addText([
     { text: "Cross-check:  ", options: { bold: true, color: "9A5A0A" } },
-    { text: "40 min × 12,500 claims = 8,333 hours, or 17% of a 30-person team's year. Plausible for the front end of a claims process. Had it come out at 60%, the model would be wrong.", options: { color: "44403A" } },
-  ], { x: L + 0.18, y: 3.66, w: CW - 0.36, h: 0.70, fontFace: FONT_BODY, fontSize: 8.2, isTextBox: true, margin: 0, valign: "middle", lineSpacingMultiple: 1.15 });
+    { text: "40 min × 12,500 claims = 8,333 hours — 17% of a 30-person team's year. Plausible for the front end of a claims process. Had it come out at 60%, the model would be wrong.", options: { color: "44403A" } },
+  ], { x: L + 0.18, y: 3.50, w: CW - 0.36, h: 0.68, fontFace: FONT_BODY, fontSize: 8.2, isTextBox: true, margin: 0, valign: "middle", lineSpacingMultiple: 1.15 });
 
   // ---------- D · business case (left, bottom) ----------
-  s.addShape(pres.ShapeType.roundRect, { x: L, y: 4.44, w: CW, h: 2.12, rectRadius: 0.06, fill: { color: "FFFFFF" }, line: { color: MAG, width: 1.2 } });
-  blockHead("D · THE BUSINESS CASE", L + 0.2, 4.56, MAG);
-  const caseRows = [
-    ["Capacity released", "4,370 h/yr · 2.8 FTE", 0],
-    ["Valued at €34.92 per handler-hour", "€152,600", 0],
-    ["Less AI models and Azure", "− €2,400", 0],
-    ["Less upkeep — 0.25 of an engineer", "− €24,400", 0],
-    ["Net value, every year", "€125,800", 1],
-    ["Build: 3 people × 6 months, fully loaded", "€146,400", 1],
-    ["Payback", "14 months", 1],
-  ];
-  let cy = 4.86;
-  caseRows.forEach(([k, v, hi]) => {
-    s.addText(k, { x: L + 0.2, y: cy, w: 3.9, h: 0.22, fontFace: FONT_BODY, fontSize: 8.4, color: hi ? INK : "3A3A3A", bold: !!hi, isTextBox: true, margin: 0 });
-    s.addText(v, { x: L + 4.1, y: cy, w: 1.7, h: 0.22, fontFace: FONT_BODY, fontSize: 8.4, bold: true, color: hi ? MAG : INK, align: "right", isTextBox: true, margin: 0 });
-    cy += 0.235;
-  });
+  // Two sections, because the unit differs. "Cost to run" means the system
+  // only; the engineer who maintains it is a separate, clearly named line.
+  s.addShape(pres.ShapeType.roundRect, { x: L, y: 4.26, w: CW, h: 2.80, rectRadius: 0.06, fill: { color: "FFFFFF" }, line: { color: MAG, width: 1.2 } });
+  blockHead("D \u00b7 THE BUSINESS CASE", L + 0.2, 4.38, MAG, CW - 0.4);
 
-  note("The €146k build is loaded capacity cost, not new cash — the AI team is already funded. It is priced this way so the project can be ranked against everything else on the roadmap. Actual new cash needed: €2,400 a year. A shorter build costs less: 4 months ≈ €98k, 3 months ≈ €73k.",
-    L, 6.62, 0.50);
+  const eyebrow = (t, y) => s.addText(t, { x: L + 0.2, y, w: CW - 0.4, h: 0.20, fontFace: FONT_BODY, fontSize: 7.6, bold: true, color: MAG, charSpacing: 1.2, isTextBox: true, margin: 0 });
+  const money = (k, v, y, hi) => {
+    s.addText(k, { x: L + 0.2, y, w: 3.85, h: 0.21, fontFace: FONT_BODY, fontSize: 8.4, color: hi ? INK : "3A3A3A", bold: !!hi, isTextBox: true, margin: 0 });
+    s.addText(v, { x: L + 4.05, y, w: 1.75, h: 0.21, fontFace: FONT_BODY, fontSize: 8.4, bold: true, color: hi ? MAG : INK, align: "right", isTextBox: true, margin: 0 });
+  };
+
+  eyebrow("EVERY YEAR", 4.62);
+  [["Capacity released", "4,370 h \u00b7 2.8 FTE", 0],
+   ["Worth, at \u20ac34.92 per handler-hour", "\u20ac152,600", 0],
+   ["Cost to run it \u2014 AI models and Azure", "\u2212 \u20ac2,400", 0],
+   ["Ongoing support \u2014 0.25 of an engineer", "\u2212 \u20ac24,400", 0],
+   ["Net value, every year", "\u20ac125,800", 1],
+  ].forEach(([k, v, hi], i) => money(k, v, 4.84 + i * 0.225, hi));
+
+  s.addShape(pres.ShapeType.rect, { x: L + 0.2, y: 6.00, w: CW - 0.4, h: 0.012, fill: { color: "E4E4E0" }, line: { type: "none" } });
+
+  eyebrow("ONE-OFF", 6.06);
+  [["Build \u2014 3 people \u00d7 6 months, fully loaded", "\u20ac146,400", 1],
+   ["Payback", "14 months", 1],
+  ].forEach(([k, v, hi], i) => money(k, v, 6.28 + i * 0.225, hi));
+
+  s.addText("The build is loaded team capacity, not new cash \u2014 the AI team is already funded. New cash needed: \u20ac2,400 a year. A shorter build costs less: 4 months \u2248 \u20ac98k.",
+    { x: L + 0.2, y: 6.76, w: CW - 0.4, h: 0.28, fontFace: FONT_BODY, fontSize: 7.2, italic: true, color: "6A6A6A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
 
   // ---------- B · AI cost (right) ----------
   blockHead("B · AI COST TO PROCESS ONE CLAIM", R, 0.58, TEAL);
@@ -559,11 +567,11 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
     ["Blob storage for documents + audit logs", "8"],
     [B("Net new, incl. ~8% West Europe premium"), B("134")],
   ], R, 3.60, [4.85, 1.15]);
-  note("Registry, networking, Key Vault and DevOps (≈ €670/yr) already exist, so they are not charged to this project. Azure DevOps covers repos and pipelines, not a managed database — the PostgreSQL line is genuinely new.", R, 4.80, 0.28);
+  note("Registry, networking, Key Vault and DevOps (≈ €670/yr) already exist, so they are not charged here. Azure DevOps gives repos and pipelines, not a database — PostgreSQL is genuinely new.", R, 4.80, 0.28);
 
   // ---------- E · who gets the time back (right, bottom) ----------
   blockHead("E · WHO ACTUALLY GETS THE TIME BACK", R, 5.14, MAG);
-  s.addText("The brief says a support team does intake, not all 30 handlers — so the truth is in the middle rows. This is our first question for GGW.",
+  s.addText("The brief says a support team does intake, not all 30 handlers — so the truth is in the middle rows. Our first question for GGW.",
     { x: R, y: 5.36, w: CW, h: 0.22, fontFace: FONT_BODY, fontSize: 7.8, italic: true, color: "6A1F42", isTextBox: true, margin: 0 });
   tbl([
     [B("Intake handled by…"), B("Claims each/day"), B("Intake work today"), B("Time freed each")],
@@ -582,59 +590,58 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   const s = pres.addSlide();
   s.background = { color: "FAFAF8" };
 
-  s.addText("What is sourced, and what is our assumption — stated separately on purpose", {
+  s.addText("What is sourced, and what is our assumption — kept separate on purpose", {
     x: 0.4, y: 0.13, w: 10.2, h: 0.34, fontFace: FONT_HEAD, fontSize: 14, bold: true, color: INK, isTextBox: true, margin: 0 });
   s.addText("SOURCES & ASSUMPTIONS", { x: 9.4, y: 0.16, w: 3.53, h: 0.3, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: MUTED, charSpacing: 1.4, align: "right", isTextBox: true, margin: 0 });
 
   const SRC = [
     ["Wage base", "Sachbearbeiter Schadenregulierung, €45,100 gross",
       "StepStone Gehaltsreport", "https://www.stepstone.de/gehalt/Schadenregulierer-in.html"],
-    ["Employer on-cost", "≈ €23 per €100 gross (health, pension, unemployment, care)",
+    ["Employer on-cost", "≈ €23 per €100 gross — health, pension, unemployment, care",
       "Lohnnebenkosten 2026, sevdesk", "https://sevdesk.de/ratgeber/buchhaltung-finanzen/lohnbuchhaltung/lohnnebenkosten/"],
-    ["Working time & breaks", "38 h tariff week; statutory break rules (ArbZG §4)",
-      "Arbeitszeitgesetz §4, gesetze-im-internet.de", "https://www.gesetze-im-internet.de/arbzg/__4.html"],
-    ["Model prices", "gpt-5.6 terra, $2 / $12 per million tokens in / out",
+    ["Working time, breaks", "38 h tariff week; statutory break rules",
+      "Arbeitszeitgesetz §4", "https://www.gesetze-im-internet.de/arbzg/__4.html"],
+    ["Model prices", "gpt-5.6 terra — $2 in / $12 out per million tokens",
       "OpenAI API pricing", "https://openai.com/api/pricing/"],
     ["Container hosting", "Consumption plan rates and the monthly free grant",
       "Azure Container Apps pricing", "https://azure.microsoft.com/en-us/pricing/details/container-apps/"],
-    ["Database", "PostgreSQL Flexible Server B2s, 2 vCore / 4 GiB",
-      "Azure Database for PostgreSQL pricing", "https://azure.microsoft.com/en-us/pricing/details/postgresql/flexible-server/"],
-    ["Industry baseline", "17 of 20 carriers still manual or workflow-only; none let AI decide alone",
+    ["Database", "PostgreSQL Flexible Server B2s — 2 vCore / 4 GiB",
+      "Azure Database for PostgreSQL", "https://azure.microsoft.com/en-us/pricing/details/postgresql/flexible-server/"],
+    ["Build-team pay", "Senior ML engineer ≈ €98k; juniors at €70k as briefed",
+      "Glassdoor, ML Engineer Germany", "https://www.glassdoor.com/Salaries/germany-machine-learning-engineer-salary-SRCH_IL.0,7_IN96_KO8,33.htm"],
+    ["Upkeep after go-live", "15–20% of build effort a year — our 0.25 FTE is 17%",
+      "Software maintenance rule of thumb", ""],
+    ["Industry baseline", "17 of 20 carriers still manual; none let AI decide alone",
       "Decerto, 2026 Claims Decisioning Pulse", "https://www.decerto.com/us/post/ai-claims-decisioning-framework-2026-what-us-claims-leaders-told-us-about-how-decisions-actually-get-made"],
-    ["Where value comes from", "The 10-20-70 split between algorithms, technology and people",
+    ["Where value comes from", "The 10-20-70 split — algorithms, technology, people",
       "BCG, AI in customer service operations", "https://www.bcg.com/publications/2024/transforming-customer-service-operations-with-genai"],
-    ["Build & upkeep pay", "Senior ML engineer ≈ €98k; juniors at €70k as briefed",
-      "Glassdoor, Senior ML Engineer Germany", "https://www.glassdoor.com/Salaries/germany-machine-learning-engineer-salary-SRCH_IL.0,7_IN96_KO8,33.htm"],
-    ["Import-failure handling", "Retry vs. dead-letter, idempotency keys, alert on rate",
+    ["Fixing import failures", "Retry vs. dead-letter, idempotency keys, alert on rate",
       "Dead-letter queues and poison messages", "https://www.glukhov.org/app-architecture/integration-patterns/dead-letter-queues/"],
-    ["Volumes and shares", "~50 first reports a day · 65% closed as minor · ~30 handlers",
+    ["Volumes and shares", "~50 first reports a day · 65% minor · ~30 handlers",
       "GGW case study brief", ""],
   ];
 
-  let y = 0.60;
+  let y = 0.58;
   SRC.forEach(([label, what, name, url]) => {
-    s.addShape(pres.ShapeType.rect, { x: 0.4, y: y + 0.04, w: 0.05, h: 0.44, fill: { color: "0891B2" }, line: { type: "none" } });
-    s.addText(label, { x: 0.58, y: y, w: 2.05, h: 0.24, fontFace: FONT_BODY, fontSize: 8.8, bold: true, color: INK, isTextBox: true, margin: 0 });
-    s.addText(what, { x: 0.58, y: y + 0.21, w: 5.3, h: 0.26, fontFace: FONT_BODY, fontSize: 8, color: "5A5A5A", isTextBox: true, margin: 0 });
-    if (url) {
-      s.addText(name, {
-        x: 6.1, y: y + 0.06, w: 6.7, h: 0.28, fontFace: FONT_BODY, fontSize: 8.4,
-        color: "0B5F8A", isTextBox: true, margin: 0, hyperlink: { url, tooltip: name },
-      });
-    } else {
-      s.addText(name, { x: 6.1, y: y + 0.06, w: 6.7, h: 0.28, fontFace: FONT_BODY, fontSize: 8.4, italic: true, color: "5A5A5A", isTextBox: true, margin: 0 });
-    }
-    y += 0.475;
+    s.addShape(pres.ShapeType.rect, { x: 0.4, y: y + 0.02, w: 0.05, h: 0.34, fill: { color: TEAL }, line: { type: "none" } });
+    s.addText(label, { x: 0.58, y: y, w: 2.15, h: 0.20, fontFace: FONT_BODY, fontSize: 8.6, bold: true, color: INK, isTextBox: true, margin: 0 });
+    s.addText(what, { x: 0.58, y: y + 0.17, w: 5.4, h: 0.20, fontFace: FONT_BODY, fontSize: 8, color: "5A5A5A", isTextBox: true, margin: 0 });
+    s.addText(name, {
+      x: 6.2, y: y + 0.06, w: 6.6, h: 0.24, fontFace: FONT_BODY, fontSize: 8.4,
+      color: url ? "0B5F8A" : "5A5A5A", italic: !url, isTextBox: true, margin: 0,
+      ...(url ? { hyperlink: { url, tooltip: name } } : {}),
+    });
+    y += 0.40;
   });
 
-  s.addShape(pres.ShapeType.roundRect, { x: 0.4, y: 5.40, w: 12.43, h: 1.14, rectRadius: 0.06, fill: { color: "FDF3E3" }, line: { color: "D97706", width: 1.2 } });
+  s.addShape(pres.ShapeType.roundRect, { x: 0.4, y: 5.42, w: 12.43, h: 1.20, rectRadius: 0.06, fill: { color: "FDF3E3" }, line: { color: AMBER, width: 1.2 } });
   s.addText("OUR ASSUMPTIONS — NOT SOURCED, AND THE FIRST THING WE WOULD TEST", {
-    x: 0.6, y: 5.51, w: 12.0, h: 0.24, fontFace: FONT_BODY, fontSize: 8.6, bold: true, color: "9A5A0A", charSpacing: 0.6, isTextBox: true, margin: 0 });
-  s.addText("Every per-step minute on slide 6 · the 30% allowance for breaks and interruptions · how often a CPR is missing (30%) or underwriting is asked (25%) · how often the redesign raises an exception (20%) · the token profile of a typical claim · the €146k build · the 0.25 FTE upkeep, sized two ways that agree (a standing share of the team, and the 15–20%-of-build rule of thumb) · and how many people actually staff intake, which sets the per-person saving.\n\nTwo weeks of observed intake would replace all of these with measurements. That observation is step one of the plan, not an afterthought.",
-    { x: 0.6, y: 5.74, w: 12.0, h: 0.72, fontFace: FONT_BODY, fontSize: 8.4, color: "44403A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.2 });
+    x: 0.6, y: 5.53, w: 12.0, h: 0.24, fontFace: FONT_BODY, fontSize: 8.6, bold: true, color: "9A5A0A", charSpacing: 0.6, isTextBox: true, margin: 0 });
+  s.addText("Every per-step minute on slide 6 · the 30% allowance for breaks and interruptions · how often a CPR is missing (30%) or underwriting is asked (25%) · how often the redesign raises an exception (20%) · the tokens a typical claim needs · the €146k build · the 0.25 FTE upkeep · and how many people staff intake, which sets the per-person saving.\n\nTwo weeks of watching live intake would replace all of these with real measurements. That is step one of the plan, not an afterthought.",
+    { x: 0.6, y: 5.78, w: 12.0, h: 0.76, fontFace: FONT_BODY, fontSize: 8.4, color: "44403A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.2 });
 
-  s.addText("Prices checked September 2026 · US$ converted at €0.92 · all euro figures are fully loaded (gross pay plus employer contributions)",
-    { x: 0.4, y: 6.64, w: 12.5, h: 0.26, fontFace: FONT_BODY, fontSize: 7, color: MUTED, isTextBox: true, margin: 0 });
+  s.addText("Prices checked September 2026 · US$ converted at €0.92 · every euro figure is fully loaded — gross pay plus employer contributions",
+    { x: 0.4, y: 6.70, w: 12.5, h: 0.26, fontFace: FONT_BODY, fontSize: 7, color: MUTED, isTextBox: true, margin: 0 });
   footer(s, 7);
 }
 

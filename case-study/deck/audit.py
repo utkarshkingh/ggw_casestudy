@@ -95,6 +95,24 @@ def audit(path):
                     print(f"S{si} NODE-OVERLAP ({ox:.2f}x{oy:.2f}) \"{x1}\" <-> \"{x2}\"")
                     issues += 1
 
+        # 2b. content straddling a card edge. A filled roundRect is a container:
+        # any text placed on top of it should be wholly inside. Partly-in /
+        # partly-out is the signature of a list that has outgrown its slide.
+        cards = [n for n in nodes if n[4] == "roundRect" and n[2] > 1.5 and n[3] > 0.5]
+        for (cl, ct, cw, ch, _, ctext, _) in cards:
+            for (nl, nt, nw, nh, ngeom, ntext, _) in nodes:
+                if ngeom != "rect" or not ntext:
+                    continue
+                ox = max(0, min(cl + cw, nl + nw) - max(cl, nl))
+                oy = max(0, min(ct + ch, nt + nh) - max(ct, nt))
+                if ox <= 0.05 or oy <= 0.05:
+                    continue
+                inside = (nl >= cl - 0.05 and nt >= ct - 0.05
+                          and nl + nw <= cl + cw + 0.05 and nt + nh <= ct + ch + 0.05)
+                if not inside:
+                    print(f"S{si} STRADDLES-CARD \"{ntext}\" hangs over card \"{ctext}\"")
+                    issues += 1
+
         # 3. line through node interior (epsilon-padded so axis-aligned lines count)
         for (ll, lt, lw, lh) in lines:
             pl, pt = ll, lt
