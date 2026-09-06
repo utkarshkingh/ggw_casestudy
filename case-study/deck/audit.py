@@ -91,7 +91,13 @@ def audit(path):
                 l2, t2, w2, h2, g2, x2, _ = solid[j]
                 ox = max(0, min(l1 + w1, l2 + w2) - max(l1, l2))
                 oy = max(0, min(t1 + h1, t2 + h2) - max(t1, t2))
-                if ox > 0.02 and oy > 0.02:
+                # a card deliberately nested inside a larger panel is not a clash;
+                # only partial overlap is
+                inside = ((l1 >= l2 - 0.02 and t1 >= t2 - 0.02
+                           and l1 + w1 <= l2 + w2 + 0.02 and t1 + h1 <= t2 + h2 + 0.02)
+                          or (l2 >= l1 - 0.02 and t2 >= t1 - 0.02
+                              and l2 + w2 <= l1 + w1 + 0.02 and t2 + h2 <= t1 + h1 + 0.02))
+                if ox > 0.02 and oy > 0.02 and not inside:
                     print(f"S{si} NODE-OVERLAP ({ox:.2f}x{oy:.2f}) \"{x1}\" <-> \"{x2}\"")
                     issues += 1
 

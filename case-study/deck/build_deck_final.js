@@ -102,7 +102,7 @@ function columnHeaders(slide) {
 }
 function footer(slide, pageNum) {
   slide.addText("GGW Claims Workflow Redesign · FNOL", { x: 0.4, y: 7.22, w: 6, h: 0.24, fontFace: FONT_BODY, fontSize: 8, color: MUTED, isTextBox: true, margin: 0 });
-  slide.addText(String(pageNum) + " / 7", { x: 12.3, y: 7.22, w: 0.65, h: 0.24, fontFace: FONT_BODY, fontSize: 8, color: MUTED, align: "right", isTextBox: true, margin: 0 });
+  slide.addText(String(pageNum) + " / 9", { x: 12.3, y: 7.22, w: 0.65, h: 0.24, fontFace: FONT_BODY, fontSize: 8, color: MUTED, align: "right", isTextBox: true, margin: 0 });
 }
 function continues(slide, cx, y, text) {
   slide.addText(text, { x: cx - 1.6, y, w: 3.2, h: 0.22, fontFace: FONT_BODY, fontSize: 8.3, italic: true, color: MUTED, align: "center", isTextBox: true, margin: 0 });
@@ -179,7 +179,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
     { x: pA + 0.22, y: py + 1.5, w: pw - 0.44, h: 1.08, fontFace: FONT_BODY, fontSize: 8.4, color: "44403A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.18 });
 
   panel(pB, pw, TEAL_BG, TEAL, "Redesigned");
-  s.addText("The same checks and the same exits — reordered, some reassigned", { x: pB + 0.22, y: py + 0.44, w: pw - 0.44, h: 0.4, fontFace: FONT_BODY, fontSize: 9, color: "34474A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
+  s.addText("The same checks and the same exits, reordered", { x: pB + 0.22, y: py + 0.44, w: pw - 0.44, h: 0.4, fontFace: FONT_BODY, fontSize: 9, color: "34474A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
   s.addText([{ text: F.bankedAfterInt, options: { fontSize: 42, bold: true, color: TEAL } }, { text: "  minutes per claim", options: { fontSize: 12, color: "5A6E70" } }],
     { x: pB + 0.22, y: py + 0.86, w: pw - 0.44, h: 0.6, fontFace: FONT_HEAD, isTextBox: true, margin: 0 });
   s.addText(`A ${F.cutPct}% cut, not the ${F.designCutPct}% the design allows: handlers will re-check drafts before they trust them. Four AI agents, one rules-only step, two human checkpoints.`,
@@ -401,6 +401,96 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
 }
 
 // =========================================================================
+// SLIDE 5 — Coverage Check, and the handoff the brief asks about
+// =========================================================================
+{
+  const s = pres.addSlide();
+  s.background = { color: "FAFAF8" };
+
+  s.addText("Coverage Check stops being a second investigation — the evidence is already in the claim", {
+    x: 0.4, y: 0.13, w: 10.2, h: 0.34, fontFace: FONT_HEAD, fontSize: 14, bold: true, color: INK, isTextBox: true, margin: 0 });
+  s.addText("COVERAGE CHECK & HANDOFF", { x: 9.0, y: 0.16, w: 3.93, h: 0.3, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: MUTED, charSpacing: 1.4, align: "right", isTextBox: true, margin: 0 });
+  s.addText("Every reason a claim can fail the coverage test, and where each one should be settled", {
+    x: 0.4, y: 0.50, w: 8.3, h: 0.24, fontFace: FONT_BODY, fontSize: 9.5, color: MUTED, isTextBox: true, margin: 0 });
+
+  const Bh = (t) => ({ text: t, options: { bold: true } });
+  s.addTable([
+    [Bh("Why coverage looks missing"), Bh("Today"), Bh("Redesigned"), Bh("Who decides")],
+    ["Date sits inside a valid policy — no warning", "quick manual check", "rules, no model call", "system"],
+    ["A valid follow-up policy exists", "find it, reattach", "registry lookup, reattach drafted", "handler"],
+    ["Self-employed, voluntary cover", "manual self-check", "registry lookup, rules", "handler"],
+    ["Group or branch policy not surfaced", "ask underwriting", "agent gathers the evidence, drafts the question", "underwriting"],
+    ["Company-name mismatch", "ask underwriting", "agent fuzzy-matches CVR, drafts the question", "underwriting"],
+    ["Wrong, expired, or no policy at all", "back to employer", "letter drafted, never sent unread", "handler"],
+  ], {
+    x: 0.4, y: 0.86, w: 8.3, colW: [2.55, 1.65, 2.75, 1.35], fontFace: FONT_BODY, fontSize: 8,
+    border: { type: "solid", color: "E4E4E0", pt: 0.5 }, color: "3A3A3A",
+    align: "left", valign: "middle", rowH: 0.34, autoPage: false, fill: { color: "FFFFFF" },
+  });
+
+  s.addShape(pres.ShapeType.roundRect, { x: 0.4, y: 3.62, w: 8.3, h: 0.92, rectRadius: 0.06, fill: { color: TEAL_BG }, line: { color: TEAL, width: 1.2 } });
+  s.addText([
+    { text: "Only two rows change hands.  ", options: { bold: true, color: "0B5A66" } },
+    { text: "Four of the six are lookups against a register the insurer already queries — those become rules with no model call at all. The two that genuinely need judgement still go to underwriting, because that authority is not ours to take. The AI's job there is to arrive with the evidence assembled, not to answer the question.", options: { color: "34474A" } },
+  ], { x: 0.58, y: 3.62, w: 7.94, h: 0.92, fontFace: FONT_BODY, fontSize: 8.6, isTextBox: true, margin: 0, valign: "middle", lineSpacingMultiple: 1.2 });
+
+  s.addShape(pres.ShapeType.roundRect, { x: 0.4, y: 4.66, w: 8.3, h: 1.86, rectRadius: 0.06, fill: { color: "FFFFFF" }, line: { color: LINE, width: 1 } });
+  s.addText("WHAT THIS REMOVES", { x: 0.6, y: 4.78, w: 7.9, h: 0.22, fontFace: FONT_BODY, fontSize: 9, bold: true, color: AMBER, charSpacing: 0.8, isTextBox: true, margin: 0 });
+  const removes = [
+    ["The second look at the policy", "FNOL already asked “is a valid policy attached?”. Coverage Check asks it again, from the same documents."],
+    ["The wait between the two", "Today the claim sits in IDB until someone picks up the coverage step. It now runs beside claim creation, not after it."],
+    ["Re-reading the file to ask underwriting", "The question arrives with the policy history, the CVR match and the dates already attached."],
+  ];
+  let ry = 5.06;
+  removes.forEach(([t, d]) => {
+    s.addShape(pres.ShapeType.rect, { x: 0.6, y: ry + 0.02, w: 0.04, h: 0.38, fill: { color: AMBER }, line: { type: "none" } });
+    s.addText(t, { x: 0.74, y: ry, w: 2.7, h: 0.4, fontFace: FONT_BODY, fontSize: 8.4, bold: true, color: INK, isTextBox: true, margin: 0, valign: "middle", lineSpacingMultiple: 1.1 });
+    s.addText(d, { x: 3.5, y: ry, w: 5.0, h: 0.4, fontFace: FONT_BODY, fontSize: 8, color: "5A5A5A", isTextBox: true, margin: 0, valign: "middle", lineSpacingMultiple: 1.15 });
+    ry += 0.46;
+  });
+
+  // ---- the handoff itself ----
+  s.addShape(pres.ShapeType.roundRect, { x: 8.9, y: 0.86, w: 4.03, h: 5.66, rectRadius: 0.06, fill: { color: INDIGO_BG }, line: { color: INDIGO, width: 1.3 } });
+  s.addText("THE HANDOFF", { x: 9.12, y: 1.00, w: 3.59, h: 0.24, fontFace: FONT_BODY, fontSize: 10, bold: true, color: INDIGO, charSpacing: 0.9, isTextBox: true, margin: 0 });
+  s.addText("The brief asks about the join between the two workflows. Today it is a queue. In the redesign there is nothing to hand over.",
+    { x: 9.12, y: 1.26, w: 3.59, h: 0.52, fontFace: FONT_BODY, fontSize: 8.2, italic: true, color: "3A3A5E", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
+
+  s.addText("TODAY", { x: 9.12, y: 1.86, w: 3.59, h: 0.2, fontFace: FONT_BODY, fontSize: 8.4, bold: true, color: "6A6A7E", charSpacing: 1, isTextBox: true, margin: 0 });
+  const today = [
+    "FNOL closes. The claim is written to IDB.",
+    "It waits in a queue for the coverage step.",
+    "A second person opens the same documents.",
+    "They re-ask a question FNOL already asked.",
+  ];
+  let hy = 2.10;
+  today.forEach((t) => {
+    s.addText("•  " + t, { x: 9.12, y: hy, w: 3.59, h: 0.32, fontFace: FONT_BODY, fontSize: 8.2, color: "4A4A5E", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
+    hy += 0.34;
+  });
+
+  s.addText("REDESIGNED", { x: 9.12, y: 3.60, w: 3.59, h: 0.2, fontFace: FONT_BODY, fontSize: 8.4, bold: true, color: INDIGO, charSpacing: 1, isTextBox: true, margin: 0 });
+  const after = [
+    "One state graph spans both workflows.",
+    "Extraction captures policy, dates, CVR and employment status once.",
+    "Coverage is a rules pass over state that already exists.",
+    "It runs beside claim creation, not after it.",
+    "Only the exceptions become anyone's work.",
+  ];
+  hy = 3.84;
+  after.forEach((t) => {
+    s.addText("•  " + t, { x: 9.12, y: hy, w: 3.59, h: 0.44, fontFace: FONT_BODY, fontSize: 8.2, color: "2A2A3E", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
+    hy += 0.42;
+  });
+
+  s.addShape(pres.ShapeType.roundRect, { x: 9.12, y: 5.94, w: 3.59, h: 0.44, rectRadius: 0.05, fill: { color: "FFFFFF" }, line: { color: INDIGO, width: 1 } });
+  s.addText("A handoff you delete cannot be the thing that breaks.", { x: 9.22, y: 5.94, w: 3.39, h: 0.44, fontFace: FONT_BODY, fontSize: 8.2, bold: true, color: INDIGO, align: "center", isTextBox: true, margin: 0, valign: "middle" });
+
+  s.addText("Causes and their handling are taken from Diagram 2 of the brief · “who decides” is the design choice, not an observation",
+    { x: 0.4, y: 6.62, w: 12.5, h: 0.26, fontFace: FONT_BODY, fontSize: 7, color: MUTED, isTextBox: true, margin: 0 });
+  footer(s, 5);
+}
+
+// =========================================================================
 // SLIDE 5 — Sequencing quadrant (decluttered: 2 items max per quadrant)
 // palette validated for colour-vision separation, not eyeballed
 // =========================================================================
@@ -469,10 +559,82 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   });
 
   s.addText("AES rulings and underwriting authority are deliberately absent — those decisions are not ours to make · frequencies from the case study", { x: 0.4, y: 6.6, w: 12.5, h: 0.28, fontFace: FONT_BODY, fontSize: 7, color: MUTED, isTextBox: true, margin: 0 });
-  footer(s, 5);
+  footer(s, 6);
 }
 
 // =========================================================================
+// =========================================================================
+// SLIDE 7 — Production: how it goes live, what is watched, what happens
+// when it breaks. This answers the reliability question directly.
+// =========================================================================
+{
+  const s = pres.addSlide();
+  s.background = { color: "FAFAF8" };
+
+  s.addText("Nothing goes live decided — it goes live watched, then suggesting, then trusted", {
+    x: 0.4, y: 0.13, w: 10.2, h: 0.34, fontFace: FONT_HEAD, fontSize: 14, bold: true, color: INK, isTextBox: true, margin: 0 });
+  s.addText("RUNNING IT IN PRODUCTION", { x: 9.0, y: 0.16, w: 3.93, h: 0.3, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: MUTED, charSpacing: 1.4, align: "right", isTextBox: true, margin: 0 });
+
+  // ---- the four stages, as a ladder ----
+  const stages = [
+    ["1 · SHADOW", "wks 1–8", "Agents run on live claims. Output is stored and compared with what the handler did. Nobody sees it.", "Exit when extraction agrees with the handler on 95% of fields.", AMBER, AMBER_BG],
+    ["2 · SUGGEST", "wks 9–16", "The handler sees the draft and must edit or approve it. Nothing sends itself.", "Exit when the edit rate on minor claims settles below 20%.", TEAL, TEAL_BG],
+    ["3 · APPROVE", "mths 5–6", "Minor claims arrive pre-filled. One click accepts. Everything else still drafted only.", "Exit criteria reviewed monthly with the claims lead.", INDIGO, INDIGO_BG],
+    ["NEVER", "—", "No automatic decision on anything adverse to a claimant, on an AES ruling, or on underwriting authority.", "This is a design boundary, not a phase.", MAG, MAG_BG],
+  ];
+  let sx = 0.4; const sgap = 0.245, sw = (13.333 - 0.8 - 3 * sgap) / 4;
+  stages.forEach(([name, when, body, gate, col, bg]) => {
+    s.addShape(pres.ShapeType.roundRect, { x: sx, y: 0.62, w: sw, h: 2.34, rectRadius: 0.06, fill: { color: bg }, line: { color: col, width: 1.3 } });
+    s.addText(name, { x: sx + 0.18, y: 0.74, w: sw - 0.36, h: 0.24, fontFace: FONT_BODY, fontSize: 9.6, bold: true, color: col, charSpacing: 0.8, isTextBox: true, margin: 0 });
+    s.addText(when, { x: sx + 0.18, y: 0.98, w: sw - 0.36, h: 0.2, fontFace: FONT_BODY, fontSize: 8, italic: true, color: MUTED, isTextBox: true, margin: 0 });
+    s.addText(body, { x: sx + 0.18, y: 1.24, w: sw - 0.36, h: 0.86, fontFace: FONT_BODY, fontSize: 8.4, color: "3A3A3A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.18 });
+    s.addShape(pres.ShapeType.rect, { x: sx + 0.18, y: 2.14, w: sw - 0.36, h: 0.012, fill: { color: col }, line: { type: "none" } });
+    s.addText(gate, { x: sx + 0.18, y: 2.20, w: sw - 0.36, h: 0.64, fontFace: FONT_BODY, fontSize: 8, italic: true, color: col === MAG ? "6A1F42" : "4A4A4A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
+    sx += sw + sgap;
+  });
+
+  // ---- what is watched ----
+  s.addShape(pres.ShapeType.roundRect, { x: 0.4, y: 3.16, w: 6.29, h: 3.16, rectRadius: 0.06, fill: { color: "FFFFFF" }, line: { color: LINE, width: 1 } });
+  s.addText("WHAT WE WATCH — AND WHY THAT METRIC", { x: 0.6, y: 3.30, w: 5.89, h: 0.24, fontFace: FONT_BODY, fontSize: 9, bold: true, color: TEAL, charSpacing: 0.8, isTextBox: true, margin: 0 });
+  const metrics = [
+    ["Edit rate on drafts", "The trust signal. A model can be accurate and still not be used."],
+    ["Field-level extraction precision", "Checked against the source document, per field, not per claim."],
+    ["Exception rate, by node", "Says which step is actually struggling, not that “the AI” is."],
+    ["Override rate by claim type", "Feeds the confidence threshold. Teeth claims will differ from the rest."],
+    ["First report to linked claim", "The only number the business asked for. Everything else is diagnostic."],
+  ];
+  let my = 3.58;
+  metrics.forEach(([t, d]) => {
+    s.addText(t, { x: 0.6, y: my, w: 2.5, h: 0.46, fontFace: FONT_BODY, fontSize: 8.4, bold: true, color: INK, isTextBox: true, margin: 0, valign: "middle", lineSpacingMultiple: 1.1 });
+    s.addText(d, { x: 3.18, y: my, w: 3.31, h: 0.46, fontFace: FONT_BODY, fontSize: 8, color: "5A5A5A", isTextBox: true, margin: 0, valign: "middle", lineSpacingMultiple: 1.15 });
+    my += 0.48;
+  });
+  s.addText("Alert on the rate, not the count — one stuck claim is normal, twenty in an hour is not.",
+    { x: 0.6, y: 6.02, w: 5.89, h: 0.2, fontFace: FONT_BODY, fontSize: 7.8, italic: true, color: TEAL, isTextBox: true, margin: 0 });
+
+  // ---- when it breaks ----
+  s.addShape(pres.ShapeType.roundRect, { x: 6.89, y: 3.16, w: 6.04, h: 3.16, rectRadius: 0.06, fill: { color: "FFFFFF" }, line: { color: MAG, width: 1.2 } });
+  s.addText("WHEN IT BREAKS", { x: 7.09, y: 3.30, w: 5.64, h: 0.24, fontFace: FONT_BODY, fontSize: 9, bold: true, color: MAG, charSpacing: 0.8, isTextBox: true, margin: 0 });
+  const breaks = [
+    ["An agent fails, or confidence is low", "The claim drops into today's manual queue. The old path is never removed, so the failure mode is a slower claim, never a wrong one."],
+    ["A prompt or model version changes", "200 historical claims are replayed first. A regression against the recorded outcome blocks the deploy."],
+    ["One agent misbehaves in the wild", "Each is behind its own switch. Turn off drafting and extraction keeps running."],
+    ["The run dies half way", "Graph state is checkpointed, so the claim resumes at the last good node instead of starting again."],
+  ];
+  let by = 3.58;
+  breaks.forEach(([t, d]) => {
+    s.addText(t, { x: 7.09, y: by, w: 5.64, h: 0.2, fontFace: FONT_BODY, fontSize: 8.4, bold: true, color: "6A1F42", isTextBox: true, margin: 0 });
+    s.addText(d, { x: 7.09, y: by + 0.19, w: 5.64, h: 0.42, fontFace: FONT_BODY, fontSize: 8, color: "5A5A5A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
+    by += 0.62;
+  });
+  s.addText("Every decision, its inputs and its confidence are written to the audit log — that is what makes an adverse outcome defensible later.",
+    { x: 7.09, y: 6.08, w: 5.64, h: 0.2, fontFace: FONT_BODY, fontSize: 7.8, italic: true, color: MAG, isTextBox: true, margin: 0 });
+
+  s.addText("Thresholds shown are the ones we would propose and then argue about with the claims lead — they are starting points, not findings",
+    { x: 0.4, y: 6.62, w: 12.5, h: 0.26, fontFace: FONT_BODY, fontSize: 7, color: MUTED, isTextBox: true, margin: 0 });
+  footer(s, 7);
+}
+
 // =========================================================================
 // SLIDE 6 — How the numbers are built (backup / defensible detail)
 // Three accent colours only: AMBER = time, TEAL = cost, MAG = conclusion.
@@ -580,7 +742,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
     ["a support team of 6", "8.3", "5.6 h", "2.9 h"],
   ], R, 5.62, [2.1, 1.35, 1.3, 1.25]);
 
-  footer(s, 6);
+  footer(s, 8);
 }
 // =========================================================================
 // SLIDE 7 — Sources (clickable) and what is assumption vs. fact
@@ -641,7 +803,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
 
   s.addText("Prices checked September 2026 · US$ converted at €0.92 · every euro figure is fully loaded — gross pay plus employer contributions",
     { x: 0.4, y: 6.70, w: 12.5, h: 0.26, fontFace: FONT_BODY, fontSize: 7, color: MUTED, isTextBox: true, margin: 0 });
-  footer(s, 7);
+  footer(s, 9);
 }
 
 pres.writeFile({ fileName: "/tmp/claude-0/-home-user-ggw-casestudy/2b8e5a67-8934-50d1-9acc-621207f6c407/scratchpad/deck/GGW_FNOL_Redesign.pptx" })

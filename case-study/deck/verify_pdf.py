@@ -57,7 +57,7 @@ def main(pdf):
                         continue
                     seen.add(key)
                     frac = overlaps(a, b)
-                    if frac > 0.35:
+                    if frac > 0.20:
                         print(f"P{pi} TEXT-COLLISION {frac*100:.0f}%  "
                               f"\"{a[4]}\" @({a[0]:.2f},{a[1]:.2f})  x  \"{b[4]}\" @({b[0]:.2f},{b[1]:.2f})")
                         issues += 1
