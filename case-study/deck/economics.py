@@ -304,6 +304,11 @@ FIGURES = {
     # Business-case presentation rounds euro totals to the nearest EUR 100.
     # Both slides read these, so they cannot round differently.
     "runYrR":   f"{round(run_yr, -2):,.0f}",
+    "allInR":   f"{round(run_total, -2):,.0f}",
+    "allInPct": f"{run_total/value_yr*100:.0f}",
+    "ratio":    f"{value_yr/run_total:.1f}",
+    "pertInt":  f"{saving:.0f}",
+    "perClaimEurR": f"{per_claim_usd*USD_EUR:.2f}",
     "maintYrR": f"{round(maint_yr, -2):,.0f}",
     "netYrR":   f"{round(net_yr, -2):,.0f}",
     "buildR":   f"{round(build, -2):,.0f}",

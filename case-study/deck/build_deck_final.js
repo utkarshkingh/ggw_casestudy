@@ -187,7 +187,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
 
   panel(pC, pwC, INDIGO_BG, INDIGO, "Where the effort actually goes");
   const split = [
-    ["5%", "Models and machines", `€${F.perClaimEur} a claim`],
+    ["5%", "Models and machines", `€${F.perClaimEurR} a claim · €${F.runYrR} a year`],
     ["25%", "Plumbing and audit trail", "EASY/IDB wiring, logging every decision"],
     ["70%", "Process, training, trust", "adoption is the real schedule risk"],
   ];
@@ -226,10 +226,10 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   s.addShape(pres.ShapeType.roundRect, { x: 6.85, y: 5.52, w: 5.98, h: 1.0, rectRadius: 0.06, fill: { color: MAG_BG }, line: { color: MAG, width: 1.2 } });
   s.addText([
     { text: "So what:  ", options: { bold: true, color: MAG } },
-    { text: `cost is not what decides this. The AI costs €${F.runYrR} a year to run — under 2% of the value it releases. What decides it is governance: proving a person reviewed anything that can go against a claimant, and whether handlers trust the drafts enough to approve them.`, options: { color: "3A2A32" } },
+    { text: `cost is not what decides this. The AI costs €${F.runYrR} a year to run; keeping it healthy takes a quarter of an engineer, €${F.maintYrR} — so €${F.allInR} a year all in, against €${F.valueYrR} of capacity released. What decides it is governance: proving a person reviewed anything that can go against a claimant, and whether handlers trust the drafts.`, options: { color: "3A2A32" } },
   ], { x: 7.03, y: 5.52, w: 5.62, h: 1.0, fontFace: FONT_BODY, fontSize: 8.5, isTextBox: true, margin: 0, valign: "middle", lineSpacingMultiple: 1.18 });
 
-  s.addText(`Conservative throughout: the ${F.pert}-minutes-per-claim saving is a three-point estimate (best ${F.pertO} / likely ${F.pertM} / worst ${F.pertP}), not the design maximum. Build-up on slide 6, sources on slide 7.`,
+  s.addText(`Conservative throughout: the ${F.pertInt}-minute-per-claim saving is a three-point estimate (best ${F.pertO} / likely ${F.pertM} / worst ${F.pertP}), not the design maximum. Build-up on slide 6, sources on slide 7.`,
     { x: 0.5, y: 6.62, w: 12.33, h: 0.28, fontFace: FONT_BODY, fontSize: 7.6, italic: true, color: "6A6A6A", isTextBox: true, margin: 0 });
   footer(s, 1);
 }
