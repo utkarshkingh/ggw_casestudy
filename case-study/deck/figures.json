@@ -1,0 +1,72 @@
+{
+  "rows": [
+    [
+      "Read the report, re-read it, open attachments",
+      "10.0",
+      "0.7"
+    ],
+    [
+      "Take notes, check fields, chase a missing CPR",
+      "6.1",
+      "2.8"
+    ],
+    [
+      "Attach policy \u00b7 duplicate check \u00b7 coverage date",
+      "5.0",
+      "0.0"
+    ],
+    [
+      "Decide, draft and send / open the full claim",
+      "5.5",
+      "3.0"
+    ],
+    [
+      "Work an escalation or an underwriting hold",
+      "1.0",
+      "0.6"
+    ],
+    [
+      "Switch between EASY, IDB, e-mail and paper",
+      "3.2",
+      "0.7"
+    ]
+  ],
+  "touchToday": "30.8",
+  "touchAfter": "7.8",
+  "allowPct": "30",
+  "allowToday": "9.2",
+  "allowAfter": "2.3",
+  "stdToday": "40.0",
+  "stdAfter": "10.1",
+  "theoretical": "29.8",
+  "pert": "21.0",
+  "pertO": "30",
+  "pertM": "21",
+  "pertP": "12",
+  "bankedAfter": "19.0",
+  "cutPct": "52",
+  "designCutPct": "75",
+  "stdTodayInt": "40",
+  "bankedAfterInt": "19",
+  "hoursDay": "17.5",
+  "hoursYr": "4,370",
+  "fte": "2.8",
+  "hourly": "34.92",
+  "valueYr": "152,603",
+  "claimsYr": "12,500",
+  "teamSharePct": "17",
+  "todayHoursYr": "8,332",
+  "runYr": "2,439",
+  "maintYr": "24,395",
+  "netYr": "125,770",
+  "build": "146,370",
+  "payback": "14",
+  "perClaimEur": "0.077",
+  "runYrR": "2,400",
+  "maintYrR": "24,400",
+  "netYrR": "125,800",
+  "buildR": "146,400",
+  "valueYrR": "152,600",
+  "valueYrK": "153",
+  "buildK": "146"
+}

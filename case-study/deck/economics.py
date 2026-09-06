@@ -33,39 +33,27 @@ HOURS_PER_DAY    = TARIFF_HOURS_WK / 5
 PRODUCTIVE_HOURS = WEEKS * TARIFF_HOURS_WK - (LEAVE_DAYS + PUBLIC_HOLIDAYS + SICK_DAYS) * HOURS_PER_DAY
 
 # ===================================================== TIME STUDY (minutes)
-# Observable steps a handler actually performs. Probabilistic steps are
-# entered as (minutes x how often they occur).
-TODAY_MINOR = [
-    ("Open notification, read the first report",              4.0),
-    ("Re-read unclear free-text description to make sense",   2.5),
-    ("Open and skim 3-4 attachments",                         3.5),
-    ("Note details on paper / scratch pad",                   1.0),
-    ("Check data complete (body parts, CPR, policy) in IDB",  3.0),
-    ("Chase a missing CPR (7 min, occurs ~30%)",              7.0 * 0.30),
-    ("Find and attach the correct policy",                    2.5),
-    ("Duplicate check on CPR / same injury",                  1.5),
-    ("Coverage: date inside a valid policy period",           1.5),
-    ("Decide minor, draft and send the standard letter",      4.5),
-    ("Switching between EASY, IDB, e-mail and paper",         3.0),
-]
-TODAY_MAJOR = [
-    ("Steps 1-9 as above (no close-out letter)",             20.1),
-    ("Create the full claim in IDB, link policy, open task",  5.0),
-    ("Send the questionnaire",                                2.5),
-    ("Red-warning hold, ask underwriting (11 min, ~25%)",    11.0 * 0.25),
-    ("Switching between systems",                             3.5),
-]
-AFTER_MINOR = [
-    ("Open the pre-assembled claim view",                     1.0),
-    ("Spot-check extracted fields against the source",        2.5),
-    ("Read the drafted letter, verify, approve",              3.0),
-    ("System touch",                                          0.5),
-]
-AFTER_MAJOR = [
-    ("Spot-check extraction and classification",              3.5),
-    ("Work a raised exception (9 min, ~20%)",                 9.0 * 0.20),
-    ("Verify the IDB record and questionnaire dispatch",      3.0),
-    ("System touch",                                          1.0),
+# One row per step a handler actually performs, costed separately for the two
+# paths a claim can take. These same six rows are what slide 6 prints, so the
+# column on the slide and the total underneath it cannot drift apart.
+#
+# Probabilistic steps are entered as (minutes x how often they occur):
+#   chasing a missing CPR   7 min, ~30% of claims   -> 2.1  (inside row 2)
+#   underwriting hold      11 min, ~25% of majors   -> 2.75 (row 5)
+#   exception after redesign 9 min, ~20% of majors  -> 1.8  (row 5, after)
+#
+# Row 3 differs by path on purpose: on a major claim the coverage-date check is
+# not done at intake, it is deferred to the Coverage Check workflow.
+#
+#         label                                        today          after
+#                                                    minor  major   minor major
+STEPS = [
+    ("Read the report, re-read it, open attachments",  10.0, 10.0,   1.0,  0.0),
+    ("Take notes, check fields, chase a missing CPR",    6.1,  6.1,   2.5,  3.5),
+    ("Attach policy \u00b7 duplicate check \u00b7 coverage date", 5.5, 4.0, 0.0, 0.0),
+    ("Decide, draft and send / open the full claim",     4.5,  7.5,   3.0,  3.0),
+    ("Work an escalation or an underwriting hold",       0.0,  2.75,  0.0,  1.8),
+    ("Switch between EASY, IDB, e-mail and paper",       3.0,  3.5,   0.5,  1.0),
 ]
 
 # Allowances on touch time (REFA-style). These are the things a stopwatch on a
@@ -128,20 +116,24 @@ BUILD_MONTHS = 6
 MAINT_FTE = 0.25
 
 # =================================================================== COMPUTE
-def total(steps):
-    return sum(m for _, m in steps)
+def blend(minor, major):
+    """Weight the two paths by how often each occurs."""
+    return MINOR_SHARE * minor + (1 - MINOR_SHARE) * major
 
 claims_yr = CLAIMS_PER_DAY * WORKING_DAYS
 loaded    = GROSS_SALARY * EMPLOYER_ONCOST
 hourly    = loaded / PRODUCTIVE_HOURS
 
-today_touch = MINOR_SHARE * total(TODAY_MINOR) + (1 - MINOR_SHARE) * total(TODAY_MAJOR)
-after_touch = MINOR_SHARE * total(AFTER_MINOR) + (1 - MINOR_SHARE) * total(AFTER_MAJOR)
+# Blended per-row figures -- exactly what the slide prints.
+ROWS = [(lbl, blend(tmi, tma), blend(ami, ama)) for lbl, tmi, tma, ami, ama in STEPS]
+today_touch = sum(r[1] for r in ROWS)
+after_touch = sum(r[2] for r in ROWS)
 today_std   = today_touch * ALLOWANCE_TOTAL
 after_std   = after_touch * ALLOWANCE_TOTAL
 theoretical = today_std - after_std
 
 saving = (theoretical + 4 * PERT_LIKELY + PERT_PESSIMISTIC) / 6
+after_banked = today_std - saving   # what the business case actually assumes
 
 hours_yr   = claims_yr * saving / 60
 fte        = hours_yr / PRODUCTIVE_HOURS
@@ -263,3 +255,66 @@ print("=" * 68)
 print(f"  Fully loaded charge   EUR {build:,.0f}      rank against other projects")
 print(f"  Capacity allocation   {BUILD_MONTHS*(1+JUNIORS)} person-months = {BUILD_MONTHS*(1+JUNIORS)/12:.1f} FTE-years of an existing team")
 print(f"  New cash required     EUR {run_yr:,.0f}/yr    tokens + Azure only; salaries already budgeted")
+
+
+# ============================================ EXPORT FOR THE DECK BUILDER
+# The slide prints these values verbatim. Displayed rows are rounded with a
+# largest-remainder pass so the column adds up to the total printed under it --
+# a reader checking the arithmetic with a pen must not find a discrepancy.
+import json
+
+
+def round_to_total(values, dp=1):
+    """Round each value to dp decimals, then nudge so the sum is preserved."""
+    q = 10 ** dp
+    target = round(sum(values) * q)
+    out = [int(v * q) for v in values]          # floor
+    rem = sorted(range(len(values)), key=lambda i: -(values[i] * q - out[i]))
+    short = target - sum(out)
+    for k in range(short):
+        out[rem[k % len(out)]] += 1
+    return [v / q for v in out]
+
+
+_today = round_to_total([r[1] for r in ROWS])
+_after = round_to_total([r[2] for r in ROWS])
+assert abs(sum(_today) - round(today_touch, 1)) < 1e-9, (sum(_today), today_touch)
+assert abs(sum(_after) - round(after_touch, 1)) < 1e-9, (sum(_after), after_touch)
+
+FIGURES = {
+    "rows": [[ROWS[i][0], f"{_today[i]:.1f}", f"{_after[i]:.1f}"] for i in range(len(ROWS))],
+    "touchToday": f"{today_touch:.1f}", "touchAfter": f"{after_touch:.1f}",
+    "allowPct": f"{sum(ALLOWANCE.values())*100:.0f}",
+    "allowToday": f"{today_std - today_touch:.1f}", "allowAfter": f"{after_std - after_touch:.1f}",
+    "stdToday": f"{today_std:.1f}", "stdAfter": f"{after_std:.1f}",
+    "theoretical": f"{theoretical:.1f}",
+    "pert": f"{saving:.1f}", "pertO": f"{theoretical:.0f}",
+    "pertM": f"{PERT_LIKELY:.0f}", "pertP": f"{PERT_PESSIMISTIC:.0f}",
+    "bankedAfter": f"{after_banked:.1f}",
+    "cutPct": f"{saving/today_std*100:.0f}",
+    "designCutPct": f"{theoretical/today_std*100:.0f}",
+    "stdTodayInt": f"{today_std:.0f}", "bankedAfterInt": f"{after_banked:.0f}",
+    "hoursDay": f"{hours_day:.1f}", "hoursYr": f"{hours_yr:,.0f}", "fte": f"{fte:.1f}",
+    "hourly": f"{hourly:.2f}", "valueYr": f"{value_yr:,.0f}",
+    "claimsYr": f"{claims_yr:,.0f}", "teamSharePct": f"{share_today*100:.0f}",
+    "todayHoursYr": f"{claims_yr*today_std/60:,.0f}",
+    "runYr": f"{run_yr:,.0f}", "maintYr": f"{maint_yr:,.0f}",
+    "netYr": f"{net_yr:,.0f}", "build": f"{build:,.0f}", "payback": f"{payback_mo:.0f}",
+    "perClaimEur": f"{per_claim_usd*USD_EUR:.3f}",
+    # Business-case presentation rounds euro totals to the nearest EUR 100.
+    # Both slides read these, so they cannot round differently.
+    "runYrR":   f"{round(run_yr, -2):,.0f}",
+    "maintYrR": f"{round(maint_yr, -2):,.0f}",
+    "netYrR":   f"{round(net_yr, -2):,.0f}",
+    "buildR":   f"{round(build, -2):,.0f}",
+    "valueYrR": f"{round(value_yr, -2):,.0f}",
+    "valueYrK": f"{value_yr/1000:.0f}",
+    "buildK":   f"{build/1000:.0f}",
+}
+with open("figures.json", "w") as fh:
+    json.dump(FIGURES, fh, indent=2)
+print()
+print("wrote figures.json  ->  deck reads these, so slide 1 and slide 6 cannot disagree")
+print(f"  today column {' + '.join(f'{v:.1f}' for v in _today)} = {sum(_today):.1f}")
+print(f"  after column {' + '.join(f'{v:.1f}' for v in _after)} = {sum(_after):.1f}")
+print(f"  banked after = {today_std:.1f} - {saving:.1f} = {after_banked:.1f}  (exec summary)")
