@@ -23,7 +23,10 @@ EMPLOYER_ONCOST  = 1.23      # Germany: ~EUR 23 on-cost per EUR 100 gross
 USD_EUR          = 0.92
 
 # Productive hours: 38h tariff week, less 30 days leave, ~10 public holidays,
-# ~11 sick days, less statutory breaks (ArbZG: 30 min unpaid over 6h worked).
+# ~11 sick days. Statutory breaks (ArbZG 4: 30 min unpaid over 6h worked) are
+# deliberately NOT deducted here -- a 38h tariff week is already paid time with
+# unpaid breaks excluded, and break time is separately inside the +30% allowance
+# on task time. Deducting it in both places would count it twice.
 WEEKS            = 52
 TARIFF_HOURS_WK  = 38
 LEAVE_DAYS       = 30
@@ -309,6 +312,7 @@ FIGURES = {
     "ratio":    f"{value_yr/run_total:.1f}",
     "pertInt":  f"{saving:.0f}",
     "perClaimEurR": f"{per_claim_usd*USD_EUR:.2f}",
+    "capturePct": f"{saving/theoretical*100:.0f}",
     "maintYrR": f"{round(maint_yr, -2):,.0f}",
     "netYrR":   f"{round(net_yr, -2):,.0f}",
     "buildR":   f"{round(build, -2):,.0f}",

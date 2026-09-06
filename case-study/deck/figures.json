@@ -68,6 +68,7 @@
   "ratio": "5.7",
   "pertInt": "21",
   "perClaimEurR": "0.08",
+  "capturePct": "70",
   "maintYrR": "24,400",
   "netYrR": "125,800",
   "buildR": "146,400",
