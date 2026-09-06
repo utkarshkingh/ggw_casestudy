@@ -157,7 +157,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
     x: 9.6, y: 0.17, w: 3.23, h: 0.26, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: "7FB3B6",
     charSpacing: 1.6, align: "right", isTextBox: true, margin: 0,
   });
-  s.addText(`Redesigning intake releases ${F.hoursDay} handler-hours every working day — the capacity of ${F.fte} full-time people`, {
+  s.addText(`Redesigning intake releases ${F.hoursDay} handler-hours a day — the capacity of ${F.fte} full-time people`, {
     x: 0.5, y: 0.15, w: 9.0, h: 0.44, fontFace: FONT_HEAD, fontSize: 19, bold: true, color: "FFFFFF", isTextBox: true, margin: 0,
   });
   s.addText("Two thirds of that work goes to claims that were always going to close quietly · a person still decides anything that can go against a claimant",
@@ -191,15 +191,15 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
     ["25%", "Plumbing and audit trail", "EASY/IDB wiring, logging every decision"],
     ["70%", "Process, training, trust", "adoption is the real schedule risk"],
   ];
-  let sy = py + 0.48;
+  let sy = py + 0.44;
   split.forEach(([pct, label, sub]) => {
     s.addShape(pres.ShapeType.rect, { x: pC + 0.22, y: sy + 0.02, w: 0.055, h: 0.58, fill: { color: INDIGO }, line: { type: "none" } });
     s.addText(pct, { x: pC + 0.36, y: sy - 0.02, w: 0.72, h: 0.3, fontFace: FONT_HEAD, fontSize: 17, bold: true, color: INDIGO, isTextBox: true, margin: 0 });
     s.addText(label, { x: pC + 1.12, y: sy - 0.03, w: pwC - 1.34, h: 0.24, fontFace: FONT_BODY, fontSize: 9.3, bold: true, color: "2A2A3E", isTextBox: true, margin: 0 });
     s.addText(sub, { x: pC + 1.12, y: sy + 0.2, w: pwC - 1.34, h: 0.4, fontFace: FONT_BODY, fontSize: 8.2, color: "4A4A5E", isTextBox: true, margin: 0, lineSpacingMultiple: 1.1 });
-    sy += 0.74;
+    sy += 0.66;
   });
-  s.addText("Follows BCG's 10-20-70 rule, adjusted for this process", { x: pC + 0.22, y: py + ph - 0.32, w: pwC - 0.44, h: 0.24, fontFace: FONT_BODY, fontSize: 7.4, italic: true, color: "5A5A6E", isTextBox: true, margin: 0 });
+  s.addText("Follows BCG's 10-20-70 rule, adjusted for this process", { x: pC + 0.22, y: py + ph - 0.28, w: pwC - 0.44, h: 0.24, fontFace: FONT_BODY, fontSize: 7.4, italic: true, color: "5A5A6E", isTextBox: true, margin: 0 });
 
   // KPI strip
   const kpis = [
@@ -208,7 +208,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
     [`€${F.valueYrK}k`, "value of that capacity, per year", MAG],
     [`${F.payback} mths`, `to pay back the one-off build of €${F.buildK}k`, INDIGO],
   ];
-  let kx = 0.5; const kw = 3.0, kgap = 0.28;
+  let kx = 0.5; const kw = 2.873, kgap = 0.28;
   kpis.forEach(([big, small, col]) => {
     s.addShape(pres.ShapeType.roundRect, { x: kx, y: 4.34, w: kw, h: 1.0, rectRadius: 0.06, fill: { color: "FFFFFF" }, line: { color: col, width: 1.4 } });
     s.addText(big, { x: kx + 0.18, y: 4.41, w: kw - 0.36, h: 0.42, fontFace: FONT_HEAD, fontSize: 20, bold: true, color: col, isTextBox: true, margin: 0 });
@@ -497,26 +497,26 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   // ---------- A · time (left) ----------
   blockHead("A \u00b7 HANDLER TIME \u2014 MINUTES PER CLAIM, PER HANDLER", L, 0.58, AMBER);
   tbl([
-    [B("Step"), B("Today (min)"), B("Redesigned (min)")],
+    [B("Step"), B("Today"), B("Redesigned")],
     ...F.rows,
     [B("Touch time"), B(F.touchToday), B(F.touchAfter)],
     [`Breaks, fatigue, interruptions, rework (+${F.allowPct}%)`, F.allowToday, F.allowAfter],
     [B("Standard time \u2014 what the design allows"), B(F.stdToday), B(F.stdAfter)],
     [B("What the business case actually banks"), B(F.stdToday), B(F.bankedAfter)],
-  ], L, 0.86, [3.9, 1.05, 1.05], 0.21);
-  note(`The design allows ${F.stdAfter} min a claim. We do not bank that. The case uses a three-point estimate \u2014 (best ${F.pertO} + 4 \u00d7 likely ${F.pertM} + worst ${F.pertP}) \u00f7 6 = ${F.pert} min saved a claim \u2014 which is the ${F.bankedAfter} min above, and the ${F.bankedAfterInt} minutes on slide 1.`, L, 3.20, 0.30);
+  ], L, 0.86, [3.9, 1.05, 1.05], 0.205);
+  note(`The design allows ${F.stdAfter} min a claim. We do not bank that. The case uses a three-point estimate \u2014 (best ${F.pertO} + 4 \u00d7 likely ${F.pertM} + worst ${F.pertP}) \u00f7 6 = ${F.pert} min saved a claim \u2014 which is the ${F.bankedAfter} min above, and the ${F.bankedAfterInt} minutes on slide 1.`, L, 3.42, 0.30);
 
-  s.addShape(pres.ShapeType.roundRect, { x: L, y: 3.52, w: CW, h: 0.68, rectRadius: 0.05, fill: { color: "FDF3E3" }, line: { color: AMBER, width: 1 } });
+  s.addShape(pres.ShapeType.roundRect, { x: L, y: 3.76, w: CW, h: 0.62, rectRadius: 0.05, fill: { color: "FDF3E3" }, line: { color: AMBER, width: 1 } });
   s.addText([
     { text: "Cross-check:  ", options: { bold: true, color: "9A5A0A" } },
     { text: `${F.stdTodayInt} min \u00d7 ${F.claimsYr} claims a year = ${F.todayHoursYr} handler-hours \u2014 ${F.teamSharePct}% of a 30-person team's yearly capacity. Plausible for the front end of a claims process. Had it come out at 60%, the model would be wrong.`, options: { color: "44403A" } },
-  ], { x: L + 0.18, y: 3.52, w: CW - 0.36, h: 0.68, fontFace: FONT_BODY, fontSize: 8.2, isTextBox: true, margin: 0, valign: "middle", lineSpacingMultiple: 1.15 });
+  ], { x: L + 0.18, y: 3.76, w: CW - 0.36, h: 0.62, fontFace: FONT_BODY, fontSize: 8.2, isTextBox: true, margin: 0, valign: "middle", lineSpacingMultiple: 1.15 });
 
   // ---------- D · business case (left, bottom) ----------
   // Two sections, because the unit differs. "Cost to run" means the system
   // only; the engineer who maintains it is a separate, clearly named line.
-  s.addShape(pres.ShapeType.roundRect, { x: L, y: 4.26, w: CW, h: 2.80, rectRadius: 0.06, fill: { color: "FFFFFF" }, line: { color: MAG, width: 1.2 } });
-  blockHead("D \u00b7 THE BUSINESS CASE", L + 0.2, 4.38, MAG, CW - 0.4);
+  s.addShape(pres.ShapeType.roundRect, { x: L, y: 4.46, w: CW, h: 2.62, rectRadius: 0.06, fill: { color: "FFFFFF" }, line: { color: MAG, width: 1.2 } });
+  blockHead("D \u00b7 THE BUSINESS CASE", L + 0.2, 4.56, MAG, CW - 0.4);
 
   const eyebrow = (t, y) => s.addText(t, { x: L + 0.2, y, w: CW - 0.4, h: 0.20, fontFace: FONT_BODY, fontSize: 7.6, bold: true, color: MAG, charSpacing: 1.2, isTextBox: true, margin: 0 });
   const money = (k, v, y, hi) => {
@@ -524,23 +524,23 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
     s.addText(v, { x: L + 4.05, y, w: 1.75, h: 0.21, fontFace: FONT_BODY, fontSize: 8.4, bold: true, color: hi ? MAG : INK, align: "right", isTextBox: true, margin: 0 });
   };
 
-  eyebrow("EVERY YEAR", 4.62);
+  eyebrow("EVERY YEAR", 4.80);
   [["Capacity released", `${F.hoursYr} handler-h \u00b7 ${F.fte} FTE`, 0],
    [`Worth, at \u20ac${F.hourly} per handler-hour`, `\u20ac${F.valueYrR} a year`, 0],
    ["Cost to run it \u2014 AI models and Azure", `\u2212 \u20ac${F.runYrR}`, 0],
    ["Ongoing support \u2014 0.25 of an engineer", `\u2212 \u20ac${F.maintYrR}`, 0],
    ["Net value, every year", `\u20ac${F.netYrR}`, 1],
-  ].forEach(([k, v, hi], i) => money(k, v, 4.84 + i * 0.225, hi));
+  ].forEach(([k, v, hi], i) => money(k, v, 5.00 + i * 0.215, hi));
 
-  s.addShape(pres.ShapeType.rect, { x: L + 0.2, y: 6.00, w: CW - 0.4, h: 0.012, fill: { color: "E4E4E0" }, line: { type: "none" } });
+  s.addShape(pres.ShapeType.rect, { x: L + 0.2, y: 6.10, w: CW - 0.4, h: 0.012, fill: { color: "E4E4E0" }, line: { type: "none" } });
 
-  eyebrow("ONE-OFF", 6.06);
+  eyebrow("ONE-OFF", 6.16);
   [["Build \u2014 3 people \u00d7 6 months, fully loaded", `\u20ac${F.buildR}`, 1],
    ["Payback", `${F.payback} months`, 1],
-  ].forEach(([k, v, hi], i) => money(k, v, 6.28 + i * 0.225, hi));
+  ].forEach(([k, v, hi], i) => money(k, v, 6.38 + i * 0.215, hi));
 
   s.addText(`The build is loaded team capacity, not new cash \u2014 the AI team is already funded. New cash needed: \u20ac${F.runYrR} a year. A shorter build costs less: 4 months \u2248 \u20ac98k.`,
-    { x: L + 0.2, y: 6.76, w: CW - 0.4, h: 0.28, fontFace: FONT_BODY, fontSize: 7.2, italic: true, color: "6A6A6A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
+    { x: L + 0.2, y: 6.82, w: CW - 0.4, h: 0.24, fontFace: FONT_BODY, fontSize: 7.2, italic: true, color: "6A6A6A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
 
   // ---------- B · AI cost (right) ----------
   blockHead("B · AI COST TO PROCESS ONE CLAIM", R, 0.58, TEAL);
