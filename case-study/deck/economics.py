@@ -17,8 +17,18 @@ whole claim lifecycle.
 CLAIMS_PER_DAY   = 50        # case study: "~50 first reports/day" via EASY
 WORKING_DAYS     = 250       # German working year
 TEAM_SIZE        = 30        # case study: "a claims team of roughly 30 people"
+# Confirmed by GGW (Philip Gossmann, 8 Sep 2026): the 30 splits 20 / 10.
+# The brief already said FNOL is run by the "support team (the intake lead
+# allocates)", so intake work -- and therefore every hour this redesign frees --
+# sits with the 10, not spread across all 30.
+CLAIM_HANDLERS   = 20
+SUPPORT_STAFF    = 10
+INTAKE_STAFF     = SUPPORT_STAFF
 MINOR_SHARE      = 0.65      # case study: "Yes, ~65% of claims (likely more)"
-GROSS_SALARY     = 45_100    # Sachbearbeiter Schadenregulierung, StepStone/gehalt.de
+# Freed hours are support-team hours, so they are valued at the support rate,
+# not the claims-handler rate. Both StepStone national averages, same basis.
+HANDLER_GROSS    = 45_100    # Sachbearbeiter Schadenregulierung
+GROSS_SALARY     = 41_100    # Sachbearbeiter/in Versicherung -- the intake role
 EMPLOYER_ONCOST  = 1.23      # Germany: ~EUR 23 on-cost per EUR 100 gross
 USD_EUR          = 0.92
 
@@ -142,11 +152,18 @@ hours_yr   = claims_yr * saving / 60
 fte        = hours_yr / PRODUCTIVE_HOURS
 value_yr   = hours_yr * hourly
 hours_day  = CLAIMS_PER_DAY * saving / 60
-per_handler = hours_yr / TEAM_SIZE
+per_handler = hours_yr / INTAKE_STAFF
 
-# triangulation
-team_capacity = TEAM_SIZE * PRODUCTIVE_HOURS
-share_today   = claims_yr * today_std / 60 / team_capacity
+# Per person on the team that actually does intake
+claims_per_person_day = CLAIMS_PER_DAY / INTAKE_STAFF
+intake_h_person_day   = claims_per_person_day * today_std / 60
+freed_h_person_day    = claims_per_person_day * saving / 60
+prod_h_per_day        = PRODUCTIVE_HOURS / WORKING_DAYS
+
+# triangulation, both ways
+today_hours_yr = claims_yr * today_std / 60
+share_support  = today_hours_yr / (INTAKE_STAFF * PRODUCTIVE_HOURS)
+share_today    = today_hours_yr / (TEAM_SIZE * PRODUCTIVE_HOURS)
 
 # llm
 rows, sub = [], 0.0
@@ -313,6 +330,16 @@ FIGURES = {
     "pertInt":  f"{saving:.0f}",
     "perClaimEurR": f"{per_claim_usd*USD_EUR:.2f}",
     "capturePct": f"{saving/theoretical*100:.0f}",
+    # confirmed by GGW, 8 Sep 2026
+    "handlers": f"{CLAIM_HANDLERS}", "support": f"{SUPPORT_STAFF}",
+    "claimsPerPersonDay": f"{claims_per_person_day:.0f}",
+    "intakeHPersonDay": f"{intake_h_person_day:.1f}",
+    "freedHPersonDay": f"{freed_h_person_day:.2f}",
+    "freedMinPersonDay": f"{freed_h_person_day*60:.0f}",
+    "prodHPerDay": f"{prod_h_per_day:.1f}",
+    "shareSupportPct": f"{share_support*100:.0f}",
+    "shareTeamPct": f"{share_today*100:.0f}",
+    "supportGross": f"{GROSS_SALARY:,}",
     "maintYrR": f"{round(maint_yr, -2):,.0f}",
     "netYrR":   f"{round(net_yr, -2):,.0f}",
     "buildR":   f"{round(build, -2):,.0f}",

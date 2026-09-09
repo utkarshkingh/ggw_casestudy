@@ -102,7 +102,7 @@ function columnHeaders(slide) {
 }
 function footer(slide, pageNum) {
   slide.addText("GGW Claims Workflow Redesign · FNOL", { x: 0.4, y: 7.22, w: 6, h: 0.24, fontFace: FONT_BODY, fontSize: 8, color: MUTED, isTextBox: true, margin: 0 });
-  slide.addText(String(pageNum) + " / 9", { x: 12.3, y: 7.22, w: 0.65, h: 0.24, fontFace: FONT_BODY, fontSize: 8, color: MUTED, align: "right", isTextBox: true, margin: 0 });
+  slide.addText(String(pageNum) + " / 10", { x: 12.3, y: 7.22, w: 0.65, h: 0.24, fontFace: FONT_BODY, fontSize: 8, color: MUTED, align: "right", isTextBox: true, margin: 0 });
 }
 function continues(slide, cx, y, text) {
   slide.addText(text, { x: cx - 1.6, y, w: 3.2, h: 0.22, fontFace: FONT_BODY, fontSize: 8.3, italic: true, color: MUTED, align: "center", isTextBox: true, margin: 0 });
@@ -157,10 +157,10 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
     x: 9.6, y: 0.17, w: 3.23, h: 0.26, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: "7FB3B6",
     charSpacing: 1.6, align: "right", isTextBox: true, margin: 0,
   });
-  s.addText(`Redesigning intake releases ${F.hoursDay} handler-hours a day — the capacity of ${F.fte} full-time people`, {
+  s.addText(`Redesigning intake gives the ${F.support}-person support team back ${F.freedHPersonDay} hours each, every day`, {
     x: 0.5, y: 0.15, w: 9.0, h: 0.44, fontFace: FONT_HEAD, fontSize: 19, bold: true, color: "FFFFFF", isTextBox: true, margin: 0,
   });
-  s.addText("Two thirds of that work goes to claims that were always going to close quietly · a person still decides anything that can go against a claimant",
+  s.addText(`${F.hoursDay} hours a day across the team — ${F.fte} full-time people · two thirds of that work goes to claims that were always going to close quietly · a person still decides anything adverse`,
     { x: 0.5, y: 0.63, w: 12.3, h: 0.36, fontFace: FONT_BODY, fontSize: 10.5, color: "9FC9CB", isTextBox: true, margin: 0 });
 
   const py = 1.45, ph = 2.72, pw = 3.75, pwC = 4.23;
@@ -172,7 +172,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   }
 
   panel(pA, pw, AMBER_BG, AMBER, "Today");
-  s.addText("What one claim costs one handler today, start to finish", { x: pA + 0.22, y: py + 0.44, w: pw - 0.44, h: 0.4, fontFace: FONT_BODY, fontSize: 9, color: "44403A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
+  s.addText("What one claim costs a support-team member", { x: pA + 0.22, y: py + 0.44, w: pw - 0.44, h: 0.4, fontFace: FONT_BODY, fontSize: 9, color: "44403A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
   s.addText([{ text: F.stdTodayInt, options: { fontSize: 42, bold: true, color: AMBER } }, { text: "  minutes per claim", options: { fontSize: 12, color: "6B6257" } }],
     { x: pA + 0.22, y: py + 0.86, w: pw - 0.44, h: 0.6, fontFace: FONT_HEAD, isTextBox: true, margin: 0 });
   s.addText("Reading and re-reading the report, opening attachments, chasing a missing CPR, switching between EASY, IDB, e-mail and paper. Plus 30% for breaks and interruptions.",
@@ -203,8 +203,8 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
 
   // KPI strip
   const kpis = [
-    [`${F.hoursDay} h`, "handler-hours freed every working day, across the claims team", AMBER],
-    [`${F.fte} FTE`, "the same capacity, expressed as full-time people", TEAL],
+    [`${F.freedHPersonDay} h`, `freed per support-team member, every working day (of ${F.prodHPerDay} productive hours)`, AMBER],
+    [`${F.hoursDay} h`, `across the ${F.support}-person support team — ${F.fte} full-time people`, TEAL],
     [`€${F.valueYrK}k`, "value of that capacity, per year", MAG],
     [`${F.payback} mths`, `to pay back the one-off build of €${F.buildK}k`, INDIGO],
   ];
@@ -220,7 +220,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   s.addShape(pres.ShapeType.roundRect, { x: 0.5, y: 5.52, w: 6.15, h: 1.0, rectRadius: 0.06, fill: { color: "FFFFFF" }, line: { color: LINE, width: 1 } });
   s.addText([
     { text: `What “€${F.valueYrK}k” means:  `, options: { bold: true, color: MAG } },
-    { text: `${F.hoursYr} handler-hours a year × €${F.hourly}, the real cost of one handler-hour. This is capacity, not cash. It becomes money only if the hours go to the backlog or are absorbed by turnover — and only if intake sits with a small team, not spread thinly across all 30 (slide 6).`, options: { color: "3A3A3A" } },
+    { text: `${F.hoursYr} support-team hours a year × €${F.hourly}, the loaded cost of one of those hours. Valued at support pay (€${F.supportGross} gross), not claims-handler pay, because these are the hours actually freed. Capacity, not cash — it becomes money only if the hours go to the backlog or are absorbed by turnover.`, options: { color: "3A3A3A" } },
   ], { x: 0.68, y: 5.52, w: 5.8, h: 1.0, fontFace: FONT_BODY, fontSize: 8.5, isTextBox: true, margin: 0, valign: "middle", lineSpacingMultiple: 1.18 });
 
   s.addShape(pres.ShapeType.roundRect, { x: 6.85, y: 5.52, w: 5.98, h: 1.0, rectRadius: 0.06, fill: { color: MAG_BG }, line: { color: MAG, width: 1.2 } });
@@ -229,7 +229,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
     { text: `cost is not what decides this. The AI costs €${F.runYrR} a year to run; keeping it healthy takes a quarter of an engineer, €${F.maintYrR} — so €${F.allInR} a year all in, against €${F.valueYrR} of capacity released. What decides it is governance: proving a person reviewed anything that can go against a claimant, and whether handlers trust the drafts.`, options: { color: "3A2A32" } },
   ], { x: 7.03, y: 5.52, w: 5.62, h: 1.0, fontFace: FONT_BODY, fontSize: 8.5, isTextBox: true, margin: 0, valign: "middle", lineSpacingMultiple: 1.18 });
 
-  s.addText(`Conservative throughout: the ${F.pertInt}-minute-per-claim saving is a three-point estimate (best ${F.pertO} / likely ${F.pertM} / worst ${F.pertP}), not the design maximum. Build-up on slide 6, sources on slide 7.`,
+  s.addText(`Conservative throughout: the ${F.pertInt}-minute-per-claim saving is a three-point estimate (best ${F.pertO} / likely ${F.pertM} / worst ${F.pertP}), not the design maximum. Build-up on slide 9, sources on slide 10.`,
     { x: 0.5, y: 6.62, w: 12.33, h: 0.28, fontFace: FONT_BODY, fontSize: 7.6, italic: true, color: "6A6A6A", isTextBox: true, margin: 0 });
   footer(s, 1);
 }
@@ -526,15 +526,15 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   }
 
   quad(gx, gy, "FDF3E3", "D97706", "Wave 1 — start here", "cheap to get wrong, happens constantly", [
-    ["Read the claim and classify it", "ends the one-person dependency on teeth claims"],
-    ["Check CPR, policy and duplicates", "plain rules, no AI model"],
+    ["Detect failed EASY → IDB imports", "nobody is alerted today — a claim can go missing unseen"],
+    ["Read, classify, check CPR and policy", "one agent plus plain rules — ends the teeth dependency"],
   ]);
   quad(gx + hw, gy, "E4F4F8", "0891B2", "Wave 2 — once trusted", "the real prize, but needs the audit trail live", [
     ["Draft the close-out letter", "~65% of claims · a handler still approves"],
     ["Read AES secure mail", "the only channel with no automation today"],
   ]);
-  quad(gx, gy + hh, "EDECFB", "4338CA", "Fix when convenient", "worth doing, but it is an IT defect", [
-    ["EASY → IDB import retries", "an integration bug, not an AI job"],
+  quad(gx, gy + hh, "EDECFB", "4338CA", "Then fix the import itself", "an IT defect, once you can see it", [
+    ["Retry, park and replay", "detection first — you cannot fix what nobody reports"],
   ]);
   quad(gx + hw, gy + hh, "FBE9F1", "BE185D", "Leave manual", "too rare to earn the effort", [
     ["\"Violence cover\" entitlement letter", "~2 claims ever · a checklist beats a model"],
@@ -542,20 +542,21 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
 
   // How the one IT item actually gets fixed -- the detail an engineer would ask for
   s.addShape(pres.ShapeType.roundRect, { x: 10.05, y: 1.0, w: 2.88, h: 5.0, rectRadius: 0.06, fill: { color: "EDECFB" }, line: { color: "4338CA", width: 1.3 } });
-  s.addText("FIXING THE IMPORT FAILURES", { x: 10.27, y: 1.16, w: 2.44, h: 0.24, fontFace: FONT_BODY, fontSize: 9, bold: true, color: "4338CA", charSpacing: 0.7, isTextBox: true, margin: 0 });
-  s.addText("The one item that is not an AI problem. How it is actually fixed:", { x: 10.27, y: 1.42, w: 2.44, h: 0.36, fontFace: FONT_BODY, fontSize: 8, italic: true, color: "4A4A5E", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
+  s.addText("THE IMPORT FAILURES", { x: 10.27, y: 1.16, w: 2.44, h: 0.24, fontFace: FONT_BODY, fontSize: 9, bold: true, color: "4338CA", charSpacing: 0.7, isTextBox: true, margin: 0 });
+  s.addText("GGW confirm these are not noticed today. That makes detection the first fix, not retries:", { x: 10.27, y: 1.42, w: 2.44, h: 0.40, fontFace: FONT_BODY, fontSize: 8, italic: true, color: "4A4A5E", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
   const fixes = [
-    ["Sort the failure first", "A timeout is worth retrying. A missing field never is — retrying it just fails again."],
-    ["Retry with growing gaps", "1s, 2s, 4s, plus a random offset, so 50 stuck claims do not all retry at once."],
-    ["One reference per claim", "The same key on every attempt, so a replay cannot create the claim twice."],
-    ["Park failures, never drop them", "They go to a holding queue with the error, so someone can fix and replay."],
-    ["Alert on the rate, not the count", "One stuck claim is normal. Twenty in an hour means something broke."],
+    ["Count what should have arrived", "Reconcile EASY sends against IDB claims daily. A gap is a lost claim nobody sees."],
+    ["Sort the failure", "A timeout is worth retrying. A missing field never is — it just fails again."],
+    ["Retry with growing gaps", "1s, 2s, 4s, plus a random offset, so stuck claims do not all retry at once."],
+    ["One reference per claim", "The same key every attempt, so a replay cannot create the claim twice."],
+    ["Park failures, never drop them", "A holding queue with the error, so someone can fix and replay."],
+    ["Alert on the rate, not the count", "One stuck claim is normal. Twenty in an hour is not."],
   ];
-  let fy = 1.92;
+  let fy = 1.88;
   fixes.forEach(([t, d]) => {
     s.addText(t, { x: 10.27, y: fy, w: 2.44, h: 0.2, fontFace: FONT_BODY, fontSize: 8.4, bold: true, color: "2A2A3E", isTextBox: true, margin: 0 });
-    s.addText(d, { x: 10.27, y: fy + 0.19, w: 2.44, h: 0.56, fontFace: FONT_BODY, fontSize: 7.6, color: "4A4A5E", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
-    fy += 0.79;
+    s.addText(d, { x: 10.27, y: fy + 0.18, w: 2.44, h: 0.46, fontFace: FONT_BODY, fontSize: 7.6, color: "4A4A5E", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
+    fy += 0.66;
   });
 
   s.addText("AES rulings and underwriting authority are deliberately absent — those decisions are not ours to make · frequencies from the case study", { x: 0.4, y: 6.6, w: 12.5, h: 0.28, fontFace: FONT_BODY, fontSize: 7, color: MUTED, isTextBox: true, margin: 0 });
@@ -636,6 +637,97 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
 }
 
 // =========================================================================
+// SLIDE 8 — Technical implementation. GGW asked for this specifically:
+// "more interested in how you do the technical implementation ...
+//  we would deploy in the cloud".
+// =========================================================================
+{
+  const s = pres.addSlide();
+  s.background = { color: "FAFAF8" };
+
+  s.addText("One typed state object moves through the graph — every node reads it, writes to it, and signs its work", {
+    x: 0.4, y: 0.13, w: 10.2, h: 0.34, fontFace: FONT_HEAD, fontSize: 14, bold: true, color: INK, isTextBox: true, margin: 0 });
+  s.addText("TECHNICAL IMPLEMENTATION", { x: 9.0, y: 0.16, w: 3.93, h: 0.3, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: MUTED, charSpacing: 1.4, align: "right", isTextBox: true, margin: 0 });
+
+  // ---------- A · the state object ----------
+  s.addText("A · THE CLAIM STATE — WHAT EVERY NODE SHARES", { x: 0.4, y: 0.56, w: 4.2, h: 0.24, fontFace: FONT_BODY, fontSize: 9, bold: true, color: AMBER, charSpacing: 0.8, isTextBox: true, margin: 0 });
+  s.addShape(pres.ShapeType.roundRect, { x: 0.4, y: 0.84, w: 4.2, h: 2.62, rectRadius: 0.05, fill: { color: "F2F1ED" }, line: { color: "D9D7D0", width: 1 } });
+  s.addText([
+    { text: "class ClaimState(BaseModel):\n", options: { bold: true, color: "1B2430" } },
+    { text: "    claim_id: str\n    source: Literal[\"easy\",\"aes\",\"email\"]\n    documents: list[BlobRef]\n", options: { color: "3A4250" } },
+    { text: "    fields: ExtractedFields          # typed, per-field\n    confidence: dict[str, float]   # per field\n", options: { color: "3A4250" } },
+    { text: "    claim_type: Literal[\"standard\",\"teeth\",\n                        \"glasses\",\"violence\"]\n", options: { color: "3A4250" } },
+    { text: "    coverage: CoverageResult | None\n    exceptions: list[Exception]\n    drafts: list[Draft]\n", options: { color: "3A4250" } },
+    { text: "    audit: list[NodeRun]             # who did what, when\n", options: { color: "6B4A10" } },
+  ], { x: 0.58, y: 0.94, w: 3.84, h: 2.44, fontFace: "Courier New", fontSize: 7.6, isTextBox: true, margin: 0, lineSpacingMultiple: 1.18 });
+
+  s.addText("Pydantic types are the contract, and confidence is held per field rather than per claim. A node that cannot produce a valid field returns null plus a reason — it never guesses to satisfy a schema.",
+    { x: 0.4, y: 3.52, w: 4.2, h: 0.4, fontFace: FONT_BODY, fontSize: 7.6, italic: true, color: "6A6A6A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
+
+  // ---------- B · the stack ----------
+  s.addText("B · THE STACK, AND WHY EACH PIECE", { x: 4.8, y: 0.56, w: 4.0, h: 0.24, fontFace: FONT_BODY, fontSize: 9, bold: true, color: TEAL, charSpacing: 0.8, isTextBox: true, margin: 0 });
+  const stack = [
+    ["LangGraph  ·  Python", "Nodes are the agents, conditional edges are the decision diamonds on slides 2–4. The diagram is the code."],
+    ["Pydantic", "Typed state. Schema violations fail loudly at the node, not silently downstream."],
+    ["PostgreSQL", "LangGraph checkpointer plus the audit log. One store, so a claim's history and its state cannot drift apart."],
+    ["Azure Container Apps", "Two always-on for the API and worker, two scale-to-zero for burst. Cloud, as GGW deploy today."],
+    ["Azure Blob  ·  Key Vault", "Claim documents and secrets. Documents never enter a prompt as raw bytes — only extracted text."],
+    ["Azure OpenAI", "Same model tier throughout, pinned by version. EU region keeps claim data in-region."],
+  ];
+  let ty = 0.86;
+  stack.forEach(([t, d]) => {
+    s.addShape(pres.ShapeType.rect, { x: 4.8, y: ty + 0.02, w: 0.04, h: 0.38, fill: { color: TEAL }, line: { type: "none" } });
+    s.addText(t, { x: 4.94, y: ty, w: 3.86, h: 0.18, fontFace: FONT_BODY, fontSize: 8.4, bold: true, color: INK, isTextBox: true, margin: 0 });
+    s.addText(d, { x: 4.94, y: ty + 0.17, w: 3.86, h: 0.34, fontFace: FONT_BODY, fontSize: 7.6, color: "5A5A5A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.12 });
+    ty += 0.535;
+  });
+
+  // ---------- C · integrations ----------
+  s.addText("C · INTEGRATIONS — WHAT DECIDES THE TIMELINE", { x: 9.0, y: 0.56, w: 3.93, h: 0.24, fontFace: FONT_BODY, fontSize: 8.4, bold: true, color: INDIGO, charSpacing: 0.6, isTextBox: true, margin: 0 });
+  const integ = [
+    ["EASY", "in", "Reuse the existing auto-import. We add the reconciliation that tells you when it failed."],
+    ["AES secure mail", "in", "Fully manual today. A mailbox reader is the single biggest unlock on the intake side."],
+    ["E-mail", "in", "Same reader, different folder. Attachments to Blob, text to extraction."],
+    ["IDB", "out", "Write the claim, attach the policy, open the task. If there is no API, this is the long pole — not the AI."],
+    ["CPR / CVR registers", "both", "Already queried by hand. Wrapped as tools the agents call, with results cached on the claim."],
+  ];
+  let iy = 0.86;
+  integ.forEach(([sys, dir, d]) => {
+    const col = dir === "out" ? MAG : dir === "both" ? AMBER : INDIGO;
+    s.addText([
+      { text: sys + "  ", options: { bold: true, color: INK, fontSize: 8.4 } },
+      { text: dir.toUpperCase(), options: { bold: true, color: col, fontSize: 7 } },
+    ], { x: 9.0, y: iy, w: 3.93, h: 0.18, fontFace: FONT_BODY, isTextBox: true, margin: 0 });
+    s.addText(d, { x: 9.0, y: iy + 0.17, w: 3.93, h: 0.42, fontFace: FONT_BODY, fontSize: 7.6, color: "5A5A5A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.12 });
+    iy += 0.63;
+  });
+  s.addShape(pres.ShapeType.roundRect, { x: 9.0, y: 4.06, w: 3.93, h: 0.62, rectRadius: 0.05, fill: { color: MAG_BG }, line: { color: MAG, width: 1 } });
+  s.addText("The models are the easy part. Whether IDB can be written to programmatically is the question that moves the date.",
+    { x: 9.14, y: 4.06, w: 3.65, h: 0.62, fontFace: FONT_BODY, fontSize: 7.8, bold: true, color: "6A1F42", isTextBox: true, margin: 0, valign: "middle", lineSpacingMultiple: 1.15 });
+
+  // ---------- D · deployment ----------
+  s.addShape(pres.ShapeType.roundRect, { x: 0.4, y: 4.06, w: 8.4, h: 2.4, rectRadius: 0.06, fill: { color: "FFFFFF" }, line: { color: LINE, width: 1 } });
+  s.addText("D · HOW IT SHIPS AND KEEPS RUNNING", { x: 0.6, y: 4.18, w: 8.0, h: 0.24, fontFace: FONT_BODY, fontSize: 9, bold: true, color: INDIGO, charSpacing: 0.8, isTextBox: true, margin: 0 });
+  const ship = [
+    ["Infrastructure as code", "Bicep or Terraform. Nothing clicked into the portal, so the test environment is the production one minus data."],
+    ["Azure DevOps pipelines", "Already licensed. Lint, type-check, unit tests, then the replay set on every merge."],
+    ["A flag per agent", "Extraction, classification, research and drafting each toggle independently, per claim type."],
+    ["Blue/green on the workers", "A bad release drains rather than cuts. In-flight claims finish on the old version."],
+    ["Model version pinned", "An upgrade is a deliberate change that re-runs the replay set — never a silent one."],
+  ];
+  let dy = 4.48;
+  ship.forEach(([t, d]) => {
+    s.addText(t, { x: 0.6, y: dy, w: 2.5, h: 0.36, fontFace: FONT_BODY, fontSize: 8.2, bold: true, color: INK, isTextBox: true, margin: 0, valign: "middle", lineSpacingMultiple: 1.1 });
+    s.addText(d, { x: 3.18, y: dy, w: 5.42, h: 0.36, fontFace: FONT_BODY, fontSize: 7.8, color: "5A5A5A", isTextBox: true, margin: 0, valign: "middle", lineSpacingMultiple: 1.12 });
+    dy += 0.385;
+  });
+
+  s.addText("Runs on the cloud GGW already deploy to · costs for exactly this shape are on slide 9 · the rollout that puts it in front of a handler is on slide 7",
+    { x: 0.4, y: 6.62, w: 12.5, h: 0.26, fontFace: FONT_BODY, fontSize: 7, color: MUTED, isTextBox: true, margin: 0 });
+  footer(s, 8);
+}
+
+// =========================================================================
 // SLIDE 6 — How the numbers are built (backup / defensible detail)
 // Three accent colours only: AMBER = time, TEAL = cost, MAG = conclusion.
 // =========================================================================
@@ -645,7 +737,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
 
   s.addText("Every figure is built from observed steps and list prices — none of it is a best case", {
     x: 0.4, y: 0.13, w: 10.2, h: 0.34, fontFace: FONT_HEAD, fontSize: 14, bold: true, color: INK, isTextBox: true, margin: 0 });
-  s.addText("HOW THE NUMBERS ARE BUILT", { x: 8.9, y: 0.16, w: 4.03, h: 0.3, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: MUTED, charSpacing: 1.4, align: "right", isTextBox: true, margin: 0 });
+  s.addText("APPENDIX · HOW THE NUMBERS ARE BUILT", { x: 8.0, y: 0.16, w: 4.93, h: 0.3, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: MUTED, charSpacing: 1.4, align: "right", isTextBox: true, margin: 0 });
 
   const L = 0.4, R = 6.85, CW = 6.0, RH = 0.235;
   const blockHead = (t, x, y, col, w) => s.addText(t, { x, y, w: w || CW, h: 0.24, fontFace: FONT_BODY, fontSize: 9, bold: true, color: col, charSpacing: 0.8, isTextBox: true, margin: 0 });
@@ -657,7 +749,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   const B = (t) => ({ text: t, options: { bold: true } });
 
   // ---------- A · time (left) ----------
-  blockHead("A \u00b7 HANDLER TIME \u2014 MINUTES PER CLAIM, PER HANDLER", L, 0.58, AMBER);
+  blockHead("A \u00b7 INTAKE TIME \u2014 MINUTES PER CLAIM, PER PERSON", L, 0.58, AMBER);
   tbl([
     [B("Step"), B("Today"), B("Redesigned")],
     ...F.rows,
@@ -671,7 +763,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   s.addShape(pres.ShapeType.roundRect, { x: L, y: 3.82, w: CW, h: 0.60, rectRadius: 0.05, fill: { color: "FDF3E3" }, line: { color: AMBER, width: 1 } });
   s.addText([
     { text: "Cross-check:  ", options: { bold: true, color: "9A5A0A" } },
-    { text: `${F.stdTodayInt} min \u00d7 ${F.claimsYr} claims a year = ${F.todayHoursYr} handler-hours \u2014 ${F.teamSharePct}% of a 30-person team's yearly capacity. Plausible for the front end of a claims process. Had it come out at 60%, the model would be wrong.`, options: { color: "44403A" } },
+    { text: `${F.stdTodayInt} min \u00d7 ${F.claimsYr} claims a year = ${F.todayHoursYr} hours \u2014 ${F.shareSupportPct}% of the ${F.support}-person support team's year, ${F.shareTeamPct}% of all 30. Per person: ${F.claimsPerPersonDay} claims a day at 40 min is ${F.intakeHPersonDay} of a ${F.prodHPerDay}-hour day. Intake is half of what the support team does.`, options: { color: "44403A" } },
   ], { x: L + 0.18, y: 3.82, w: CW - 0.36, h: 0.60, fontFace: FONT_BODY, fontSize: 8.2, isTextBox: true, margin: 0, valign: "middle", lineSpacingMultiple: 1.15 });
 
   // ---------- D · business case (left, bottom) ----------
@@ -687,8 +779,8 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   };
 
   eyebrow("EVERY YEAR", 4.84);
-  [["Capacity released", `${F.hoursYr} handler-h \u00b7 ${F.fte} FTE`, 0],
-   [`Worth, at \u20ac${F.hourly} per handler-hour`, `\u20ac${F.valueYrR} a year`, 0],
+  [["Capacity released", `${F.hoursYr} support-h \u00b7 ${F.fte} FTE`, 0],
+   [`Worth, at \u20ac${F.hourly} per support-team hour`, `\u20ac${F.valueYrR} a year`, 0],
    ["Cost to run it \u2014 AI models and Azure", `\u2212 \u20ac${F.runYrR}`, 0],
    ["Ongoing support \u2014 0.25 of an engineer", `\u2212 \u20ac${F.maintYrR}`, 0],
    ["Net value, every year", `\u20ac${F.netYrR}`, 1],
@@ -731,79 +823,77 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   note("Registry, networking, Key Vault and DevOps (≈ €670/yr) already exist, so they are not charged here. Azure DevOps gives repos and pipelines, not a database — PostgreSQL is genuinely new.", R, 4.80, 0.28);
 
   // ---------- E · who gets the time back (right, bottom) ----------
-  blockHead("E · WHO ACTUALLY GETS THE TIME BACK", R, 5.14, MAG);
-  s.addText("The brief says a support team does intake, not all 30 handlers — so the truth is in the middle rows. Our first question for GGW.",
+  blockHead("E · WHO GETS THE TIME BACK — CONFIRMED BY GGW", R, 5.14, MAG);
+  s.addText(`${F.handlers} claim handlers and ${F.support} support staff (GGW, 8 Sep). The brief puts FNOL with the support team, so every freed hour is theirs.`,
     { x: R, y: 5.36, w: CW, h: 0.22, fontFace: FONT_BODY, fontSize: 7.8, italic: true, color: "6A1F42", isTextBox: true, margin: 0 });
   tbl([
-    [B("Intake handled by…"), B("Claims each, per day"), B("Intake work, per day"), B("Time freed, per day")],
-    ["all 30 claims handlers", "1.7", "1.1 h", "35 min"],
-    ["a support team of 12", "4.2", "2.8 h", "88 min"],
-    ["a support team of 8", "6.2", "4.2 h", "2.2 h"],
-    ["a support team of 6", "8.3", "5.6 h", "2.9 h"],
+    [B("Per support-team member"), B("Today"), B("Redesigned"), B("Difference")],
+    ["Claims taken in, per day", `${F.claimsPerPersonDay}`, `${F.claimsPerPersonDay}`, "—"],
+    ["Time on intake, per day", `${F.intakeHPersonDay} h`, "1.6 h", `− ${F.freedHPersonDay} h`],
+    ["Share of a productive day", `${F.shareSupportPct}%`, "25%", "− 27 pts"],
+    [B("Hours back, each, per day"), "", "", B(`${F.freedHPersonDay} h`)],
   ], R, 5.62, [2.1, 1.35, 1.3, 1.25]);
 
-  footer(s, 8);
+  footer(s, 9);
 }
 // =========================================================================
 // SLIDE 7 — Sources (clickable) and what is assumption vs. fact
+// Two columns: the list outgrew one after GGW's answers were added.
 // =========================================================================
 {
   const s = pres.addSlide();
   s.background = { color: "FAFAF8" };
 
-  s.addText("What is sourced, and what is our assumption — kept separate on purpose", {
+  s.addText("What is sourced, what GGW confirmed, and what is still our assumption", {
     x: 0.4, y: 0.13, w: 10.2, h: 0.34, fontFace: FONT_HEAD, fontSize: 14, bold: true, color: INK, isTextBox: true, margin: 0 });
-  s.addText("SOURCES & ASSUMPTIONS", { x: 9.4, y: 0.16, w: 3.53, h: 0.3, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: MUTED, charSpacing: 1.4, align: "right", isTextBox: true, margin: 0 });
+  s.addText("APPENDIX · SOURCES & ASSUMPTIONS", { x: 8.4, y: 0.16, w: 4.53, h: 0.3, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: MUTED, charSpacing: 1.4, align: "right", isTextBox: true, margin: 0 });
 
   const SRC = [
-    ["Wage base", "Sachbearbeiter Schadenregulierung, €45,100 gross",
-      "StepStone Gehaltsreport", "https://www.stepstone.de/gehalt/Schadenregulierer-in.html"],
-    ["Employer on-cost", "≈ €23 per €100 gross — health, pension, unemployment, care",
-      "Lohnnebenkosten 2026, sevdesk", "https://sevdesk.de/ratgeber/buchhaltung-finanzen/lohnbuchhaltung/lohnnebenkosten/"],
-    ["Working time, breaks", "38 h tariff week; statutory break rules",
-      "Arbeitszeitgesetz §4", "https://www.gesetze-im-internet.de/arbzg/__4.html"],
-    ["Model prices", "gpt-5.6 terra — $2 in / $12 out per million tokens",
-      "OpenAI API pricing", "https://openai.com/api/pricing/"],
-    ["Container hosting", "Consumption plan rates and the monthly free grant",
-      "Azure Container Apps pricing", "https://azure.microsoft.com/en-us/pricing/details/container-apps/"],
-    ["Database", "PostgreSQL Flexible Server B2s — 2 vCore / 4 GiB",
-      "Azure Database for PostgreSQL", "https://azure.microsoft.com/en-us/pricing/details/postgresql/flexible-server/"],
-    ["Build-team pay", "Senior ML engineer ≈ €98k; juniors at €70k as briefed",
-      "Glassdoor, ML Engineer Germany", "https://www.glassdoor.com/Salaries/germany-machine-learning-engineer-salary-SRCH_IL.0,7_IN96_KO8,33.htm"],
-    ["Upkeep after go-live", "15–20% of build effort a year — our 0.25 FTE is 17%",
-      "Software maintenance rule of thumb", ""],
-    ["Industry baseline", "17 of 20 carriers still manual; none let AI decide alone",
-      "Decerto, 2026 Claims Decisioning Pulse", "https://www.decerto.com/us/post/ai-claims-decisioning-framework-2026-what-us-claims-leaders-told-us-about-how-decisions-actually-get-made"],
-    ["Where value comes from", "The 10-20-70 split — algorithms, technology, people",
-      "BCG, AI in customer service operations", "https://www.bcg.com/publications/2024/transforming-customer-service-operations-with-genai"],
-    ["Fixing import failures", "Retry vs. dead-letter, idempotency keys, alert on rate",
-      "Dead-letter queues and poison messages", "https://www.glukhov.org/app-architecture/integration-patterns/dead-letter-queues/"],
-    ["Volumes and shares", "~50 first reports a day · 65% minor · ~30 handlers",
-      "GGW case study brief", ""],
+    ["Who does intake", "20 claim handlers, 10 support staff — FNOL sits with support", "GGW (P. Gossmann), 8 Sep 2026", "", true],
+    ["Failed EASY imports", "Not noticed today — so detection comes before retries", "GGW (P. Gossmann), 8 Sep 2026", "", true],
+    ["Volumes and shares", "~50 first reports a day · 65% minor · ~30 in the team", "GGW case study brief", "", true],
+    ["Wage base — intake", "Sachbearbeiter/in Versicherung, €41,100 gross", "StepStone Gehaltsreport", "https://www.stepstone.de/gehalt/Sachbearbeiter-in-Versicherung.html"],
+    ["Employer on-cost", "≈ €23 per €100 gross — health, pension, care", "Lohnnebenkosten 2026, sevdesk", "https://sevdesk.de/ratgeber/buchhaltung-finanzen/lohnbuchhaltung/lohnnebenkosten/"],
+    ["Working time, breaks", "38 h tariff week; statutory break rules", "Arbeitszeitgesetz §4", "https://www.gesetze-im-internet.de/arbzg/__4.html"],
+    ["Build & upkeep pay", "Senior ML engineer ≈ €98k; juniors at €70k as briefed", "Glassdoor, ML Engineer Germany", "https://www.glassdoor.com/Salaries/germany-machine-learning-engineer-salary-SRCH_IL.0,7_IN96_KO8,33.htm"],
+    ["Model prices", "gpt-5.6 terra — $2 in / $12 out per million tokens", "OpenAI API pricing", "https://openai.com/api/pricing/"],
+    ["Container hosting", "Consumption plan rates and the monthly free grant", "Azure Container Apps pricing", "https://azure.microsoft.com/en-us/pricing/details/container-apps/"],
+    ["Database", "PostgreSQL Flexible Server B2s — 2 vCore / 4 GiB", "Azure Database for PostgreSQL", "https://azure.microsoft.com/en-us/pricing/details/postgresql/flexible-server/"],
+    ["Upkeep after go-live", "15–20% of build effort a year — our 0.25 FTE is 17%", "Software maintenance rule of thumb", ""],
+    ["Industry baseline", "17 of 20 carriers still manual; none let AI decide alone", "Decerto, 2026 Claims Decisioning Pulse", "https://www.decerto.com/us/post/ai-claims-decisioning-framework-2026-what-us-claims-leaders-told-us-about-how-decisions-actually-get-made"],
+    ["Where value comes from", "The 10-20-70 split — algorithms, technology, people", "BCG, AI in customer service operations", "https://www.bcg.com/publications/2024/transforming-customer-service-operations-with-genai"],
+    ["Fixing import failures", "Retry vs. dead-letter, idempotency keys, alert on rate", "Dead-letter queues and poison messages", "https://www.glukhov.org/app-architecture/integration-patterns/dead-letter-queues/"],
   ];
 
-  let y = 0.58;
-  SRC.forEach(([label, what, name, url]) => {
-    s.addShape(pres.ShapeType.rect, { x: 0.4, y: y + 0.02, w: 0.05, h: 0.34, fill: { color: TEAL }, line: { type: "none" } });
-    s.addText(label, { x: 0.58, y: y, w: 2.15, h: 0.20, fontFace: FONT_BODY, fontSize: 8.6, bold: true, color: INK, isTextBox: true, margin: 0 });
-    s.addText(what, { x: 0.58, y: y + 0.17, w: 5.4, h: 0.20, fontFace: FONT_BODY, fontSize: 8, color: "5A5A5A", isTextBox: true, margin: 0 });
+  const COLX = [0.4, 6.75], COLW = 6.18;
+  SRC.forEach(([label, what, name, url, confirmed], i) => {
+    const cx = COLX[i < 7 ? 0 : 1];
+    const y = 0.60 + (i % 7) * 0.52;
+    const accent = confirmed ? MAG : TEAL;
+    s.addShape(pres.ShapeType.rect, { x: cx, y: y + 0.02, w: 0.05, h: 0.44, fill: { color: accent }, line: { type: "none" } });
+    s.addText(label, { x: cx + 0.18, y, w: COLW - 0.18, h: 0.19, fontFace: FONT_BODY, fontSize: 8.6, bold: true, color: INK, isTextBox: true, margin: 0 });
+    s.addText(what, { x: cx + 0.18, y: y + 0.17, w: COLW - 0.18, h: 0.19, fontFace: FONT_BODY, fontSize: 7.8, color: "5A5A5A", isTextBox: true, margin: 0 });
     s.addText(name, {
-      x: 6.2, y: y + 0.06, w: 6.6, h: 0.24, fontFace: FONT_BODY, fontSize: 8.4,
-      color: url ? "0B5F8A" : "5A5A5A", italic: !url, isTextBox: true, margin: 0,
+      x: cx + 0.18, y: y + 0.33, w: COLW - 0.18, h: 0.19, fontFace: FONT_BODY, fontSize: 7.8,
+      color: url ? "0B5F8A" : (confirmed ? "6A1F42" : "5A5A5A"), italic: !url, isTextBox: true, margin: 0,
       ...(url ? { hyperlink: { url, tooltip: name } } : {}),
     });
-    y += 0.40;
   });
 
-  s.addShape(pres.ShapeType.roundRect, { x: 0.4, y: 5.42, w: 12.43, h: 1.20, rectRadius: 0.06, fill: { color: "FDF3E3" }, line: { color: AMBER, width: 1.2 } });
-  s.addText("OUR ASSUMPTIONS — NOT SOURCED, AND THE FIRST THING WE WOULD TEST", {
-    x: 0.6, y: 5.53, w: 12.0, h: 0.24, fontFace: FONT_BODY, fontSize: 8.6, bold: true, color: "9A5A0A", charSpacing: 0.6, isTextBox: true, margin: 0 });
-  s.addText("Every per-step minute on slide 6 · the 30% allowance for breaks and interruptions · how often a CPR is missing (30%) or underwriting is asked (25%) · how often the redesign raises an exception (20%) · the tokens a typical claim needs · the €146k build · the 0.25 FTE upkeep · and how many people staff intake, which sets the per-person saving.\n\nTwo weeks of watching live intake would replace all of these with real measurements. That is step one of the plan, not an afterthought.",
-    { x: 0.6, y: 5.78, w: 12.0, h: 0.76, fontFace: FONT_BODY, fontSize: 8.4, color: "44403A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.2 });
+  s.addShape(pres.ShapeType.roundRect, { x: 0.4, y: 4.36, w: 12.53, h: 1.26, rectRadius: 0.06, fill: { color: "FDF3E3" }, line: { color: AMBER, width: 1.2 } });
+  s.addText("STILL OUR ASSUMPTIONS — AND THE FIRST THING WE WOULD TEST", {
+    x: 0.6, y: 4.47, w: 12.1, h: 0.24, fontFace: FONT_BODY, fontSize: 8.6, bold: true, color: "9A5A0A", charSpacing: 0.6, isTextBox: true, margin: 0 });
+  s.addText("Every per-step minute on slide 9 · the 30% allowance for breaks and interruptions · how often a CPR is missing (30%) or underwriting is asked (25%) · how often the redesign raises an exception (20%) · the tokens a typical claim needs · the €146k build · the 0.25 FTE upkeep.\n\nWho does intake is no longer among them — GGW answered it, and every per-person figure in this deck is rebuilt on that answer. Two weeks of watching live intake would replace the rest with measurements.",
+    { x: 0.6, y: 4.72, w: 12.1, h: 0.82, fontFace: FONT_BODY, fontSize: 8.4, color: "44403A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.2 });
+
+  s.addShape(pres.ShapeType.rect, { x: 0.4, y: 5.80, w: 0.05, h: 0.2, fill: { color: MAG }, line: { type: "none" } });
+  s.addText("confirmed by GGW or stated in the brief", { x: 0.58, y: 5.78, w: 3.2, h: 0.24, fontFace: FONT_BODY, fontSize: 7.6, color: MAG, isTextBox: true, margin: 0 });
+  s.addShape(pres.ShapeType.rect, { x: 4.0, y: 5.80, w: 0.05, h: 0.2, fill: { color: TEAL }, line: { type: "none" } });
+  s.addText("published source, linked", { x: 4.18, y: 5.78, w: 3.2, h: 0.24, fontFace: FONT_BODY, fontSize: 7.6, color: TEAL, isTextBox: true, margin: 0 });
 
   s.addText("Prices checked September 2026 · US$ converted at €0.92 · every euro figure is fully loaded — gross pay plus employer contributions",
-    { x: 0.4, y: 6.70, w: 12.5, h: 0.26, fontFace: FONT_BODY, fontSize: 7, color: MUTED, isTextBox: true, margin: 0 });
-  footer(s, 9);
+    { x: 0.4, y: 6.18, w: 12.5, h: 0.26, fontFace: FONT_BODY, fontSize: 7, color: MUTED, isTextBox: true, margin: 0 });
+  footer(s, 10);
 }
 
 pres.writeFile({ fileName: "/tmp/claude-0/-home-user-ggw-casestudy/2b8e5a67-8934-50d1-9acc-621207f6c407/scratchpad/deck/GGW_FNOL_Redesign.pptx" })
