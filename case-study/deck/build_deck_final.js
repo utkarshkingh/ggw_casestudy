@@ -157,10 +157,10 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
     x: 9.6, y: 0.17, w: 3.23, h: 0.26, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: "7FB3B6",
     charSpacing: 1.6, align: "right", isTextBox: true, margin: 0,
   });
-  s.addText(`Redesigning intake gives the ${F.support}-person support team back ${F.freedHPersonDay} hours each, every day`, {
+  s.addText(`Redesigning intake gives each of the ${F.handlers} claim handlers back ${F.freedMinPersonDay} minutes a day`, {
     x: 0.5, y: 0.15, w: 9.0, h: 0.44, fontFace: FONT_HEAD, fontSize: 19, bold: true, color: "FFFFFF", isTextBox: true, margin: 0,
   });
-  s.addText(`${F.hoursDay} hours a day across the team — ${F.fte} full-time people · two thirds of that work goes to claims that were always going to close quietly · a person still decides anything adverse`,
+  s.addText(`${F.hoursDay} hours a day across the ${F.handlers} of them — ${F.fte} full-time people · two thirds of that work goes to claims that were always going to close quietly · a person still decides anything adverse`,
     { x: 0.5, y: 0.63, w: 12.3, h: 0.36, fontFace: FONT_BODY, fontSize: 10.5, color: "9FC9CB", isTextBox: true, margin: 0 });
 
   const py = 1.45, ph = 2.72, pw = 3.75, pwC = 4.23;
@@ -172,7 +172,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   }
 
   panel(pA, pw, AMBER_BG, AMBER, "Today");
-  s.addText("What one claim costs a support-team member", { x: pA + 0.22, y: py + 0.44, w: pw - 0.44, h: 0.4, fontFace: FONT_BODY, fontSize: 9, color: "44403A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
+  s.addText("What one claim costs one claim handler", { x: pA + 0.22, y: py + 0.44, w: pw - 0.44, h: 0.4, fontFace: FONT_BODY, fontSize: 9, color: "44403A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
   s.addText([{ text: F.stdTodayInt, options: { fontSize: 42, bold: true, color: AMBER } }, { text: "  minutes per claim", options: { fontSize: 12, color: "6B6257" } }],
     { x: pA + 0.22, y: py + 0.86, w: pw - 0.44, h: 0.6, fontFace: FONT_HEAD, isTextBox: true, margin: 0 });
   s.addText("Reading and re-reading the report, opening attachments, chasing a missing CPR, switching between EASY, IDB, e-mail and paper. Plus 30% for breaks and interruptions.",
@@ -203,8 +203,8 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
 
   // KPI strip
   const kpis = [
-    [`${F.freedHPersonDay} h`, `freed per support-team member, every working day (of ${F.prodHPerDay} productive hours)`, AMBER],
-    [`${F.hoursDay} h`, `across the ${F.support}-person support team — ${F.fte} full-time people`, TEAL],
+    [`${F.freedMinPersonDay} min`, `freed per claim handler, every working day (of ${F.prodHPerDay} productive hours)`, AMBER],
+    [`${F.hoursDay} h`, `across the ${F.handlers} claim handlers — ${F.fte} full-time people`, TEAL],
     [`€${F.valueYrK}k`, "value of that capacity, per year", MAG],
     [`${F.payback} mths`, `to pay back the one-off build of €${F.buildK}k`, INDIGO],
   ];
@@ -220,7 +220,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   s.addShape(pres.ShapeType.roundRect, { x: 0.5, y: 5.52, w: 6.15, h: 1.0, rectRadius: 0.06, fill: { color: "FFFFFF" }, line: { color: LINE, width: 1 } });
   s.addText([
     { text: `What “€${F.valueYrK}k” means:  `, options: { bold: true, color: MAG } },
-    { text: `${F.hoursYr} support-team hours a year × €${F.hourly}, the loaded cost of one of those hours. Valued at support pay (€${F.supportGross} gross), not claims-handler pay, because these are the hours actually freed. Capacity, not cash — it becomes money only if the hours go to the backlog or are absorbed by turnover.`, options: { color: "3A3A3A" } },
+    { text: `${F.hoursYr} handler-hours a year × €${F.hourly}, the loaded cost of one handler-hour (€${F.intakeGross} gross plus employer contributions, over actual working hours). Capacity, not cash — it becomes money only if the hours go to the backlog or are absorbed by normal staff turnover.`, options: { color: "3A3A3A" } },
   ], { x: 0.68, y: 5.52, w: 5.8, h: 1.0, fontFace: FONT_BODY, fontSize: 8.5, isTextBox: true, margin: 0, valign: "middle", lineSpacingMultiple: 1.18 });
 
   s.addShape(pres.ShapeType.roundRect, { x: 6.85, y: 5.52, w: 5.98, h: 1.0, rectRadius: 0.06, fill: { color: MAG_BG }, line: { color: MAG, width: 1.2 } });
@@ -587,7 +587,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   s.addShape(pres.ShapeType.roundRect, { x: L, y: 3.82, w: CW, h: 0.60, rectRadius: 0.05, fill: { color: "FDF3E3" }, line: { color: AMBER, width: 1 } });
   s.addText([
     { text: "Cross-check:  ", options: { bold: true, color: "9A5A0A" } },
-    { text: `${F.stdTodayInt} min \u00d7 ${F.claimsYr} claims a year = ${F.todayHoursYr} hours \u2014 ${F.shareSupportPct}% of the ${F.support}-person support team's year, ${F.shareTeamPct}% of all 30. Per person: ${F.claimsPerPersonDay} claims a day at 40 min is ${F.intakeHPersonDay} of a ${F.prodHPerDay}-hour day. Intake is half of what the support team does.`, options: { color: "44403A" } },
+    { text: `${F.stdTodayInt} min \u00d7 ${F.claimsYr} claims a year = ${F.todayHoursYr} handler-hours \u2014 ${F.shareIntakePct}% of the ${F.handlers} handlers' year, ${F.shareTeamPct}% of all 30. Per handler: ${F.claimsPerPersonDay} claims a day at 40 min is ${F.intakeHPersonDay} of a ${F.prodHPerDay}-hour day.`, options: { color: "44403A" } },
   ], { x: L + 0.18, y: 3.82, w: CW - 0.36, h: 0.60, fontFace: FONT_BODY, fontSize: 8.2, isTextBox: true, margin: 0, valign: "middle", lineSpacingMultiple: 1.15 });
 
   // ---------- D · business case (left, bottom) ----------
@@ -603,8 +603,8 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   };
 
   eyebrow("EVERY YEAR", 4.84);
-  [["Capacity released", `${F.hoursYr} support-h \u00b7 ${F.fte} FTE`, 0],
-   [`Worth, at \u20ac${F.hourly} per support-team hour`, `\u20ac${F.valueYrR} a year`, 0],
+  [["Capacity released", `${F.hoursYr} handler-h \u00b7 ${F.fte} FTE`, 0],
+   [`Worth, at \u20ac${F.hourly} per handler-hour`, `\u20ac${F.valueYrR} a year`, 0],
    ["Cost to run it \u2014 AI models and Azure", `\u2212 \u20ac${F.runYrR}`, 0],
    ["Ongoing support \u2014 0.25 of an engineer", `\u2212 \u20ac${F.maintYrR}`, 0],
    ["Net value, every year", `\u20ac${F.netYrR}`, 1],
@@ -648,14 +648,14 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
 
   // ---------- E · who gets the time back (right, bottom) ----------
   blockHead("E · WHO GETS THE TIME BACK — CONFIRMED BY GGW", R, 5.14, MAG);
-  s.addText(`${F.handlers} claim handlers and ${F.support} support staff (GGW, 8 Sep). The brief puts FNOL with the support team, so every freed hour is theirs.`,
+  s.addText(`${F.handlers} claim handlers, ${F.support} support staff (GGW, 8 Sep) \u00b7 ${F.freedMinExact} min each \u00d7 ${F.handlers} = ${F.hoursDay} h a day`,
     { x: R, y: 5.36, w: CW, h: 0.22, fontFace: FONT_BODY, fontSize: 7.8, italic: true, color: "6A1F42", isTextBox: true, margin: 0 });
   tbl([
-    [B("Per support-team member"), B("Today"), B("Redesigned"), B("Difference")],
+    [B("Per claim handler"), B("Today"), B("Redesigned"), B("Difference")],
     ["Claims taken in, per day", `${F.claimsPerPersonDay}`, `${F.claimsPerPersonDay}`, "—"],
-    ["Time on intake, per day", `${F.intakeHPersonDay} h`, "1.6 h", `− ${F.freedHPersonDay} h`],
-    ["Share of a productive day", `${F.shareSupportPct}%`, "25%", "− 27 pts"],
-    [B("Hours back, each, per day"), "", "", B(`${F.freedHPersonDay} h`)],
+    ["Time on intake, per day", `${F.intakeMinPersonDay} min`, `${F.afterMinPersonDay} min`, `− ${F.freedMinPersonDay} min`],
+    ["Share of a productive day", `${F.shareDayTodayPct}%`, `${F.shareDayAfterPct}%`, `− ${F.shareDayDeltaPts} pts`],
+    [B("Time back, each, per day"), "", "", B(`${F.freedMinPersonDay} min`)],
   ], R, 5.62, [2.1, 1.35, 1.3, 1.25]);
 
   footer(s, 7);
@@ -673,10 +673,10 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   s.addText("APPENDIX · SOURCES & ASSUMPTIONS", { x: 8.4, y: 0.16, w: 4.53, h: 0.3, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: MUTED, charSpacing: 1.4, align: "right", isTextBox: true, margin: 0 });
 
   const SRC = [
-    ["Who does intake", "20 claim handlers, 10 support staff — FNOL sits with support", "GGW (P. Gossmann), 8 Sep 2026", "", true],
+    ["Who does intake", "20 claim handlers process claims; 10 support staff besides", "GGW (P. Gossmann), 8 Sep 2026", "", true],
     ["Failed EASY imports", "Not noticed today — so detection comes before retries", "GGW (P. Gossmann), 8 Sep 2026", "", true],
     ["Volumes and shares", "~50 first reports a day · 65% minor · ~30 in the team", "GGW case study brief", "", true],
-    ["Wage base — intake", "Sachbearbeiter/in Versicherung, €41,100 gross", "StepStone Gehaltsreport", "https://www.stepstone.de/gehalt/Sachbearbeiter-in-Versicherung.html"],
+    ["Wage base — handlers", "Schadenregulierer/in, €45,100 gross — the role doing intake", "StepStone Gehaltsreport", "https://www.stepstone.de/gehalt/Schadenregulierer-in.html"],
     ["Employer on-cost", "≈ €23 per €100 gross — health, pension, care", "Lohnnebenkosten 2026, sevdesk", "https://sevdesk.de/ratgeber/buchhaltung-finanzen/lohnbuchhaltung/lohnnebenkosten/"],
     ["Working time, breaks", "38 h tariff week; statutory break rules", "Arbeitszeitgesetz §4", "https://www.gesetze-im-internet.de/arbzg/__4.html"],
     ["Build & upkeep pay", "Senior ML engineer ≈ €98k; juniors at €70k as briefed", "Glassdoor, ML Engineer Germany", "https://www.glassdoor.com/Salaries/germany-machine-learning-engineer-salary-SRCH_IL.0,7_IN96_KO8,33.htm"],

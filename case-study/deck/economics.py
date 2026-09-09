@@ -18,17 +18,18 @@ CLAIMS_PER_DAY   = 50        # case study: "~50 first reports/day" via EASY
 WORKING_DAYS     = 250       # German working year
 TEAM_SIZE        = 30        # case study: "a claims team of roughly 30 people"
 # Confirmed by GGW (Philip Gossmann, 8 Sep 2026): the 30 splits 20 / 10.
-# The brief already said FNOL is run by the "support team (the intake lead
-# allocates)", so intake work -- and therefore every hour this redesign frees --
-# sits with the 10, not spread across all 30.
+# The 20 claim handlers process claims; the 10 support staff are separate.
+# Intake work -- and therefore every hour this redesign frees -- sits with the
+# 20, not with all 30 and not with the support staff.
 CLAIM_HANDLERS   = 20
 SUPPORT_STAFF    = 10
-INTAKE_STAFF     = SUPPORT_STAFF
+INTAKE_STAFF     = CLAIM_HANDLERS
 MINOR_SHARE      = 0.65      # case study: "Yes, ~65% of claims (likely more)"
-# Freed hours are support-team hours, so they are valued at the support rate,
-# not the claims-handler rate. Both StepStone national averages, same basis.
-HANDLER_GROSS    = 45_100    # Sachbearbeiter Schadenregulierung
-GROSS_SALARY     = 41_100    # Sachbearbeiter/in Versicherung -- the intake role
+# Freed hours are claim-handler hours, so they are valued at the handler rate.
+# The support rate is kept for contrast only. Both StepStone national averages.
+HANDLER_GROSS    = 45_100    # Schadenregulierer/in -- the role doing intake
+SUPPORT_GROSS    = 41_100    # Sachbearbeiter/in Versicherung -- not used here
+GROSS_SALARY     = HANDLER_GROSS
 EMPLOYER_ONCOST  = 1.23      # Germany: ~EUR 23 on-cost per EUR 100 gross
 USD_EUR          = 0.92
 
@@ -332,14 +333,20 @@ FIGURES = {
     "capturePct": f"{saving/theoretical*100:.0f}",
     # confirmed by GGW, 8 Sep 2026
     "handlers": f"{CLAIM_HANDLERS}", "support": f"{SUPPORT_STAFF}",
-    "claimsPerPersonDay": f"{claims_per_person_day:.0f}",
+    "claimsPerPersonDay": f"{claims_per_person_day:.1f}",
     "intakeHPersonDay": f"{intake_h_person_day:.1f}",
+    "intakeMinPersonDay": f"{intake_h_person_day*60:.0f}",
     "freedHPersonDay": f"{freed_h_person_day:.2f}",
     "freedMinPersonDay": f"{freed_h_person_day*60:.0f}",
+    "freedMinExact": f"{freed_h_person_day*60:.1f}",
+    "afterMinPersonDay": f"{claims_per_person_day*after_banked:.0f}",
     "prodHPerDay": f"{prod_h_per_day:.1f}",
-    "shareSupportPct": f"{share_support*100:.0f}",
+    "shareDayTodayPct": f"{intake_h_person_day/prod_h_per_day*100:.0f}",
+    "shareDayAfterPct": f"{claims_per_person_day*after_banked/60/prod_h_per_day*100:.0f}",
+    "shareDayDeltaPts": f"{(intake_h_person_day-claims_per_person_day*after_banked/60)/prod_h_per_day*100:.0f}",
+    "shareIntakePct": f"{share_support*100:.0f}",
     "shareTeamPct": f"{share_today*100:.0f}",
-    "supportGross": f"{GROSS_SALARY:,}",
+    "intakeGross": f"{GROSS_SALARY:,}",
     "maintYrR": f"{round(maint_yr, -2):,.0f}",
     "netYrR":   f"{round(net_yr, -2):,.0f}",
     "buildR":   f"{round(build, -2):,.0f}",
