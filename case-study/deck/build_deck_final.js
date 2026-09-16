@@ -996,6 +996,60 @@ function codePanel(slide, x, y, w, h, lines, fontSize = 10.5) {
   codePanel(s, 0.4, 1.1, 12.53, 5.55, code, 11);
 }
 
+// ---- BACKUP 3: Coverage Check -- the brief's second named workflow.
+// Deliberately drawn with the same node vocabulary as slides 3-5 and the
+// same shape as slide 4's Validation: rules resolve most of it, a person
+// only sees what's genuinely ambiguous. Kept as backup so the main 9-slide
+// story stays FNOL-first, this is here to answer "and Coverage Check?"
+// directly rather than only at the architecture level (slide 2's node).
+{
+  const s = pres.addSlide();
+  s.hidden = true;
+  s.background = { color: WHITE };
+
+  s.addText("Coverage Check: the same rules-first pattern as Validation, reused", {
+    x: 0.4, y: 0.13, w: 8.9, h: 0.34, fontFace: FONT_HEAD, fontSize: 14, bold: true, color: INK, isTextBox: true, margin: 0 });
+  s.addText("The brief's second workflow, redesigned the same way: one shared claim record, no separate hand-off",
+    { x: 0.4, y: 0.44, w: 9.6, h: 0.26, fontFace: FONT_BODY, fontSize: 9.5, color: MUTED, isTextBox: true, margin: 0 });
+  s.addText("BACKUP · IF ASKED", { x: 10.4, y: 0.16, w: 2.53, h: 0.3, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: MUTED, charSpacing: 1.4, align: "right", isTextBox: true, margin: 0 });
+  columnHeaders(s);
+
+  // ---- LEFT: today ----
+  rectNode(s, "Claim passes intake\n(continued from FNOL)", LC - 2.3, 1.55, 4.6, START_FILL, START_STROKE, START_TEXT, { fontSize: 9.5 });
+  vArrow(s, LC, 1.95, 2.35);
+
+  diamondNode(s, "Valid policy\nperiod?", LC, 2.35, 0.7);
+  branch(s, LC, 2.70, "right", "Yes, no warning", "Coverage confirmed,\nproceed (usually quick)", "exit", { fontSize: 7.8 });
+  vArrow(s, LC, 3.05, 3.5);
+
+  diamondNode(s, "Why no\ncoverage?", LC, 3.5, 0.7);
+  const bUW = branch(s, LC, 3.85, "left", "Self-employed · group/branch · name mismatch", "Ask underwriting", "exception", { fontSize: 7.6 });
+  branch(s, LC, 3.85, "right", "Valid follow-up policy", "Reattach to\nfollow-up policy", "exception", { fontSize: 7.8 });
+  vArrow(s, LC, 4.2, 4.65);
+  rectNode(s, "Back to employer:\nfile with correct insurer", LC - 2.3, 4.65, 4.6, EXIT_FILL, EXIT_STROKE, EXIT_TEXT, { fontSize: 8.5 });
+  edgeLabel(s, "Wrong, expired, or none", LC + 0.12, 4.36, 2.4, { align: "left", italic: true, fontSize: 7.4 });
+
+  s.addText("Underwriting resolves the exception before the claim can proceed. Most are expected to clear once the underwriting area is mapped (GGW).",
+    { x: LC - 2.3, y: 5.35, w: 4.6, h: 0.55, fontFace: FONT_BODY, fontSize: 8, italic: true, color: MUTED, isTextBox: true, margin: 0, lineSpacingMultiple: 1.2 });
+
+  // ---- RIGHT: AI-native ----
+  const boxW = COL_W - 0.6, boxX = RC - boxW / 2;
+  const h1 = rectNode(s, "Coverage Check Node (rules only)\ndate in force · self-employed cover · employer/policy match\nsame pattern as Validation, applied to coverage",
+    boxX, 1.55, boxW, DET_FILL, DET_STROKE, DET_TEXT, { fontSize: 8.6, bold: true });
+  vArrow(s, RC, 1.55 + h1, 1.55 + h1 + 0.35);
+  const dY = 1.55 + h1 + 0.35;
+
+  diamondNode(s, "Any check\nfailed?", RC, dY, 0.7);
+  branch(s, RC, dY + 0.35, "right", "No", "Coverage confirmed, proceed\n(policy reattached automatically)", "exit", { fontSize: 7.4, boxW: 1.75 });
+  branch(s, RC, dY + 0.35, "left", "Yes, no valid policy", "Back to employer:\nfile with correct insurer", "exit", { fontSize: 7.8 });
+  vArrow(s, RC, dY + 0.7, dY + 1.15);
+  rectNode(s, "Underwriting decides\n(AI prepares the evidence)", boxX, dY + 1.15, boxW, HUM_FILL, HUM_STROKE, HUM_TEXT, { fontSize: 9, bold: true });
+  edgeLabel(s, "Yes, ambiguous: self-employed, group/branch, name mismatch", RC + 0.12, dY + 0.78, 2.6, { align: "left", italic: true, fontSize: 7.2, h: 0.34 });
+
+  s.addText("Same shape as slide 4's Validation: one rules node resolves what it can, a person only sees what's genuinely ambiguous.",
+    { x: boxX, y: dY + 1.85, w: boxW, h: 0.5, fontFace: FONT_BODY, fontSize: 8, italic: true, color: MUTED, isTextBox: true, margin: 0, lineSpacingMultiple: 1.2 });
+}
+
 pres.writeFile({ fileName: "/tmp/claude-0/-home-user-ggw-casestudy/2b8e5a67-8934-50d1-9acc-621207f6c407/scratchpad/deck/GGW_FNOL_Redesign.pptx" })
   .then(() => console.log("written"))
   .catch((e) => { console.error(e); process.exit(1); });
