@@ -526,10 +526,14 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   s.addText("“Hard” means build effort and regulatory exposure together, not just weeks of work", {
     x: 0.4, y: 0.5, w: 12.5, h: 0.26, fontFace: FONT_BODY, fontSize: 9.5, color: MUTED, isTextBox: true, margin: 0 });
 
-  const gx = 1.15, gy = 1.0, gw = 8.6, gh = 5.0;
+  // Quadrants sequence the AI-native build itself -- which agents and rules
+  // nodes to ship first -- not GGW's existing EASY/IDB integration. Fixing
+  // someone else's IT pipeline is a different project; it is deliberately
+  // out of this slide.
+  const gx = 1.15, gy = 1.0, gw = 11.4, gh = 5.0;
   const hw = gw / 2, hh = gh / 2;
 
-  s.addText("HOW OFTEN IT HAPPENS  →", { x: 0.02, y: gy + gh / 2 - 0.14, w: 1.75, h: 0.28, fontFace: FONT_BODY, fontSize: 8, bold: true, color: MUTED, align: "center", isTextBox: true, margin: 0, rotate: 270 });
+  s.addText("HOW OFTEN IT FIRES  →", { x: 0.02, y: gy + gh / 2 - 0.14, w: 1.75, h: 0.28, fontFace: FONT_BODY, fontSize: 8, bold: true, color: MUTED, align: "center", isTextBox: true, margin: 0, rotate: 270 });
   s.addText("HOW HARD AND HOW RISKY IT IS  →", { x: gx, y: gy + gh + 0.1, w: gw, h: 0.24, fontFace: FONT_BODY, fontSize: 8, bold: true, color: MUTED, align: "center", isTextBox: true, margin: 0 });
 
   function quad(qx, qy, bg, stroke, label, sub, items) {
@@ -546,44 +550,20 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
     });
   }
 
-  quad(gx, gy, "FDF3E3", "D97706", "Wave 1 — start here", "cheap to get wrong, happens constantly", [
-    ["Detect failed EASY → IDB imports", "nobody is alerted today, so a claim can go missing unseen"],
-    ["Read, classify, check CPR and policy", "one agent plus plain rules, ending the teeth dependency"],
+  quad(gx, gy, "FDF3E3", "D97706", "Wave 1 — start here", "runs on every claim, makes no decision", [
+    ["Extraction + Classification Agents", "structured fields, claim type, confidence score, every claim"],
+    ["Validation + Coverage Check", "rules only: CPR, policy, dates, a failed import is caught automatically"],
   ]);
   quad(gx + hw, gy, "E4F4F8", "0891B2", "Wave 2 — once trusted", "the real prize, but needs the audit trail live", [
-    ["Draft the close-out letter", "~65% of claims · a handler still approves"],
-    ["Read AES secure mail", "the only channel with no automation today"],
+    ["Outcome Drafting Agent", "~65% of claims, writes the close-out letter, a handler still approves"],
+    ["Exception Research Agent", "fires on the ~20% flagged, gathers evidence for a person to decide"],
   ]);
-  quad(gx, gy + hh, "EDECFB", "4338CA", "Then fix the import itself", "an IT defect, once you can see it", [
-    ["Retry, park and replay", "detection first, because you cannot fix what nobody reports"],
+  quad(gx, gy + hh, "EDECFB", "4338CA", "Extend the pattern", "rarer, but the same shape works", [
+    ["Underwriting decision support", "AI prepares the evidence only: self-employed, group/branch, name mismatch"],
   ]);
   quad(gx + hw, gy + hh, "FBE9F1", "BE185D", "Leave manual", "too rare to earn the effort", [
     ["\"Violence cover\" entitlement letter", "~2 claims so far (GGW) · a checklist beats a model"],
   ]);
-
-  // How the one IT item actually gets fixed -- the detail an engineer would ask for
-  s.addShape(pres.ShapeType.roundRect, { x: 10.05, y: 1.0, w: 2.88, h: 5.0, rectRadius: 0.06, fill: { color: "EDECFB" }, line: { color: "4338CA", width: 1.3 } });
-  s.addText("THE IMPORT FAILURES", { x: 10.27, y: 1.16, w: 2.44, h: 0.24, fontFace: FONT_BODY, fontSize: 9, bold: true, color: "4338CA", charSpacing: 0.7, isTextBox: true, margin: 0 });
-  s.addText("Not noticed today (GGW), so detection comes before retries:", { x: 10.27, y: 1.42, w: 2.44, h: 0.34, fontFace: FONT_BODY, fontSize: 7.8, italic: true, color: "4A4A5E", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
-  // numbered-pill list -- one badge, one short label, one 3-5 word caption.
-  // no paragraphs: the reader gets the sequence at a glance, not a read.
-  const fixes = [
-    ["Count what should arrive", "daily reconciliation catches gaps"],
-    ["Sort the failure", "timeout vs. missing field"],
-    ["Retry with backoff", "1s, 2s, 4s + jitter"],
-    ["One key per claim", "no duplicate replays"],
-    ["Park, don't drop", "holding queue for review"],
-    ["Alert on the rate", "a spike matters, a trickle does not"],
-  ];
-  let fy = 1.86;
-  const fixGap = [0.535, 0.520, 0.548, 0.522, 0.545, 0.530];
-  fixes.forEach(([t, d], i) => {
-    s.addShape(pres.ShapeType.ellipse, { x: 10.27, y: fy, w: 0.30, h: 0.30, fill: { color: "4338CA" }, line: { type: "none" } });
-    s.addText(String(i + 1), { x: 10.27, y: fy, w: 0.30, h: 0.30, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: "FFFFFF", align: "center", valign: "middle", isTextBox: true, margin: 0 });
-    s.addText(t, { x: 10.65, y: fy - 0.02, w: 2.06, h: 0.19, fontFace: FONT_BODY, fontSize: 8.8, bold: true, color: "2A2A3E", isTextBox: true, margin: 0 });
-    s.addText(d, { x: 10.65, y: fy + 0.16, w: 2.06, h: 0.18, fontFace: FONT_BODY, fontSize: 7.6, color: "6A6A7E", isTextBox: true, margin: 0 });
-    fy += fixGap[i] || 0.535;
-  });
 
   s.addText("AES rulings and underwriting authority are deliberately absent. Those decisions are not ours to make.", { x: 0.4, y: 6.6, w: 12.5, h: 0.28, fontFace: FONT_BODY, fontSize: 7, color: MUTED, isTextBox: true, margin: 0 });
   footer(s, 6);
