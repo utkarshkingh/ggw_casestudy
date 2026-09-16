@@ -531,28 +531,47 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
     if (i < 5) elbowAcross(s, BX[i] + BW + 0.03, BX[i + 1] - 0.03, BY + BH / 2);
   });
 
-  // what sits underneath
-  s.addShape(pres.ShapeType.roundRect, { x: BX[0], y: 3.18, w: BW, h: 0.46, rectRadius: 0.05, fill: { color: "FDF3E3" }, line: { color: AMBER, width: 1 } });
-  s.addText("Service Bus\nfailures park, nothing is lost", { x: BX[0] + 0.06, y: 3.18, w: BW - 0.12, h: 0.46, fontFace: FONT_BODY, fontSize: 7.4, bold: true, color: "9A5A0A", align: "center", valign: "middle", isTextBox: true, margin: 0, lineSpacingMultiple: 1.05 });
-  s.addShape(pres.ShapeType.roundRect, { x: BX[1], y: 3.18, w: BX[5] + BW - BX[1], h: 0.46, rectRadius: 0.05, fill: { color: "ECEFF3" }, line: { color: DET_STROKE, width: 1 } });
+  // what sits underneath the graph -- persistence and reliability, kept short
+  s.addShape(pres.ShapeType.roundRect, { x: BX[0], y: 3.12, w: BW, h: 0.38, rectRadius: 0.05, fill: { color: "FDF3E3" }, line: { color: AMBER, width: 1 } });
+  s.addText("Service Bus\nfailures park, nothing is lost", { x: BX[0] + 0.06, y: 3.12, w: BW - 0.12, h: 0.38, fontFace: FONT_BODY, fontSize: 7.4, bold: true, color: "9A5A0A", align: "center", valign: "middle", isTextBox: true, margin: 0, lineSpacingMultiple: 1.05 });
+  s.addShape(pres.ShapeType.roundRect, { x: BX[1], y: 3.12, w: BX[5] + BW - BX[1], h: 0.38, rectRadius: 0.05, fill: { color: "ECEFF3" }, line: { color: DET_STROKE, width: 1 } });
   s.addText("PostgreSQL  ·  graph checkpoint and audit log in one place — every decision, its inputs and its confidence", {
-    x: BX[1], y: 3.18, w: BX[5] + BW - BX[1], h: 0.46, fontFace: FONT_BODY, fontSize: 8, bold: true, color: DET_TEXT, align: "center", valign: "middle", isTextBox: true, margin: 0 });
+    x: BX[1], y: 3.12, w: BX[5] + BW - BX[1], h: 0.38, fontFace: FONT_BODY, fontSize: 8, bold: true, color: DET_TEXT, align: "center", valign: "middle", isTextBox: true, margin: 0 });
+
+  // Operating model -- who owns what, in the graph above. Same three colours as
+  // the pipeline boxes, so the reader maps this straight back to what they just
+  // saw, then the whole slide is answered in one line underneath.
+  s.addText("OPERATING MODEL — WHO OWNS WHAT", { x: 0.4, y: 3.60, w: 6.0, h: 0.20, fontFace: FONT_BODY, fontSize: 9, bold: true, color: INDIGO, charSpacing: 0.8, isTextBox: true, margin: 0 });
+  const roles = [
+    ["AI agents", "draft, classify, extract — never decide", AI_FILL, AI_STROKE, AI_TEXT],
+    ["Rules, no model", "check the record — pass or fail, nothing in between", DET_FILL, DET_STROKE, DET_TEXT],
+    ["A person", "approves before anything can go against a claimant", HUM_FILL, HUM_STROKE, HUM_TEXT],
+  ];
+  const rw = (12.53 - 2 * 0.2) / 3;
+  roles.forEach(([t, d, fill, stroke, tc], i) => {
+    const x = 0.4 + i * (rw + 0.2);
+    s.addShape(pres.ShapeType.roundRect, { x, y: 3.82, w: rw, h: 0.42, rectRadius: 0.05, fill: { color: fill }, line: { color: stroke, width: 1.2 } });
+    s.addText(t, { x: x + 0.14, y: 3.82, w: 1.7, h: 0.42, fontFace: FONT_BODY, fontSize: 9, bold: true, color: tc, valign: "middle", isTextBox: true, margin: 0 });
+    s.addText(d, { x: x + 1.85, y: 3.82, w: rw - 1.95, h: 0.42, fontFace: FONT_BODY, fontSize: 7.8, color: tc, valign: "middle", isTextBox: true, margin: 0, lineSpacingMultiple: 1.05 });
+  });
+  s.addText("AI owns the drafting. Rules own the facts. A person owns every call that can go against a claimant.",
+    { x: 0.4, y: 4.28, w: 12.53, h: 0.20, fontFace: FONT_BODY, fontSize: 8, italic: true, bold: true, color: "2A2A3E", isTextBox: true, margin: 0 });
 
   // the stack, as names only
-  s.addText("THE STACK", { x: 0.4, y: 4.00, w: 3.0, h: 0.22, fontFace: FONT_BODY, fontSize: 9, bold: true, color: TEAL, charSpacing: 0.9, isTextBox: true, margin: 0 });
+  s.addText("THE STACK", { x: 0.4, y: 4.60, w: 3.0, h: 0.20, fontFace: FONT_BODY, fontSize: 9, bold: true, color: TEAL, charSpacing: 0.9, isTextBox: true, margin: 0 });
   const chips = ["FastAPI", "LangGraph", "Pydantic", "PostgreSQL", "Service Bus", "Container Apps", "Blob + Key Vault", "Azure OpenAI", "Azure DevOps"];
   const cw = (12.53 - 8 * 0.16) / 9;
   chips.forEach((c, i) => {
     const x = 0.4 + i * (cw + 0.16);
-    s.addShape(pres.ShapeType.roundRect, { x, y: 4.28, w: cw, h: 0.42, rectRadius: 0.05, fill: { color: "FFFFFF" }, line: { color: TEAL, width: 1.1 } });
-    s.addText(c, { x: x + 0.04, y: 4.28, w: cw - 0.08, h: 0.42, fontFace: FONT_BODY, fontSize: 8, bold: true, color: "0B5A66", align: "center", valign: "middle", isTextBox: true, margin: 0 });
+    s.addShape(pres.ShapeType.roundRect, { x, y: 4.82, w: cw, h: 0.38, rectRadius: 0.05, fill: { color: "FFFFFF" }, line: { color: TEAL, width: 1.1 } });
+    s.addText(c, { x: x + 0.04, y: 4.82, w: cw - 0.08, h: 0.38, fontFace: FONT_BODY, fontSize: 7.8, bold: true, color: "0B5A66", align: "center", valign: "middle", isTextBox: true, margin: 0 });
   });
   s.addText("Deployed to the cloud GGW already use · infrastructure as code · one on/off switch per agent · model version pinned",
-    { x: 0.4, y: 4.78, w: 12.53, h: 0.22, fontFace: FONT_BODY, fontSize: 7.8, italic: true, color: MUTED, isTextBox: true, margin: 0 });
+    { x: 0.4, y: 5.26, w: 12.53, h: 0.20, fontFace: FONT_BODY, fontSize: 7.6, italic: true, color: MUTED, isTextBox: true, margin: 0 });
 
   // how it goes live
-  s.addText("HOW IT GOES LIVE", { x: 0.4, y: 5.24, w: 3.0, h: 0.22, fontFace: FONT_BODY, fontSize: 9, bold: true, color: MAG, charSpacing: 0.9, isTextBox: true, margin: 0 });
-  const gw = (12.53 - 3 * 0.24) / 4;
+  s.addText("HOW IT GOES LIVE", { x: 0.4, y: 5.58, w: 3.0, h: 0.20, fontFace: FONT_BODY, fontSize: 9, bold: true, color: MAG, charSpacing: 0.9, isTextBox: true, margin: 0 });
+  const gw = (12.53 - 3 * 0.24) / 4, gy = 5.80, gh = 0.70;
   const gates = [
     ["Shadow", "weeks 1–8", "Runs on live claims. Nobody sees the output.", AMBER, AMBER_BG],
     ["Suggest", "weeks 9–16", "The handler must edit or approve. Nothing sends itself.", TEAL, TEAL_BG],
@@ -561,15 +580,15 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   ];
   gates.forEach(([t, when, d, col, bg], i) => {
     const x = 0.4 + i * (gw + 0.24);
-    s.addShape(pres.ShapeType.roundRect, { x, y: 5.52, w: gw, h: 0.86, rectRadius: 0.06, fill: { color: bg }, line: { color: col, width: 1.2 } });
-    s.addText(t, { x: x + 0.16, y: 5.61, w: gw - 0.32, h: 0.22, fontFace: FONT_BODY, fontSize: 10, bold: true, color: col, isTextBox: true, margin: 0 });
-    s.addText(when, { x: x + 0.16, y: 5.61, w: gw - 0.32, h: 0.22, fontFace: FONT_BODY, fontSize: 7.6, italic: true, color: MUTED, align: "right", isTextBox: true, margin: 0 });
-    s.addText(d, { x: x + 0.16, y: 5.86, w: gw - 0.32, h: 0.44, fontFace: FONT_BODY, fontSize: 8, color: "3A3A3A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.12 });
-    if (i < 3) elbowAcross(s, x + gw + 0.03, x + gw + 0.21, 5.95);
+    s.addShape(pres.ShapeType.roundRect, { x, y: gy, w: gw, h: gh, rectRadius: 0.06, fill: { color: bg }, line: { color: col, width: 1.2 } });
+    s.addText(t, { x: x + 0.16, y: gy + 0.08, w: gw - 0.32, h: 0.20, fontFace: FONT_BODY, fontSize: 9.6, bold: true, color: col, isTextBox: true, margin: 0 });
+    s.addText(when, { x: x + 0.16, y: gy + 0.08, w: gw - 0.32, h: 0.20, fontFace: FONT_BODY, fontSize: 7.4, italic: true, color: MUTED, align: "right", isTextBox: true, margin: 0 });
+    s.addText(d, { x: x + 0.16, y: gy + 0.28, w: gw - 0.32, h: gh - 0.34, fontFace: FONT_BODY, fontSize: 7.6, color: "3A3A3A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.1 });
+    if (i < 3) elbowAcross(s, x + gw + 0.03, x + gw + 0.21, gy + gh / 2);
   });
 
   s.addText("If an agent fails or is unsure, the claim drops into today's manual queue — slower, never wrong · what it costs is on slide 7",
-    { x: 0.4, y: 6.56, w: 12.5, h: 0.26, fontFace: FONT_BODY, fontSize: 7, color: MUTED, isTextBox: true, margin: 0 });
+    { x: 0.4, y: gy + gh + 0.10, w: 12.5, h: 0.24, fontFace: FONT_BODY, fontSize: 7, color: MUTED, isTextBox: true, margin: 0 });
   footer(s, 6);
 }
 
