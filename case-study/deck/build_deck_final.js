@@ -238,13 +238,13 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   s.addShape(pres.ShapeType.roundRect, { x: 0.5, y: 5.52, w: 6.15, h: 1.0, rectRadius: 0.06, fill: { color: "FFFFFF" }, line: { color: LINE, width: 1 } });
   s.addText([
     { text: `What “€${F.valueYrK}k” means:  `, options: { bold: true, color: MAG } },
-    { text: `${F.hoursYr} handler-hours a year × €${F.hourly}, the loaded cost of one handler-hour (€${F.intakeGross} gross plus employer contributions, over actual working hours). Capacity, not cash — it becomes money only if the hours go to the backlog or are absorbed by normal staff turnover.`, options: { color: "3A3A3A" } },
+    { text: `${F.hoursYr} handler-hours a year, at the loaded cost of a handler-hour. Capacity, not cash — it becomes money only if the hours go to the backlog or are absorbed by normal staff turnover. Full build-up on slide 7.`, options: { color: "3A3A3A" } },
   ], { x: 0.68, y: 5.52, w: 5.8, h: 1.0, fontFace: FONT_BODY, fontSize: 8.5, isTextBox: true, margin: 0, valign: "middle", lineSpacingMultiple: 1.18 });
 
   s.addShape(pres.ShapeType.roundRect, { x: 6.85, y: 5.52, w: 5.98, h: 1.0, rectRadius: 0.06, fill: { color: MAG_BG }, line: { color: MAG, width: 1.2 } });
   s.addText([
     { text: "So what:  ", options: { bold: true, color: MAG } },
-    { text: `cost is not what decides this. The AI costs €${F.runYrR} a year to run; keeping it healthy takes a quarter of an engineer, €${F.maintYrR} — so €${F.allInR} a year all in, against €${F.valueYrR} of capacity released. What decides it is governance: proving a person reviewed anything that can go against a claimant, and whether handlers trust the drafts.`, options: { color: "3A2A32" } },
+    { text: `cost is not what decides this — the value released covers running and maintaining it ${F.ratio} times over. What decides it is governance: proving a person reviewed anything that can go against a claimant, and whether handlers trust the drafts.`, options: { color: "3A2A32" } },
   ], { x: 7.03, y: 5.52, w: 5.62, h: 1.0, fontFace: FONT_BODY, fontSize: 8.5, isTextBox: true, margin: 0, valign: "middle", lineSpacingMultiple: 1.18 });
 
   s.addText(`Conservative throughout: the ${F.pertInt}-minute-per-claim saving is a three-point estimate (best ${F.pertO} / likely ${F.pertM} / worst ${F.pertP}), not the design maximum. Build-up on slide 7, sources on slide 8.`,
