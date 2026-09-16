@@ -786,6 +786,158 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   footer(s, 9);
 }
 
+// =========================================================================
+// BACKUP (hidden) slides — code, for if someone asks "show me the code."
+// Not part of the 9-slide story; PowerPoint skips a hidden slide in Slide
+// Show but it's one keystroke away (type its slide number + Enter).
+// =========================================================================
+const FONT_MONO = "Consolas";
+const CODE_BG = "1E1E1E";
+// minimal Python tokenizer -> VS Code Dark+ colors, so backup code reads
+// like an IDE screenshot instead of a wall of one-color monospace text
+const PY_KW = new Set(["def","class","return","if","else","elif","import","from","as","in","is","not","and","or","lambda","None","True","False","self","for","while","with","try","except","raise","pass","yield"]);
+const PY_TYPE = new Set(["BaseModel","str","int","float","bool","date","list","dict","Literal","Optional"]);
+const PY_COLOR = { kw: "C586C0", type: "4EC9B0", str: "CE9178", cmt: "6A9955", num: "B5CEA8", fn: "DCDCAA", def: "D4D4D4" };
+function pyHighlight(lines) {
+  const tokRe = /(#[^\n]*)|('[^']*'|"[^"]*")|([A-Za-z_][A-Za-z0-9_]*)|(\d+\.?\d*)|(\s+)|(.)/g;
+  const runs = [];
+  lines.forEach((line) => {
+    let m, afterDef = false, afterClass = false;
+    const lineRuns = [];
+    tokRe.lastIndex = 0;
+    while ((m = tokRe.exec(line)) !== null) {
+      const [full, cmt, str, word, num] = m;
+      let color = PY_COLOR.def;
+      if (cmt !== undefined) color = PY_COLOR.cmt;
+      else if (str !== undefined) color = PY_COLOR.str;
+      else if (word !== undefined) {
+        if (PY_KW.has(word)) { color = PY_COLOR.kw; afterDef = word === "def"; afterClass = word === "class"; }
+        else if (PY_TYPE.has(word)) color = PY_COLOR.type;
+        else if (afterDef) { color = PY_COLOR.fn; afterDef = false; }
+        else if (afterClass) { color = PY_COLOR.type; afterClass = false; }
+      } else if (num !== undefined) color = PY_COLOR.num;
+      lineRuns.push({ text: full, options: { color } });
+    }
+    if (lineRuns.length === 0) lineRuns.push({ text: "", options: { color: PY_COLOR.def } });
+    lineRuns[lineRuns.length - 1].text += "\n";
+    runs.push(...lineRuns);
+  });
+  return runs;
+}
+function codePanel(slide, x, y, w, h, lines, fontSize = 10.5) {
+  slide.addShape(pres.ShapeType.roundRect, { x, y, w, h, rectRadius: 0.06, fill: { color: CODE_BG }, line: { type: "none" } });
+  slide.addText(pyHighlight(lines), {
+    x: x + 0.22, y: y + 0.18, w: w - 0.44, h: h - 0.36, fontFace: FONT_MONO, fontSize, isTextBox: true, margin: 0, lineSpacingMultiple: 1.18 });
+}
+
+// ---- BACKUP 1: Validation ----
+{
+  const s = pres.addSlide();
+  s.hidden = true;
+  s.background = { color: WHITE };
+
+  s.addText("Validation is a function, not an agent: three lookups in parallel, no model call", {
+    x: 0.4, y: 0.28, w: 11.8, h: 0.4, fontFace: FONT_HEAD, fontSize: 16, bold: true, color: INK, isTextBox: true, margin: 0 });
+  s.addText("BACKUP · IF ASKED", { x: 10.9, y: 0.16, w: 2.03, h: 0.24, fontFace: FONT_BODY, fontSize: 8.5, bold: true, color: MUTED, charSpacing: 1.2, align: "right", isTextBox: true, margin: 0 });
+  s.addText("A LangGraph node: typed state in, a partial state update out", { x: 0.4, y: 0.68, w: 11.8, h: 0.26, fontFace: FONT_BODY, fontSize: 10.5, color: MUTED, isTextBox: true, margin: 0 });
+
+  const code = [
+    "class ClaimState(BaseModel):",
+    "    cpr: str",
+    "    policy_id: str",
+    "    incident_date: date",
+    "    validation_failed: bool = False",
+    "    failure_reasons: list[str] = []",
+    "",
+    "def validate_claim(state: ClaimState) -> dict:",
+    "    checks = [",
+    "        check_cpr_policy_match(state),",
+    "        check_policy_in_force(state),",
+    "        check_duplicate(state),",
+    "    ]",
+    "    failed = [c for c in checks if not c.passed]",
+    "    return {",
+    '        "validation_failed": bool(failed),',
+    '        "failure_reasons": [c.reason for c in failed],',
+    "    }",
+    "",
+    'graph.add_node("validate", validate_claim)',
+    "graph.add_conditional_edges(",
+    '    "validate",',
+    '    lambda s: "exception_research" if s.validation_failed',
+    '              else "coverage_check",',
+    ")",
+  ];
+  codePanel(s, 0.4, 1.1, 7.6, 4.55, code);
+
+  // why-not-an-agent column
+  s.addText("WHY NOT AN AGENT", { x: 8.25, y: 1.1, w: 4.68, h: 0.24, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: DET_STROKE, charSpacing: 1, isTextBox: true, margin: 0 });
+  // manual line breaks, not the auto-wrap estimate -- every bullet here is
+  // exactly two lines, so the four rows sit at an even rhythm
+  const whys = [
+    "No prompt, no completion call: three pure lookups\nagainst the CPR/CVR register, policy admin, and IDB.",
+    "Runs in milliseconds and costs nothing to run; same input\nalways gives the same output.",
+    "Unit-tested like any other function, not evaluated\nlike a prompt.",
+    "Checkpointed in Postgres: a claim put on hold resumes\nexactly where it left off.",
+  ];
+  let wy = 1.44;
+  const whyH = 2 * (10 / 72 * 1.2) + 0.14;
+  whys.forEach((t) => {
+    s.addShape(pres.ShapeType.ellipse, { x: 8.25, y: wy + 0.07, w: 0.07, h: 0.07, fill: { color: DET_STROKE }, line: { type: "none" } });
+    s.addText(t, { x: 8.42, y: wy, w: 4.45, h: whyH, fontFace: FONT_BODY, fontSize: 10, color: "2A3340", isTextBox: true, margin: 0, lineSpacingMultiple: 1.2 });
+    wy += whyH + 0.2;
+  });
+
+  s.addShape(pres.ShapeType.roundRect, { x: 8.25, y: 4.35, w: 4.68, h: 1.3, rectRadius: 0.06, fill: { color: DET_FILL }, line: { color: DET_STROKE, width: 1 } });
+  s.addText([
+    { text: "So what:  ", options: { bold: true, color: DET_STROKE } },
+    { text: "only the failure path calls a model, Exception Research, and only for the ~20% of claims that need judgement. Everything deterministic stays deterministic.", options: { color: "2A3340" } },
+  ], { x: 8.43, y: 4.35, w: 4.32, h: 1.3, fontFace: FONT_BODY, fontSize: 10, isTextBox: true, margin: 0, valign: "middle", lineSpacingMultiple: 1.2 });
+}
+
+// ---- BACKUP 2: Extraction Agent -- code only, kept basic on purpose ----
+{
+  const s = pres.addSlide();
+  s.hidden = true;
+  s.background = { color: WHITE };
+
+  s.addText("Extraction Agent: one call returns a typed schema, not free text", {
+    x: 0.4, y: 0.28, w: 11.0, h: 0.4, fontFace: FONT_HEAD, fontSize: 16, bold: true, color: INK, isTextBox: true, margin: 0 });
+  s.addText("BACKUP · IF ASKED", { x: 10.9, y: 0.16, w: 2.03, h: 0.24, fontFace: FONT_BODY, fontSize: 8.5, bold: true, color: MUTED, charSpacing: 1.2, align: "right", isTextBox: true, margin: 0 });
+  s.addText("Structured output: the schema is a Pydantic model, so a missing field is null, never a guess", {
+    x: 0.4, y: 0.68, w: 11.8, h: 0.26, fontFace: FONT_BODY, fontSize: 10.5, color: MUTED, isTextBox: true, margin: 0 });
+
+  const code = [
+    "class ExtractedClaim(BaseModel):",
+    "    cpr: str | None",
+    "    employer: str",
+    "    incident_date: date",
+    "    body_part: str",
+    "    confidence: float",
+    "",
+    "EXTRACTION_PROMPT = (",
+    '    "Extract the fields below. Use null for "',
+    '    "anything not stated; never invent a value."',
+    ")",
+    "",
+    "def extract_claim(state: ClaimState) -> dict:",
+    "    result = llm.with_structured_output(",
+    "        ExtractedClaim",
+    "    ).invoke([",
+    "        SystemMessage(EXTRACTION_PROMPT),",
+    "        HumanMessage(state.raw_report),",
+    "    ])",
+    "    return {",
+    '        "extracted": result,',
+    '        "confidence": result.confidence,',
+    "    }",
+    "",
+    'graph.add_node("extract", extract_claim)',
+    'graph.add_edge("extract", "classify")',
+  ];
+  codePanel(s, 0.4, 1.1, 12.53, 5.55, code, 11);
+}
+
 pres.writeFile({ fileName: "/tmp/claude-0/-home-user-ggw-casestudy/2b8e5a67-8934-50d1-9acc-621207f6c407/scratchpad/deck/GGW_FNOL_Redesign.pptx" })
   .then(() => console.log("written"))
   .catch((e) => { console.error(e); process.exit(1); });
