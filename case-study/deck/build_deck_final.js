@@ -699,8 +699,8 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   });
   s.addText(`We bank ${F.bankedAfterInt} min, not the ${F.stdAfter} the design allows: the business case runs on a three-point estimate of best, likely and worst case.`,
     { x: L, y: 4.30, w: CW, h: 0.30, fontFace: FONT_BODY, fontSize: 8.6, italic: true, color: "6A6A6A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
-  s.addText(`Basis: ${F.handlers} claim handlers × ${F.claimsPerPersonDay} claims a day, confirmed by GGW (8 Sep 2026). ${F.freedMinPersonDay} min back, each, per day.`,
-    { x: L, y: 4.62, w: CW, h: 0.30, fontFace: FONT_BODY, fontSize: 8.6, color: "6A6A6A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
+  s.addText(`Basis: ${F.claimsPerPersonDay} first reports a day per handler, the same before and after, that's inbound volume, not a capacity cap. What changes is the time each takes: ${F.intakeMinPersonDay} minutes a day, then ${F.afterMinPersonDay}. Confirmed by GGW (8 Sep 2026).`,
+    { x: L, y: 4.62, w: CW, h: 0.42, fontFace: FONT_BODY, fontSize: 8.6, color: "6A6A6A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
 
   // ---------- B: the business case ----------
   s.addText("B · THE BUSINESS CASE", { x: R, y: 0.58, w: CW, h: 0.24, fontFace: FONT_BODY, fontSize: 10, bold: true, color: MAG, charSpacing: 0.6, isTextBox: true, margin: 0 });
