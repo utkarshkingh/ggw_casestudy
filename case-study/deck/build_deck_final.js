@@ -86,18 +86,18 @@ function legendRow(slide, y) {
   legendChip(slide, 8.85, y, DET_FILL, DET_STROKE, "Rules only, no model");
   legendChip(slide, 10.85, y, HUM_FILL, HUM_STROKE, "Human checkpoint");
 }
-function slideHeader(slide, kicker, subtitle, partLabel) {
+function slideHeader(slide, kicker, subtitle, partLabel, showLegend = true) {
   slide.addText(kicker, { x: 0.4, y: 0.13, w: 8.9, h: 0.34, fontFace: FONT_HEAD, fontSize: 14, bold: true, color: INK, isTextBox: true, margin: 0 });
   slide.addText(subtitle, { x: 0.4, y: 0.44, w: 11.6, h: 0.26, fontFace: FONT_BODY, fontSize: 9.5, color: MUTED, isTextBox: true, margin: 0 });
   slide.addText(partLabel, { x: 9.4, y: 0.16, w: 3.53, h: 0.3, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: MUTED, charSpacing: 1.4, align: "right", isTextBox: true, margin: 0 });
-  legendRow(slide, 0.78);
+  if (showLegend) legendRow(slide, 0.78);
 }
 function columnHeaders(slide) {
   slide.addShape("line", { x: 6.63, y: 1.12, w: 0, h: 5.95, line: { color: LINE, width: 0.75 } });
   slide.addText("TODAY", { x: LEFT_X, y: 1.1, w: COL_W, h: 0.26, fontFace: FONT_BODY, fontSize: 11.5, bold: true, color: MUTED, isTextBox: true, margin: 0 });
   slide.addText([
     { text: "AI-NATIVE  ", options: { bold: true, color: AI_STROKE } },
-    { text: "— one LangGraph state graph · shared claim state carries the audit trail", options: { bold: false, italic: true, color: MUTED, fontSize: 8.5 } },
+    { text: "one shared claim record, one audit trail", options: { bold: false, italic: true, color: MUTED, fontSize: 8.5 } },
   ], { x: RIGHT_X, y: 1.1, w: COL_W, h: 0.26, fontFace: FONT_BODY, fontSize: 11.5, isTextBox: true, margin: 0 });
 }
 function footer(slide, pageNum) {
@@ -160,7 +160,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   s.addText(`Redesigning intake gives each of the ${F.handlers} claim handlers back ${F.freedMinPersonDay} minutes a day`, {
     x: 0.5, y: 0.15, w: 9.0, h: 0.44, fontFace: FONT_HEAD, fontSize: 19, bold: true, color: "FFFFFF", isTextBox: true, margin: 0,
   });
-  s.addText(`${F.hoursDay} hours a day across the ${F.handlers} of them — ${F.fte} full-time people · two thirds of that work goes to claims that were always going to close quietly · a person still decides anything adverse`,
+  s.addText(`${F.hoursDay} hours a day across the ${F.handlers} of them, or ${F.fte} full-time people. Two thirds of that work goes to claims that were always going to close quietly.`,
     { x: 0.5, y: 0.63, w: 12.3, h: 0.36, fontFace: FONT_BODY, fontSize: 10.5, color: "9FC9CB", isTextBox: true, margin: 0 });
 
   const py = 1.45, ph = 2.72, pw = 3.75, pwC = 4.23;
@@ -222,7 +222,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   // KPI strip
   const kpis = [
     [`${F.freedMinPersonDay} min`, `freed per claim handler, every working day (of ${F.prodHPerDay} productive hours)`, AMBER],
-    [`${F.hoursDay} h`, `across the ${F.handlers} claim handlers — ${F.fte} full-time people`, TEAL],
+    [`${F.hoursDay} h`, `across the ${F.handlers} claim handlers, or ${F.fte} full-time people`, TEAL],
     [`€${F.valueYrK}k`, "value of that capacity, per year", MAG],
     [`${F.payback} mths`, `to pay back the one-off build of €${F.buildK}k`, INDIGO],
   ];
@@ -244,11 +244,9 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   s.addShape(pres.ShapeType.roundRect, { x: 6.85, y: 5.52, w: 5.98, h: 0.64, rectRadius: 0.06, fill: { color: MAG_BG }, line: { color: MAG, width: 1.2 } });
   s.addText([
     { text: "So what:  ", options: { bold: true, color: MAG } },
-    { text: "cost isn't the decision — value covers it several times over. Governance is: a person reviews every call that can go against a claimant.", options: { color: "3A2A32" } },
+    { text: "cost isn't the decision. Value covers it several times over. Governance is: a person reviews every call that can go against a claimant.", options: { color: "3A2A32" } },
   ], { x: 7.03, y: 5.52, w: 5.62, h: 0.64, fontFace: FONT_BODY, fontSize: 8.5, isTextBox: true, margin: 0, valign: "middle", lineSpacingMultiple: 1.18 });
 
-  s.addText("A conservative estimate throughout — not the best case. Build-up and sources: slides 8–9.",
-    { x: 0.5, y: 6.62, w: 12.33, h: 0.28, fontFace: FONT_BODY, fontSize: 7.6, italic: true, color: "6A6A6A", isTextBox: true, margin: 0 });
   footer(s, 1);
 }
 
@@ -263,7 +261,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   const s = pres.addSlide();
   s.background = { color: "FAFAF8" };
 
-  s.addText("Six stations share one claim record — no handoffs, and nothing is read twice", {
+  s.addText("Seven stations share one claim record, so nothing is handed off or read twice", {
     x: 0.4, y: 0.13, w: 9.6, h: 0.30, fontFace: FONT_HEAD, fontSize: 14, bold: true, color: INK, isTextBox: true, margin: 0 });
   s.addText("SYSTEM AT A GLANCE", { x: 9.0, y: 0.16, w: 3.93, h: 0.26, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: MUTED, charSpacing: 1.4, align: "right", isTextBox: true, margin: 0 });
 
@@ -325,6 +323,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   const b2 = station(2, 2, "Classification Agent", "claim type + confidence score", AI_FILL, AI_STROKE, AI_TEXT);
   const b3 = station(3, 1, "Validation", "CPR · policy · duplicates", DET_FILL, DET_STROKE, DET_TEXT);
   const b3x = station(3, 2, "Exception Research", "gathers evidence · ~20% of claims", "FCEFD6", "EF9F27", "6B4A10", true);
+  const bcv = station(4, 1, "Coverage Check", "cover, dates, sums · same record", DET_FILL, DET_STROKE, DET_TEXT);
   const b4 = station(4, 2, "Drafting Agent", "writes the letter, cites its reasoning", AI_FILL, AI_STROKE, AI_TEXT);
   const b5 = station(5, 3, "Handler approves", "before anything sends", HUM_FILL, HUM_STROKE, HUM_TEXT);
 
@@ -332,7 +331,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   // read left to right, matching the reference deck's numbering device
   // number badges sit fully inside each box's top-left corner -- contained,
   // not straddling any border, so they cannot collide with the lane labels
-  [b0, b1, b2, b3, b4, b5].forEach((b, i) => {
+  [b0, b1, b2, b3, bcv, b4, b5].forEach((b, i) => {
     const bx = b.x + 0.05, by = b.y + 0.05;
     s.addShape(pres.ShapeType.ellipse, { x: bx, y: by, w: 0.18, h: 0.18, fill: { color: INK }, line: { type: "none" } });
     s.addText(String(i + 1), { x: bx, y: by, w: 0.18, h: 0.18, fontFace: FONT_BODY, fontSize: 7.4, bold: true, color: "FFFFFF", align: "center", valign: "middle", isTextBox: true, margin: 0 });
@@ -344,15 +343,14 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   link(b0, b1);
   link(b1, b2);
   link(b2, b3);
-  link(b3, b4);            // clear, ~80%
+  link(b3, bcv);           // validation and coverage read the same record
+  link(bcv, b4);           // clear, ~80%
   link(b3, b3x, true);     // flagged, ~20%
   link(b3x, b4, true);     // research findings feed the draft
   link(b4, b5);
 
-  s.addText("AI owns the drafting. Rules own the facts. A person owns every call that can go against a claimant.",
-    { x: 0.4, y: 5.92, w: 12.53, h: 0.22, fontFace: FONT_BODY, fontSize: 8.4, italic: true, bold: true, color: "2A2A3E", isTextBox: true, margin: 0 });
-  s.addText("One shared claim record carries every field and decision through the whole run, so a failed step resumes rather than restarts.",
-    { x: 0.4, y: 6.16, w: 12.53, h: 0.22, fontFace: FONT_BODY, fontSize: 7.6, color: MUTED, isTextBox: true, margin: 0 });
+  s.addText("AI drafts. Rules check. A person decides anything that can go against a claimant.",
+    { x: 0.4, y: 5.96, w: 12.53, h: 0.22, fontFace: FONT_BODY, fontSize: 8.6, italic: true, bold: true, color: "2A2A3E", isTextBox: true, margin: 0 });
   footer(s, 2);
 }
 
@@ -362,17 +360,17 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
 {
   const s = pres.addSlide();
   s.background = { color: WHITE };
-  slideHeader(s, "Three ways in and a separate side-track diagram become one classified intake", "FNOL as it runs today (left) against the redesign (right) · first report to an opened, policy-linked claim", "FNOL REDESIGN · 1 OF 3");
+  slideHeader(s, "Three ways in and a separate side-track diagram become one classified intake", "Today on the left, the redesign on the right", "FNOL REDESIGN · 1 OF 3");
   columnHeaders(s);
   footer(s, 3);
 
   // ---- LEFT: today ----
-  rectNode(s, "First report filed\n(employer almost always; sometimes union or injured)", LC - 2.3, 1.55, 4.6, START_FILL, START_STROKE, START_TEXT, { fontSize: 9.5 });
+  rectNode(s, "First report filed\n(usually the employer)", LC - 2.3, 1.55, 4.6, START_FILL, START_STROKE, START_TEXT, { fontSize: 9.5 });
   vArrow(s, LC, 1.95, 2.35);
 
   diamondNode(s, "Channel?", LC, 2.35, 0.7);
-  const b1r = branch(s, LC, 2.70, "right", "Direct to AES, secure mail", "AES already gathered the info — insurer only re-checks coverage", "exit", { fontSize: 7.6 });
-  branch(s, LC, 2.70, "left", "Teeth/glasses: 'tooth' · email + invoices", "Side track — not PD/LOEC, see 1.1", "exception", { dashed: true, fontSize: 7.8 });
+  const b1r = branch(s, LC, 2.70, "right", "Direct to AES, secure mail", "AES already gathered it;\ninsurer only re-checks coverage", "exit", { fontSize: 7.6 });
+  branch(s, LC, 2.70, "left", "Teeth/glasses: 'tooth' · email + invoices", "Side track (not PD/LOEC)\nsee 1.1", "exception", { dashed: true, fontSize: 7.8 });
   edgeLabel(s, "EASY / IDB auto-import", LC + 0.12, 3.06, 2.4, { align: "left" });
   vArrow(s, LC, 3.05, 3.55);
 
@@ -387,29 +385,29 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
 
   // ---- RIGHT: AI-native ----
   const boxW = COL_W - 0.6, boxX = RC - boxW / 2;
-  rectNode(s, "Claim arrives — any channel, any format (EASY, AES secure mail, email)", boxX, 1.55, boxW, START_FILL, START_STROKE, START_TEXT, { fontSize: 9.5 });
+  rectNode(s, "Claim arrives: EASY, AES secure mail, or email", boxX, 1.55, boxW, START_FILL, START_STROKE, START_TEXT, { fontSize: 9.5 });
   vArrow(s, RC, 1.95, 2.35);
 
-  const h1 = rectNode(s, "Extraction Agent\nreads any channel/format · extracts structured fields · matches CPR / CVR",
+  const h1 = rectNode(s, "Extraction Agent\nany format in, structured fields out",
     boxX, 2.35, boxW, AI_FILL, AI_STROKE, AI_TEXT, { fontSize: 10, bold: true });
-  vArrow(s, RC, 2.35 + h1, 2.35 + h1 + 0.2);
-  const y2 = 2.35 + h1 + 0.2;
-  const h2 = rectNode(s, "Classification Agent\nlabels claim type (standard, teeth, glasses, violence-cover) with a confidence score",
+  vArrow(s, RC, 2.35 + h1, 2.35 + h1 + 0.35);
+  const y2 = 2.35 + h1 + 0.35;
+  const h2 = rectNode(s, "Classification Agent\nclaim type + confidence score",
     boxX, y2, boxW, AI_FILL, AI_STROKE, AI_TEXT, { fontSize: 10, bold: true });
   vArrow(s, RC, y2 + h2, y2 + h2 + 0.35);
   const dY = y2 + h2 + 0.35;
 
   diamondNode(s, "Confidence ≥\nthreshold?", RC, dY, 0.7);
-  edgeLabel(s, "threshold starts strict, loosens as override-rate data accumulates",
+  edgeLabel(s, "starts strict, loosens with data",
     RC + DIA_HALF + 0.15, dY + 0.12, 1.85, { align: "left", italic: true, fontSize: 7.2, h: 0.46 });
-  branch(s, RC, dY + 0.35, "left", "No", "Falls back to today's manual queue — never silently wrong", "exception", { fontSize: 7.8 });
+  branch(s, RC, dY + 0.35, "left", "No", "Falls back to today's manual queue", "exception", { fontSize: 7.8 });
   edgeLabel(s, "Yes", RC + 0.12, dY + 0.73, 1.0, { align: "left" });
   vArrow(s, RC, dY + 0.70, dY + 1.15);
   continues(s, RC, dY + 1.23, "▼ continues, part 2 · Parallel Validation");
 
   const cardY = dY + 1.55;
   s.addShape(pres.ShapeType.roundRect, { x: boxX - 0.2, y: cardY, w: boxW + 0.4, h: 0.62, rectRadius: 0.05, fill: { color: PAPER }, line: { color: LINE, width: 1 } });
-  s.addText("These two agents together replace 3 entry channels, the auto-import failure path, and the entire 1.1 side-track diagram.", {
+  s.addText("These two agents replace 3 entry channels, the auto-import failure path, and the whole 1.1 side track.", {
     x: boxX - 0.05, y: cardY, w: boxW + 0.1, h: 0.62, fontFace: FONT_BODY, fontSize: 8.6, color: "3A4250", isTextBox: true, margin: 4, valign: "middle", align: "center", lineSpacingMultiple: 1.15,
   });
 }
@@ -420,7 +418,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
 {
   const s = pres.addSlide();
   s.background = { color: WHITE };
-  slideHeader(s, "Three checks done one after another become one check done all at once", "Is it complete, linked to the right policy, and not already in the system? None of the three depends on the others", "FNOL REDESIGN · 2 OF 3");
+  slideHeader(s, "Three checks done one after another become one check done all at once", "None of the three checks depends on the other two", "FNOL REDESIGN · 2 OF 3", false);
   columnHeaders(s);
   footer(s, 4);
 
@@ -451,23 +449,19 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   continues(s, RC, 1.40, "▲ continued from part 1");
   vArrow(s, RC, 1.62, 1.80);
 
-  const h1 = rectNode(s, "Validation Node — rules only\nCPR dedup · policy in force · completeness — three lookups at once, no model call",
+  const h1 = rectNode(s, "Validation Node (rules only)\nCPR dedup · policy in force · completeness\nthree lookups at once, no model call",
     boxX, 1.80, boxW, DET_FILL, DET_STROKE, DET_TEXT, { fontSize: 10, bold: true });
   vArrow(s, RC, 1.80 + h1, 1.80 + h1 + 0.35);
   const dY = 1.80 + h1 + 0.35;
 
   diamondNode(s, "Any check\nfailed?", RC, dY, 0.7);
-  const exBox = branch(s, RC, dY + 0.35, "right", "Yes", "Exception Research Agent — gathers CVR / fuzzy-match candidates as evidence", "exception", { fontSize: 7.6 });
+  const exBox = branch(s, RC, dY + 0.35, "right", "Yes", "Exception Research Agent\ngathers CVR and fuzzy-match evidence", "exception", { fontSize: 7.6 });
   vArrow(s, exBox.x + exBox.w / 2, exBox.y + exBox.h, exBox.y + exBox.h + 0.24);
-  rectNode(s, "Underwriter decides\n(AI prepares, never decides)", exBox.x, exBox.y + exBox.h + 0.24, exBox.w, HUM_FILL, HUM_STROKE, HUM_TEXT, { fontSize: 7.6 });
+  rectNode(s, "Underwriter decides\n(AI prepares only)", exBox.x, exBox.y + exBox.h + 0.24, exBox.w, HUM_FILL, HUM_STROKE, HUM_TEXT, { fontSize: 7.6 });
   edgeLabel(s, "No", RC + 0.12, dY + 0.73, 1.0, { align: "left" });
   vArrow(s, RC, dY + 0.70, 5.30);
   continues(s, RC, 5.40, "▼ continues, part 3 · Outcome Drafting Agent");
 
-  s.addShape(pres.ShapeType.roundRect, { x: RIGHT_X, y: 6.05, w: 3.3, h: 0.72, rectRadius: 0.05, fill: { color: PAPER }, line: { color: LINE, width: 1 } });
-  s.addText("3 sequential gates, each with its own rework loop, become 1 parallel check.", {
-    x: RIGHT_X + 0.1, y: 6.05, w: 3.1, h: 0.72, fontFace: FONT_BODY, fontSize: 8.4, color: "3A4250", isTextBox: true, margin: 4, valign: "middle", align: "center", lineSpacingMultiple: 1.2,
-  });
 }
 
 // =========================================================================
@@ -476,7 +470,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
 {
   const s = pres.addSlide();
   s.background = { color: WHITE };
-  slideHeader(s, "The AI writes the draft; the handler still makes the decision", "From a system warning to a closed claim or a fully opened one — nothing that can go against a claimant is automated", "FNOL REDESIGN · 3 OF 3");
+  slideHeader(s, "The AI writes the draft; the handler still makes the decision", "Nothing that can go against a claimant is automated", "FNOL REDESIGN · 3 OF 3", false);
   columnHeaders(s);
   footer(s, 5);
 
@@ -490,7 +484,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   vArrow(s, LC, 2.42, 3.05);
 
   diamondNode(s, "Injury minor?", LC, 3.05, 0.7);
-  branch(s, LC, 3.40, "left", "Yes, ~65% (likely more)", "Close at intake — letter, no permanent injury", "exit", { fontSize: 7.6 });
+  branch(s, LC, 3.40, "left", "Yes, ~65% (likely more)", "Close at intake\nletter, no permanent injury", "exit", { fontSize: 7.6 });
   branch(s, LC, 3.40, "right", "No", "Claim in IDB: fields checked, task opened, questionnaire", "exit", { fontSize: 7.6 });
 
   s.addShape(pres.ShapeType.roundRect, { x: LEFT_X, y: 4.55, w: COL_W, h: 0.75, rectRadius: 0.05, fill: { color: PAPER }, line: { color: LINE, width: 1 } });
@@ -502,18 +496,18 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   continues(s, RC, 1.40, "▲ continued from part 2");
   vArrow(s, RC, 1.62, 1.80);
 
-  const h1 = rectNode(s, "Outcome Drafting Agent\ndrafts the close-out letter, or the full IDB record, with its reasoning attached",
+  const h1 = rectNode(s, "Outcome Drafting Agent\ndrafts the letter or the IDB record,\nwith its reasoning attached",
     boxX, 1.80, boxW, AI_FILL, AI_STROKE, AI_TEXT, { fontSize: 10, bold: true });
   vArrow(s, RC, 1.80 + h1, 1.80 + h1 + 0.22);
   const humY = 1.80 + h1 + 0.22;
-  const hH = rectNode(s, "Handler approves before anything sends — edit rate is the monitored metric, not model accuracy",
+  const hH = rectNode(s, "Handler approves before anything sends\n(we monitor edit rate, not model accuracy)",
     boxX + 0.5, humY, boxW - 1.0, HUM_FILL, HUM_STROKE, HUM_TEXT, { fontSize: 8.6, bold: true });
   vArrow(s, RC, humY + hH, humY + hH + 0.32);
   const dY = humY + hH + 0.32;
 
   diamondNode(s, "Injury minor?\n(~65%)", RC, dY, 0.7);
-  branch(s, RC, dY + 0.35, "left", "Yes", "Close at intake — AI-drafted, handler approved", "exit", { fontSize: 7.6 });
-  branch(s, RC, dY + 0.35, "right", "No", "Claim in IDB — runs parallel with Coverage Check", "exit", { fontSize: 7.6 });
+  branch(s, RC, dY + 0.35, "left", "Yes", "Close at intake\nAI-drafted, handler approved", "exit", { fontSize: 7.6 });
+  branch(s, RC, dY + 0.35, "right", "No", "Claim in IDB\nCoverage Check runs alongside", "exit", { fontSize: 7.6 });
 
   s.addShape(pres.ShapeType.roundRect, { x: boxX - 0.2, y: dY + 1.15, w: boxW + 0.4, h: 1.0, rectRadius: 0.05, fill: { color: PAPER }, line: { color: LINE, width: 1 } });
   s.addText([
@@ -530,7 +524,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   const s = pres.addSlide();
   s.background = { color: "FAFAF8" };
 
-  s.addText("Start where a mistake is cheap — that is what earns the trust the bigger wins depend on", {
+  s.addText("Start where a mistake is cheap. That is what earns the trust the bigger wins need.", {
     x: 0.4, y: 0.13, w: 10.2, h: 0.34, fontFace: FONT_HEAD, fontSize: 14, bold: true, color: INK, isTextBox: true, margin: 0,
   });
   s.addText("SEQUENCING", { x: 10.4, y: 0.16, w: 2.53, h: 0.3, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: MUTED, charSpacing: 1.4, align: "right", isTextBox: true, margin: 0 });
@@ -558,15 +552,15 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   }
 
   quad(gx, gy, "FDF3E3", "D97706", "Wave 1 — start here", "cheap to get wrong, happens constantly", [
-    ["Detect failed EASY → IDB imports", "nobody is alerted today — a claim can go missing unseen"],
-    ["Read, classify, check CPR and policy", "one agent plus plain rules — ends the teeth dependency"],
+    ["Detect failed EASY → IDB imports", "nobody is alerted today, so a claim can go missing unseen"],
+    ["Read, classify, check CPR and policy", "one agent plus plain rules, ending the teeth dependency"],
   ]);
   quad(gx + hw, gy, "E4F4F8", "0891B2", "Wave 2 — once trusted", "the real prize, but needs the audit trail live", [
     ["Draft the close-out letter", "~65% of claims · a handler still approves"],
     ["Read AES secure mail", "the only channel with no automation today"],
   ]);
   quad(gx, gy + hh, "EDECFB", "4338CA", "Then fix the import itself", "an IT defect, once you can see it", [
-    ["Retry, park and replay", "detection first — you cannot fix what nobody reports"],
+    ["Retry, park and replay", "detection first, because you cannot fix what nobody reports"],
   ]);
   quad(gx + hw, gy + hh, "FBE9F1", "BE185D", "Leave manual", "too rare to earn the effort", [
     ["\"Violence cover\" entitlement letter", "~2 claims ever · a checklist beats a model"],
@@ -575,7 +569,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   // How the one IT item actually gets fixed -- the detail an engineer would ask for
   s.addShape(pres.ShapeType.roundRect, { x: 10.05, y: 1.0, w: 2.88, h: 5.0, rectRadius: 0.06, fill: { color: "EDECFB" }, line: { color: "4338CA", width: 1.3 } });
   s.addText("THE IMPORT FAILURES", { x: 10.27, y: 1.16, w: 2.44, h: 0.24, fontFace: FONT_BODY, fontSize: 9, bold: true, color: "4338CA", charSpacing: 0.7, isTextBox: true, margin: 0 });
-  s.addText("Not noticed today (GGW) — so detection comes before retries:", { x: 10.27, y: 1.42, w: 2.44, h: 0.34, fontFace: FONT_BODY, fontSize: 7.8, italic: true, color: "4A4A5E", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
+  s.addText("Not noticed today (GGW), so detection comes before retries:", { x: 10.27, y: 1.42, w: 2.44, h: 0.34, fontFace: FONT_BODY, fontSize: 7.8, italic: true, color: "4A4A5E", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
   // numbered-pill list -- one badge, one short label, one 3-5 word caption.
   // no paragraphs: the reader gets the sequence at a glance, not a read.
   const fixes = [
@@ -595,7 +589,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
     fy += 0.535;
   });
 
-  s.addText("AES rulings and underwriting authority are deliberately absent — those decisions are not ours to make · frequencies from the case study", { x: 0.4, y: 6.6, w: 12.5, h: 0.28, fontFace: FONT_BODY, fontSize: 7, color: MUTED, isTextBox: true, margin: 0 });
+  s.addText("AES rulings and underwriting authority are deliberately absent. Those decisions are not ours to make.", { x: 0.4, y: 6.6, w: 12.5, h: 0.28, fontFace: FONT_BODY, fontSize: 7, color: MUTED, isTextBox: true, margin: 0 });
   footer(s, 6);
 }
 
@@ -606,7 +600,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   const s = pres.addSlide();
   s.background = { color: "FAFAF8" };
 
-  s.addText("Deployed on the cloud GGW already run, released in three gated steps, never blind", {
+  s.addText("Deployed on the cloud GGW already run, and released in three gated steps", {
     x: 0.4, y: 0.13, w: 10.2, h: 0.34, fontFace: FONT_HEAD, fontSize: 14, bold: true, color: INK, isTextBox: true, margin: 0 });
   s.addText("STACK & ROLLOUT", { x: 9.4, y: 0.16, w: 3.53, h: 0.3, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: MUTED, charSpacing: 1.4, align: "right", isTextBox: true, margin: 0 });
 
@@ -615,7 +609,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   s.addShape(pres.ShapeType.roundRect, { x: RX[0], y: 0.70, w: RW[0], h: 0.52, rectRadius: 0.05, fill: { color: "FDF3E3" }, line: { color: AMBER, width: 1 } });
   s.addText("Service Bus\nfailures park, nothing is lost", { x: RX[0] + 0.08, y: 0.70, w: RW[0] - 0.16, h: 0.52, fontFace: FONT_BODY, fontSize: 8, bold: true, color: "9A5A0A", align: "center", valign: "middle", isTextBox: true, margin: 0, lineSpacingMultiple: 1.08 });
   s.addShape(pres.ShapeType.roundRect, { x: RX[1], y: 0.70, w: RW[1], h: 0.52, rectRadius: 0.05, fill: { color: "ECEFF3" }, line: { color: DET_STROKE, width: 1 } });
-  s.addText("PostgreSQL  ·  graph checkpoint and audit log in one place — every decision, its inputs and its confidence",
+  s.addText("PostgreSQL  ·  graph checkpoint and audit log in one place: every decision, its inputs, its confidence",
     { x: RX[1], y: 0.70, w: RW[1], h: 0.52, fontFace: FONT_BODY, fontSize: 9, bold: true, color: DET_TEXT, align: "center", valign: "middle", isTextBox: true, margin: 0 });
 
   // the stack, as names only
@@ -627,16 +621,14 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
     s.addShape(pres.ShapeType.roundRect, { x, y: 1.84, w: cw, h: 0.50, rectRadius: 0.06, fill: { color: "FFFFFF" }, line: { color: TEAL, width: 1.2 } });
     s.addText(c, { x: x + 0.04, y: 1.84, w: cw - 0.08, h: 0.50, fontFace: FONT_BODY, fontSize: 8.6, bold: true, color: "0B5A66", align: "center", valign: "middle", isTextBox: true, margin: 0, lineSpacingMultiple: 1.0 });
   });
-  s.addText("Deployed to the cloud GGW already use, with a switch to turn any agent off",
-    { x: 0.4, y: 2.46, w: 12.53, h: 0.24, fontFace: FONT_BODY, fontSize: 8.2, italic: true, color: MUTED, isTextBox: true, margin: 0 });
 
   // operating model -- kept from the pipeline slide, restated once more here
   // right next to the infrastructure, because "who owns the call" is part of
   // how this is operated, not just how it is designed
   s.addText("OPERATING MODEL", { x: 0.4, y: 2.94, w: 4.0, h: 0.22, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: INDIGO, charSpacing: 0.9, isTextBox: true, margin: 0 });
   const roles = [
-    ["AI agents", "draft, classify, extract — never decide", AI_FILL, AI_STROKE, AI_TEXT],
-    ["Rules, no model", "check the record — pass or fail, nothing in between", DET_FILL, DET_STROKE, DET_TEXT],
+    ["AI agents", "draft, classify, extract, but never decide", AI_FILL, AI_STROKE, AI_TEXT],
+    ["Rules, no model", "check the record: pass or fail, nothing in between", DET_FILL, DET_STROKE, DET_TEXT],
     ["A person", "approves before anything can go against a claimant", HUM_FILL, HUM_STROKE, HUM_TEXT],
   ];
   const rw = (12.53 - 2 * 0.2) / 3;
@@ -667,7 +659,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
     if (i < 3) elbowAcross(s, x + gw + 0.03, x + gw + 0.21, gy + gh / 2);
   });
 
-  s.addText("If an agent fails or is unsure, the claim simply falls back to today's manual queue — slower, never wrong.",
+  s.addText("If an agent fails or is unsure, the claim falls back to today's manual queue. Slower, never wrong.",
     { x: 0.4, y: gy + gh + 0.14, w: 12.5, h: 0.26, fontFace: FONT_BODY, fontSize: 7.4, color: MUTED, isTextBox: true, margin: 0 });
   footer(s, 7);
 }
@@ -710,9 +702,9 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
     border: { type: "solid", color: "E4E4E0", pt: 0.5 }, color: "3A3A3A",
     align: "left", valign: "middle", rowH: 0.36, autoPage: false, fill: { color: "FFFFFF" },
   });
-  s.addText(`We bank ${F.bankedAfterInt} min, not the ${F.stdAfter} the design allows — a conservative three-point estimate, not the best case.`,
+  s.addText(`We bank ${F.bankedAfterInt} min, not the ${F.stdAfter} the design allows. Conservative three-point estimate, not the best case.`,
     { x: L, y: 4.30, w: CW, h: 0.30, fontFace: FONT_BODY, fontSize: 8.6, italic: true, color: "6A6A6A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
-  s.addText(`Basis: ${F.handlers} claim handlers × ${F.claimsPerPersonDay} claims a day, confirmed by GGW (8 Sep 2026) — ${F.freedMinPersonDay} min back, each, per day.`,
+  s.addText(`Basis: ${F.handlers} claim handlers × ${F.claimsPerPersonDay} claims a day, confirmed by GGW (8 Sep 2026). ${F.freedMinPersonDay} min back, each, per day.`,
     { x: L, y: 4.62, w: CW, h: 0.30, fontFace: FONT_BODY, fontSize: 8.6, color: "6A6A6A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
 
   // ---------- B: the business case ----------
@@ -742,7 +734,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   });
   s.addText(`Running cost in full: ≈ €${F.perClaimEurR}/claim in AI tokens + ≈ $134/month in Azure → €${F.runYrR}/year, all in.`,
     { x: R, y: 4.48, w: CW, h: 0.30, fontFace: FONT_BODY, fontSize: 8.6, color: "6A6A6A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
-  s.addText("The build is loaded team capacity, not new cash — the AI team is already funded.",
+  s.addText("The build is loaded team capacity, not new cash. The AI team is already funded.",
     { x: R, y: 4.80, w: CW, h: 0.30, fontFace: FONT_BODY, fontSize: 8.6, italic: true, color: "6A6A6A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
 
   footer(s, 8);
@@ -770,7 +762,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
     ["Build & upkeep pay", "Senior ML engineer ≈ €98k; juniors ≈ €70k, as briefed.", "Glassdoor", "https://www.glassdoor.com/Salaries/germany-machine-learning-engineer-salary-SRCH_IL.0,7_IN96_KO8,33.htm"],
     ["Model prices", "gpt-5.6 terra — $2 in / $12 out per million tokens.", "OpenAI", "https://openai.com/api/pricing/"],
     ["Hosting & database", "Container Apps consumption rates; PostgreSQL B2s.", "Azure pricing", "https://azure.microsoft.com/en-us/pricing/details/container-apps/"],
-    ["Upkeep after go-live", "15–20% of build effort a year — ours is 17%.", "Standard maintenance rule of thumb", ""],
+    ["Upkeep after go-live", "15–20% of build effort a year, ours is 17%.", "Standard maintenance rule of thumb", ""],
     ["Industry baseline", "17 of 20 carriers still manual; none let AI decide alone.", "Decerto, 2026 Claims Decisioning Pulse", "https://www.decerto.com/us/post/ai-claims-decisioning-framework-2026-what-us-claims-leaders-told-us-about-how-decisions-actually-get-made"],
     ["Where value comes from", "The 10-20-70 split — algorithms, technology, people.", "BCG", "https://www.bcg.com/publications/2024/transforming-customer-service-operations-with-genai"],
     ["Fixing import failures", "Retry vs. dead-letter, idempotency, alert on rate.", "Standard integration pattern", "https://www.glukhov.org/app-architecture/integration-patterns/dead-letter-queues/"],
@@ -788,7 +780,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   });
 
   y += 0.10;
-  s.addText("Still assumptions — not sourced, and the first thing we would test:", {
+  s.addText("Still assumptions, not sourced. The first thing we would test:", {
     x: 0.4, y, w: 12.53, h: 0.22, fontFace: FONT_BODY, fontSize: 10, bold: true, color: "2A2A2A", isTextBox: true, margin: 0 });
   y += 0.28;
   s.addText("Every per-step minute on slide 8 · the 30% allowance for breaks and interruptions · how often a CPR is missing (30%) or underwriting is asked (25%) · how often the redesign raises an exception (20%) · the tokens a typical claim needs · the €146k build · the 0.25 FTE upkeep. Two weeks of watching live intake would replace all of this with measurements.",
