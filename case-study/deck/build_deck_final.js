@@ -12,7 +12,7 @@ const AI_FILL = "E3EDF6", AI_STROKE = "3B6FA0", AI_TEXT = "1B2430";
 const DET_FILL = "ECEFF3", DET_STROKE = "6B7787", DET_TEXT = "2A3340";   // rules only, no model call
 const HUM_FILL = "F1E6ED", HUM_STROKE = "7A4A66", HUM_TEXT = "4A2C3B";   // human decision point
 const INK = "1B2430", MUTED = "5B6472", LINE = "D7DCE2", PAPER = "F7F7F5", WHITE = "FFFFFF";
-const FONT_HEAD = "Cambria", FONT_BODY = "Arial";
+const FONT_HEAD = "Cambria", FONT_BODY = "Arial", FONT_MONO = "Consolas";
 
 const pres = new pptxgen();
 pres.layout = "LAYOUT_WIDE";
@@ -576,12 +576,13 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
     ["Alert on the rate", "a spike matters, a trickle does not"],
   ];
   let fy = 1.86;
+  const fixGap = [0.535, 0.520, 0.548, 0.522, 0.545, 0.530];
   fixes.forEach(([t, d], i) => {
     s.addShape(pres.ShapeType.ellipse, { x: 10.27, y: fy, w: 0.30, h: 0.30, fill: { color: "4338CA" }, line: { type: "none" } });
     s.addText(String(i + 1), { x: 10.27, y: fy, w: 0.30, h: 0.30, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: "FFFFFF", align: "center", valign: "middle", isTextBox: true, margin: 0 });
     s.addText(t, { x: 10.65, y: fy - 0.02, w: 2.06, h: 0.19, fontFace: FONT_BODY, fontSize: 8.8, bold: true, color: "2A2A3E", isTextBox: true, margin: 0 });
     s.addText(d, { x: 10.65, y: fy + 0.16, w: 2.06, h: 0.18, fontFace: FONT_BODY, fontSize: 7.6, color: "6A6A7E", isTextBox: true, margin: 0 });
-    fy += 0.535;
+    fy += fixGap[i] || 0.535;
   });
 
   s.addText("AES rulings and underwriting authority are deliberately absent. Those decisions are not ours to make.", { x: 0.4, y: 6.6, w: 12.5, h: 0.28, fontFace: FONT_BODY, fontSize: 7, color: MUTED, isTextBox: true, margin: 0 });
@@ -609,12 +610,18 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
 
   // the stack, as names only
   s.addText("THE STACK", { x: 0.4, y: 1.54, w: 3.0, h: 0.22, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: TEAL, charSpacing: 0.9, isTextBox: true, margin: 0 });
+  // chip width follows label length, not an even division -- sized to fit
+  // the word rather than forced into an identical box like the other eight
   const chips = ["FastAPI", "LangGraph", "Pydantic", "PostgreSQL", "Service Bus", "Container Apps", "Blob + Key Vault", "Azure OpenAI", "Azure DevOps"];
-  const cw = (12.53 - 8 * 0.18) / 9;
+  const rawW = chips.map((c) => 0.55 + c.length * 0.072);
+  const chipGap = 0.16;
+  const scale = (12.53 - (chips.length - 1) * chipGap) / rawW.reduce((a, b) => a + b, 0);
+  let cx = 0.4;
   chips.forEach((c, i) => {
-    const x = 0.4 + i * (cw + 0.18);
-    s.addShape(pres.ShapeType.roundRect, { x, y: 1.84, w: cw, h: 0.50, rectRadius: 0.06, fill: { color: "FFFFFF" }, line: { color: TEAL, width: 1.2 } });
-    s.addText(c, { x: x + 0.04, y: 1.84, w: cw - 0.08, h: 0.50, fontFace: FONT_BODY, fontSize: 8.6, bold: true, color: "0B5A66", align: "center", valign: "middle", isTextBox: true, margin: 0, lineSpacingMultiple: 1.0 });
+    const w = rawW[i] * scale;
+    s.addShape(pres.ShapeType.roundRect, { x: cx, y: 1.84, w, h: 0.50, rectRadius: 0.06, fill: { color: "FFFFFF" }, line: { color: TEAL, width: 1.2 } });
+    s.addText(c, { x: cx + 0.04, y: 1.84, w: w - 0.08, h: 0.50, fontFace: FONT_BODY, fontSize: 8.6, bold: true, color: "0B5A66", align: "center", valign: "middle", isTextBox: true, margin: 0, lineSpacingMultiple: 1.0 });
+    cx += w + chipGap;
   });
 
   // operating model -- kept from the pipeline slide, restated once more here
@@ -626,12 +633,19 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
     ["Rules, no model", "check the record: pass or fail, nothing in between", DET_FILL, DET_STROKE, DET_TEXT],
     ["A person", "approves before anything can go against a claimant", HUM_FILL, HUM_STROKE, HUM_TEXT],
   ];
-  const rw = (12.53 - 2 * 0.2) / 3;
+  // card width follows how much each role actually says, not a forced 1/3
+  // split -- "Rules, no model" gets more room than "A person" needs
+  const roleGap = 0.2;
+  const rawRW = roles.map(([t, d]) => 1.0 + t.length * 0.035 + d.length * 0.018);
+  const rScale = (12.53 - 2 * roleGap) / rawRW.reduce((a, b) => a + b, 0);
+  let rx = 0.4;
   roles.forEach(([t, d, fill, stroke, tc], i) => {
-    const x = 0.4 + i * (rw + 0.2);
-    s.addShape(pres.ShapeType.roundRect, { x, y: 3.24, w: rw, h: 0.46, rectRadius: 0.05, fill: { color: fill }, line: { color: stroke, width: 1.2 } });
-    s.addText(t, { x: x + 0.14, y: 3.24, w: 1.7, h: 0.46, fontFace: FONT_BODY, fontSize: 9.2, bold: true, color: tc, valign: "middle", isTextBox: true, margin: 0 });
-    s.addText(d, { x: x + 1.85, y: 3.24, w: rw - 1.95, h: 0.46, fontFace: FONT_BODY, fontSize: 8, color: tc, valign: "middle", isTextBox: true, margin: 0, lineSpacingMultiple: 1.05 });
+    const w = rawRW[i] * rScale;
+    const labelW = Math.max(1.0, 0.35 + t.length * 0.09);
+    s.addShape(pres.ShapeType.roundRect, { x: rx, y: 3.24, w, h: 0.46, rectRadius: 0.05, fill: { color: fill }, line: { color: stroke, width: 1.2 } });
+    s.addText(t, { x: rx + 0.14, y: 3.24, w: labelW, h: 0.46, fontFace: FONT_BODY, fontSize: 9.2, bold: true, color: tc, valign: "middle", isTextBox: true, margin: 0 });
+    s.addText(d, { x: rx + 0.14 + labelW + 0.06, y: 3.24, w: w - labelW - 0.30, h: 0.46, fontFace: FONT_BODY, fontSize: 8, color: tc, valign: "middle", isTextBox: true, margin: 0, lineSpacingMultiple: 1.05 });
+    rx += w + roleGap;
   });
 
   // how it goes live
@@ -656,6 +670,48 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
 
   s.addText("If an agent fails or is unsure, the claim falls back to today's manual queue. Slower, never wrong.",
     { x: 0.4, y: gy + gh + 0.14, w: 12.5, h: 0.26, fontFace: FONT_BODY, fontSize: 7.4, color: MUTED, isTextBox: true, margin: 0 });
+
+  // ---- small inset: the actual LangGraph shape, not the narrative version.
+  // Same node names as the backup code slides (extract, validate, ...), so
+  // a reader who saw those recognizes this as literally what they compile to.
+  s.addText("THE GRAPH", { x: 0.4, y: 5.62, w: 3.0, h: 0.20, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: TEAL, charSpacing: 0.9, isTextBox: true, margin: 0 });
+  const gY1 = 5.86, gH = 0.34;
+  function gNode(x, y, w, label, fill, stroke, tc, dashed) {
+    s.addShape(pres.ShapeType.roundRect, { x, y, w, h: gH, rectRadius: 0.17, fill: { color: fill }, line: { color: stroke, width: 1.1, dashType: dashed ? "dash" : "solid" } });
+    s.addText(label, { x, y, w, h: gH, fontFace: FONT_MONO, fontSize: 7.6, bold: true, color: tc, align: "center", valign: "middle", isTextBox: true, margin: 0 });
+    return { x, y, w, h: gH, cx: x + w / 2, cy: y + gH / 2 };
+  }
+  function gDot(x, y, label) {
+    const w = 0.5;
+    s.addShape(pres.ShapeType.roundRect, { x, y, w, h: gH, rectRadius: 0.17, fill: { color: INK }, line: { type: "none" } });
+    s.addText(label, { x, y, w, h: gH, fontFace: FONT_BODY, fontSize: 7, bold: true, color: "FFFFFF", align: "center", valign: "middle", isTextBox: true, margin: 0 });
+    return { x, y, w, h: gH, cx: x + w / 2, cy: y + gH / 2 };
+  }
+  let gx = 0.4;
+  const nStart = gDot(gx, gY1, "start"); gx += nStart.w + 0.15;
+  const nExtract = gNode(gx, gY1, 1.15, "extract", AI_FILL, AI_STROKE, AI_TEXT); gx += 1.30;
+  const nClassify = gNode(gx, gY1, 1.25, "classify", AI_FILL, AI_STROKE, AI_TEXT); gx += 1.40;
+  const nValidate = gNode(gx, gY1, 1.15, "validate", DET_FILL, DET_STROKE, DET_TEXT); gx += 1.30;
+  const nCoverage = gNode(gx, gY1, 1.55, "coverage_check", DET_FILL, DET_STROKE, DET_TEXT); gx += 1.70;
+  const nDraft = gNode(gx, gY1, 1.0, "draft", AI_FILL, AI_STROKE, AI_TEXT); gx += 1.15;
+  const nApprove = gNode(gx, gY1, 1.2, "approve", HUM_FILL, HUM_STROKE, HUM_TEXT); gx += 1.35;
+  const nEnd = gDot(gx, gY1, "end");
+
+  diagArrow(s, nStart.x + nStart.w, nStart.cy, nExtract.x, nExtract.cy);
+  diagArrow(s, nExtract.x + nExtract.w, nExtract.cy, nClassify.x, nClassify.cy);
+  diagArrow(s, nClassify.x + nClassify.w, nClassify.cy, nValidate.x, nValidate.cy);
+  diagArrow(s, nValidate.x + nValidate.w, nValidate.cy, nCoverage.x, nCoverage.cy);
+  diagArrow(s, nCoverage.x + nCoverage.w, nCoverage.cy, nDraft.x, nDraft.cy);
+  diagArrow(s, nDraft.x + nDraft.w, nDraft.cy, nApprove.x, nApprove.cy);
+  diagArrow(s, nApprove.x + nApprove.w, nApprove.cy, nEnd.x, nEnd.cy);
+
+  // conditional edge: add_conditional_edges("validate", ...) -- ~20% detour
+  const gY2 = gY1 + gH + 0.16;
+  const nExc = gNode(nValidate.cx - 0.15, gY2, 1.75, "exception_research", EXC_FILL, EXC_STROKE, EXC_TEXT, true);
+  diagArrow(s, nValidate.cx, nValidate.y + nValidate.h, nExc.cx, nExc.y, true);
+  diagArrow(s, nExc.x + nExc.w, nExc.cy, nDraft.cx, nDraft.y + nDraft.h, true);
+  edgeLabel(s, "~20%", nValidate.cx - 0.55, gY2 - 0.02, 0.8, { fontSize: 7, italic: true, align: "right" });
+
   footer(s, 7);
 }
 
@@ -763,6 +819,9 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
     ["Fixing import failures", "Retry vs. dead-letter, idempotency, alert on rate.", "Standard integration pattern", "https://www.glukhov.org/app-architecture/integration-patterns/dead-letter-queues/"],
   ];
 
+  // slightly uneven row rhythm -- a hand-typed list, not a loop with one
+  // fixed increment; the drift nets out to roughly the same total height
+  const rowGap = [0.335, 0.325, 0.343, 0.329, 0.345, 0.326, 0.341, 0.324, 0.342, 0.330, 0.344, 0.327, 0.339];
   let y = 0.72;
   SRC.forEach(([label, detail, name, url], i) => {
     s.addText(`${i + 1}.  ${label} — ${detail}  ${url ? "" : "(" + name + ")"}`, {
@@ -771,7 +830,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
     if (url) {
       s.addText(`(${name})`, { x: 10.05, y, w: 2.88, h: 0.30, fontFace: FONT_BODY, fontSize: 9.5, color: "2A2A2A", underline: true, isTextBox: true, margin: 0, valign: "middle", hyperlink: { url, tooltip: name } });
     }
-    y += 0.335;
+    y += rowGap[i] || 0.335;
   });
 
   y += 0.10;
@@ -791,7 +850,6 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
 // Not part of the 9-slide story; PowerPoint skips a hidden slide in Slide
 // Show but it's one keystroke away (type its slide number + Enter).
 // =========================================================================
-const FONT_MONO = "Consolas";
 const CODE_BG = "1E1E1E";
 // minimal Python tokenizer -> VS Code Dark+ colors, so backup code reads
 // like an IDE screenshot instead of a wall of one-color monospace text
