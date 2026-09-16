@@ -699,7 +699,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   });
   s.addText(`We bank ${F.bankedAfterInt} min, not the ${F.stdAfter} the design allows: the business case runs on a three-point estimate of best, likely and worst case.`,
     { x: L, y: 4.30, w: CW, h: 0.30, fontFace: FONT_BODY, fontSize: 8.6, italic: true, color: "6A6A6A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
-  s.addText(`Basis: ${F.claimsPerPersonDay} first reports a day per handler (50 ÷ 20, both confirmed by GGW), the same before and after, that's inbound volume, not a capacity cap. At ${F.stdTodayInt} min each, that's ${F.intakeMinPersonDay} minutes of an 8-hour shift today (~21%), ${F.afterMinPersonDay} after (~10%). The rest of the day is the rest of the job: claims already open, not new intake.`,
+  s.addText(`Basis: at ${F.stdTodayInt} minutes a claim, today's standard time, an 8-hour shift holds capacity for 12 claims; at ${F.bankedAfterInt} (the banked, most-likely estimate), capacity is ~25, roughly double. That's a ceiling, not the 52 minutes freed above, which is actual time freed on today's claim volume. Confirmed by GGW (8 Sep 2026).`,
     { x: L, y: 4.62, w: CW, h: 0.56, fontFace: FONT_BODY, fontSize: 8.6, color: "6A6A6A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
 
   // ---------- B: the business case ----------
