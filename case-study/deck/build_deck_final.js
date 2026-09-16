@@ -157,10 +157,10 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
     x: 9.6, y: 0.17, w: 3.23, h: 0.26, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: "7FB3B6",
     charSpacing: 1.6, align: "right", isTextBox: true, margin: 0,
   });
-  s.addText(`Redesigning intake gives each of the ${F.handlers} claim handlers back ${F.freedMinPersonDay} minutes a day`, {
+  s.addText(`Redesigning intake gives each claim handler back ${F.freedMinPersonDay} minutes a day`, {
     x: 0.5, y: 0.15, w: 9.0, h: 0.44, fontFace: FONT_HEAD, fontSize: 19, bold: true, color: "FFFFFF", isTextBox: true, margin: 0,
   });
-  s.addText(`${F.hoursDay} hours a day across the ${F.handlers} of them, or ${F.fte} full-time people. Two thirds of that work goes to claims that were always going to close quietly.`,
+  s.addText(`${F.hoursDay} hours a day across the ${F.handlers} of them, or ${F.fte} full-time people. Most of it goes to the ~65% of claims that close at intake with no permanent injury.`,
     { x: 0.5, y: 0.63, w: 12.3, h: 0.36, fontFace: FONT_BODY, fontSize: 10.5, color: "9FC9CB", isTextBox: true, margin: 0 });
 
   const py = 1.45, ph = 2.72, pw = 3.75, pwC = 4.23;
@@ -193,11 +193,11 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   ], AMBER);
 
   panel(pB, pw, TEAL_BG, TEAL, "Redesigned");
-  s.addText("The same checks and the same exits, reordered", { x: pB + 0.22, y: py + 0.44, w: pw - 0.44, h: 0.4, fontFace: FONT_BODY, fontSize: 9, color: "34474A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
+  s.addText("Every check and every exit kept, run in a new order", { x: pB + 0.22, y: py + 0.44, w: pw - 0.44, h: 0.4, fontFace: FONT_BODY, fontSize: 9, color: "34474A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
   s.addText([{ text: F.bankedAfterInt, options: { fontSize: 42, bold: true, color: TEAL } }, { text: "  minutes per claim", options: { fontSize: 12, color: "5A6E70" } }],
     { x: pB + 0.22, y: py + 0.86, w: pw - 0.44, h: 0.6, fontFace: FONT_HEAD, isTextBox: true, margin: 0 });
   chips(pB + 0.22, py + 1.5, pw - 0.44, [
-    `${F.cutPct}% cut, not the ${F.designCutPct}% max`,
+    `21 minutes back on every claim (a ${F.cutPct}% cut)`,
     "4 AI agents, 1 rules-only step",
     "2 human checkpoints kept",
     "Handlers re-check before they trust it",
@@ -217,13 +217,13 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
     s.addText(sub, { x: pC + 1.12, y: sy + 0.2, w: pwC - 1.34, h: 0.4, fontFace: FONT_BODY, fontSize: 8.2, color: "4A4A5E", isTextBox: true, margin: 0, lineSpacingMultiple: 1.1 });
     sy += 0.66;
   });
-  s.addText("Follows BCG's 10-20-70 rule, adjusted for this process", { x: pC + 0.22, y: py + ph - 0.28, w: pwC - 0.44, h: 0.24, fontFace: FONT_BODY, fontSize: 7.4, italic: true, color: "5A5A6E", isTextBox: true, margin: 0 });
+  s.addText("BCG's 10-20-70, tilted to plumbing: EASY and IDB are the constraint", { x: pC + 0.22, y: py + ph - 0.28, w: pwC - 0.44, h: 0.24, fontFace: FONT_BODY, fontSize: 7.4, italic: true, color: "5A5A6E", isTextBox: true, margin: 0 });
 
   // KPI strip
   const kpis = [
-    [`${F.freedMinPersonDay} min`, `freed per claim handler, every working day (of ${F.prodHPerDay} productive hours)`, AMBER],
+    [`${F.freedMinPersonDay} min`, `freed per claim handler per day, out of ${F.prodHPerDay} productive hours`, AMBER],
     [`${F.hoursDay} h`, `across the ${F.handlers} claim handlers, or ${F.fte} full-time people`, TEAL],
-    [`€${F.valueYrK}k`, "value of that capacity, per year", MAG],
+    [`€${F.valueYrK}k a year`, `what the ${F.hoursYr} freed handler-hours are worth, at €${F.hourly} fully loaded`, MAG],
     [`${F.payback} mths`, `to pay back the one-off build of €${F.buildK}k`, INDIGO],
   ];
   let kx = 0.5; const kw = 2.873, kgap = 0.28;
@@ -234,18 +234,13 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
     kx += kw + kgap;
   });
 
-  // definition + so-what
-  s.addShape(pres.ShapeType.roundRect, { x: 0.5, y: 5.52, w: 6.15, h: 0.64, rectRadius: 0.06, fill: { color: "FFFFFF" }, line: { color: LINE, width: 1 } });
+  // one bottom line: the recommendation, not a pre-emptive defence of the
+  // numbers above. Each KPI now explains itself in its own label.
+  s.addShape(pres.ShapeType.roundRect, { x: 0.5, y: 5.52, w: 12.33, h: 0.64, rectRadius: 0.06, fill: { color: MAG_BG }, line: { color: MAG, width: 1.2 } });
   s.addText([
-    { text: `“€${F.valueYrK}k” is capacity, not cash:  `, options: { bold: true, color: MAG } },
-    { text: `${F.hoursYr} handler-hours a year at the loaded rate. It becomes money once those hours go to the backlog.`, options: { color: "3A3A3A" } },
-  ], { x: 0.68, y: 5.52, w: 5.8, h: 0.64, fontFace: FONT_BODY, fontSize: 8.5, isTextBox: true, margin: 0, valign: "middle", lineSpacingMultiple: 1.18 });
-
-  s.addShape(pres.ShapeType.roundRect, { x: 6.85, y: 5.52, w: 5.98, h: 0.64, rectRadius: 0.06, fill: { color: MAG_BG }, line: { color: MAG, width: 1.2 } });
-  s.addText([
-    { text: "So what:  ", options: { bold: true, color: MAG } },
-    { text: "cost isn't the decision. Value covers it several times over. Governance is: a person reviews every call that can go against a claimant.", options: { color: "3A2A32" } },
-  ], { x: 7.03, y: 5.52, w: 5.62, h: 0.64, fontFace: FONT_BODY, fontSize: 8.5, isTextBox: true, margin: 0, valign: "middle", lineSpacingMultiple: 1.18 });
+    { text: "Recommendation:  ", options: { bold: true, color: MAG } },
+    { text: "start with the failed imports nobody sees today, then intake. A person approves every decision that can go against a claimant, at every stage.", options: { color: "3A2A32" } },
+  ], { x: 0.72, y: 5.52, w: 11.9, h: 0.64, fontFace: FONT_BODY, fontSize: 9.5, isTextBox: true, margin: 0, valign: "middle", lineSpacingMultiple: 1.18 });
 
   footer(s, 1);
 }
@@ -484,7 +479,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   vArrow(s, LC, 2.42, 3.05);
 
   diamondNode(s, "Injury minor?", LC, 3.05, 0.7);
-  branch(s, LC, 3.40, "left", "Yes, ~65% (likely more)", "Close at intake\nletter, no permanent injury", "exit", { fontSize: 7.6 });
+  branch(s, LC, 3.40, "left", "Yes, ~65%", "Close at intake\nletter, no permanent injury", "exit", { fontSize: 7.6 });
   branch(s, LC, 3.40, "right", "No", "Claim in IDB: fields checked, task opened, questionnaire", "exit", { fontSize: 7.6 });
 
   s.addShape(pres.ShapeType.roundRect, { x: LEFT_X, y: 4.55, w: COL_W, h: 0.75, rectRadius: 0.05, fill: { color: PAPER }, line: { color: LINE, width: 1 } });
@@ -563,7 +558,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
     ["Retry, park and replay", "detection first, because you cannot fix what nobody reports"],
   ]);
   quad(gx + hw, gy + hh, "FBE9F1", "BE185D", "Leave manual", "too rare to earn the effort", [
-    ["\"Violence cover\" entitlement letter", "~2 claims ever · a checklist beats a model"],
+    ["\"Violence cover\" entitlement letter", "~2 claims so far (GGW) · a checklist beats a model"],
   ]);
 
   // How the one IT item actually gets fixed -- the detail an engineer would ask for
@@ -578,7 +573,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
     ["Retry with backoff", "1s, 2s, 4s + jitter"],
     ["One key per claim", "no duplicate replays"],
     ["Park, don't drop", "holding queue for review"],
-    ["Alert on the rate", "20/hour \u2260 1/day"],
+    ["Alert on the rate", "a spike matters, a trickle does not"],
   ];
   let fy = 1.86;
   fixes.forEach(([t, d], i) => {
@@ -702,7 +697,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
     border: { type: "solid", color: "E4E4E0", pt: 0.5 }, color: "3A3A3A",
     align: "left", valign: "middle", rowH: 0.36, autoPage: false, fill: { color: "FFFFFF" },
   });
-  s.addText(`We bank ${F.bankedAfterInt} min, not the ${F.stdAfter} the design allows. Conservative three-point estimate, not the best case.`,
+  s.addText(`We bank ${F.bankedAfterInt} min, not the ${F.stdAfter} the design allows: the business case runs on a three-point estimate of best, likely and worst case.`,
     { x: L, y: 4.30, w: CW, h: 0.30, fontFace: FONT_BODY, fontSize: 8.6, italic: true, color: "6A6A6A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
   s.addText(`Basis: ${F.handlers} claim handlers × ${F.claimsPerPersonDay} claims a day, confirmed by GGW (8 Sep 2026). ${F.freedMinPersonDay} min back, each, per day.`,
     { x: L, y: 4.62, w: CW, h: 0.30, fontFace: FONT_BODY, fontSize: 8.6, color: "6A6A6A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
