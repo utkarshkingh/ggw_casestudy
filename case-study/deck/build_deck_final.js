@@ -157,10 +157,10 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
     x: 9.6, y: 0.17, w: 3.23, h: 0.26, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: "7FB3B6",
     charSpacing: 1.6, align: "right", isTextBox: true, margin: 0,
   });
-  s.addText(`Redesigning intake gives each claim handler back ${F.freedMinPersonDay} minutes a day`, {
+  s.addText("Redesigning intake roughly doubles a claim handler's daily capacity", {
     x: 0.5, y: 0.15, w: 9.0, h: 0.44, fontFace: FONT_HEAD, fontSize: 19, bold: true, color: "FFFFFF", isTextBox: true, margin: 0,
   });
-  s.addText(`${F.hoursDay} hours a day across the ${F.handlers} of them, or ${F.fte} full-time people. Most of it goes to the ~65% of claims that close at intake with no permanent injury.`,
+  s.addText(`Each claim drops from ${F.stdTodayInt} to ${F.bankedAfterInt} minutes. Same ${F.handlers} handlers, same shift: that's a capacity ceiling, not confirmed extra demand.`,
     { x: 0.5, y: 0.63, w: 12.3, h: 0.36, fontFace: FONT_BODY, fontSize: 10.5, color: "9FC9CB", isTextBox: true, margin: 0 });
 
   const py = 1.45, ph = 2.72, pw = 3.75, pwC = 4.23;
