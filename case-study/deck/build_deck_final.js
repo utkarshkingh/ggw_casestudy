@@ -1,6 +1,6 @@
 const pptxgen = require("pptxgenjs");
 // Every time and money figure comes from economics.py via figures.json.
-// Nothing below is typed by hand, so slide 1 and slide 6 cannot disagree.
+// Nothing below is typed by hand, so slide 1 and slide 8 cannot disagree.
 const F = require("./figures.json");
 
 const START_FILL = "E6F8F7", START_STROKE = "007A82", START_TEXT = "00373A";
@@ -253,264 +253,21 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
 }
 
 // =========================================================================
-// SLIDE 1 of 3 — Entry & Classification
-// =========================================================================
-{
-  const s = pres.addSlide();
-  s.background = { color: WHITE };
-  slideHeader(s, "Three ways in and a separate side-track diagram become one classified intake", "FNOL as it runs today (left) against the redesign (right) · first report to an opened, policy-linked claim", "FNOL REDESIGN · 1 OF 3");
-  columnHeaders(s);
-  footer(s, 2);
-
-  // ---- LEFT: today ----
-  rectNode(s, "First report filed\n(employer almost always; sometimes union or injured)", LC - 2.3, 1.55, 4.6, START_FILL, START_STROKE, START_TEXT, { fontSize: 9.5 });
-  vArrow(s, LC, 1.95, 2.35);
-
-  diamondNode(s, "Channel?", LC, 2.35, 0.7);
-  const b1r = branch(s, LC, 2.70, "right", "Direct to AES, secure mail", "AES already gathered the info — insurer only re-checks coverage", "exit", { fontSize: 7.6 });
-  branch(s, LC, 2.70, "left", "Teeth/glasses: 'tooth' · email + invoices", "Side track — not PD/LOEC, see 1.1", "exception", { dashed: true, fontSize: 7.8 });
-  edgeLabel(s, "EASY / IDB auto-import", LC + 0.12, 3.06, 2.4, { align: "left" });
-  vArrow(s, LC, 3.05, 3.55);
-
-  diamondNode(s, "Auto-import\nworked?", LC, 3.55, 0.7);
-  const b2l = branch(s, LC, 3.90, "left", "No", "Manual claim creation", "exception", { fontSize: 8.5 });
-  rejoinSimple(s, b2l, LC, 4.55);
-  edgeLabel(s, "Yes", LC + 0.12, 4.28, 1.0, { align: "left" });
-
-  vArrow(s, LC, 4.25, 4.7);
-  rejoinElbow(s, b1r, LC, 4.68);
-  continues(s, LC, 4.80, "▼ continues, part 2 · Data / Policy / Duplicate checks");
-
-  // ---- RIGHT: AI-native ----
-  const boxW = COL_W - 0.6, boxX = RC - boxW / 2;
-  rectNode(s, "Claim arrives — any channel, any format (EASY, AES secure mail, email)", boxX, 1.55, boxW, START_FILL, START_STROKE, START_TEXT, { fontSize: 9.5 });
-  vArrow(s, RC, 1.95, 2.35);
-
-  const h1 = rectNode(s, "Extraction Agent\nreads any channel/format · extracts structured fields · matches CPR / CVR",
-    boxX, 2.35, boxW, AI_FILL, AI_STROKE, AI_TEXT, { fontSize: 10, bold: true });
-  vArrow(s, RC, 2.35 + h1, 2.35 + h1 + 0.2);
-  const y2 = 2.35 + h1 + 0.2;
-  const h2 = rectNode(s, "Classification Agent\nlabels claim type (standard, teeth, glasses, violence-cover) with a confidence score",
-    boxX, y2, boxW, AI_FILL, AI_STROKE, AI_TEXT, { fontSize: 10, bold: true });
-  vArrow(s, RC, y2 + h2, y2 + h2 + 0.35);
-  const dY = y2 + h2 + 0.35;
-
-  diamondNode(s, "Confidence ≥\nthreshold?", RC, dY, 0.7);
-  edgeLabel(s, "threshold starts strict, loosens as override-rate data accumulates",
-    RC + DIA_HALF + 0.15, dY + 0.12, 1.85, { align: "left", italic: true, fontSize: 7.2, h: 0.46 });
-  branch(s, RC, dY + 0.35, "left", "No", "Falls back to today's manual queue — never silently wrong", "exception", { fontSize: 7.8 });
-  edgeLabel(s, "Yes", RC + 0.12, dY + 0.73, 1.0, { align: "left" });
-  vArrow(s, RC, dY + 0.70, dY + 1.15);
-  continues(s, RC, dY + 1.23, "▼ continues, part 2 · Parallel Validation");
-
-  const cardY = dY + 1.55;
-  s.addShape(pres.ShapeType.roundRect, { x: boxX - 0.2, y: cardY, w: boxW + 0.4, h: 0.62, rectRadius: 0.05, fill: { color: PAPER }, line: { color: LINE, width: 1 } });
-  s.addText("These two agents together replace 3 entry channels, the auto-import failure path, and the entire 1.1 side-track diagram.", {
-    x: boxX - 0.05, y: cardY, w: boxW + 0.1, h: 0.62, fontFace: FONT_BODY, fontSize: 8.6, color: "3A4250", isTextBox: true, margin: 4, valign: "middle", align: "center", lineSpacingMultiple: 1.15,
-  });
-}
-
-// =========================================================================
-// SLIDE 2 of 3 — Validation Gates
-// =========================================================================
-{
-  const s = pres.addSlide();
-  s.background = { color: WHITE };
-  slideHeader(s, "Three checks done one after another become one check done all at once", "Is it complete, linked to the right policy, and not already in the system? None of the three depends on the others", "FNOL REDESIGN · 2 OF 3");
-  columnHeaders(s);
-  footer(s, 3);
-
-  continues(s, LC, 1.40, "▲ continued from part 1");
-  vArrow(s, LC, 1.62, 1.80);
-
-  diamondNode(s, "Data correct\nand complete?", LC, 1.80, 0.7);
-  const c1 = branch(s, LC, 2.15, "left", "Missing CPR", "Ask / fill fields (via questionnaire)", "exception", { fontSize: 7.8 });
-  rejoinSimple(s, c1, LC, 2.90);
-  edgeLabel(s, "OK", LC + 0.12, 2.45, 1.0, { align: "left" });
-  vArrow(s, LC, 2.42, 2.90);
-
-  diamondNode(s, "Valid policy\nattached?", LC, 2.90, 0.7);
-  const c2l = branch(s, LC, 3.25, "left", "Wrong / old policy", "Reattach correct policy", "exception", { fontSize: 8 });
-  rejoinSimple(s, c2l, LC, 4.08);
-  branch(s, LC, 3.25, "right", "No valid policy", "Back to employer: correct insurer", "exit", { fontSize: 7.8 });
-  edgeLabel(s, "Yes", LC + 0.12, 3.63, 1.0, { align: "left" });
-  vArrow(s, LC, 3.60, 4.08);
-
-  diamondNode(s, "Earlier or\nduplicate?", LC, 4.08, 0.7);
-  const c3 = branch(s, LC, 4.43, "left", "Duplicate", "Dedup / connect same-CPR claims", "exception", { fontSize: 7.8 });
-  rejoinSimple(s, c3, LC, 5.30);
-  edgeLabel(s, "New", LC + 0.12, 4.81, 1.0, { align: "left" });
-  vArrow(s, LC, 4.78, 5.30);
-  continues(s, LC, 5.40, "▼ continues, part 3 · Escalation & Close-Out");
-
-  const boxW = COL_W - 0.6, boxX = RC - boxW / 2;
-  continues(s, RC, 1.40, "▲ continued from part 1");
-  vArrow(s, RC, 1.62, 1.80);
-
-  const h1 = rectNode(s, "Validation Node — rules only\nCPR dedup · policy in force · completeness — three lookups at once, no model call",
-    boxX, 1.80, boxW, DET_FILL, DET_STROKE, DET_TEXT, { fontSize: 10, bold: true });
-  vArrow(s, RC, 1.80 + h1, 1.80 + h1 + 0.35);
-  const dY = 1.80 + h1 + 0.35;
-
-  diamondNode(s, "Any check\nfailed?", RC, dY, 0.7);
-  const exBox = branch(s, RC, dY + 0.35, "right", "Yes", "Exception Research Agent — gathers CVR / fuzzy-match candidates as evidence", "exception", { fontSize: 7.6 });
-  vArrow(s, exBox.x + exBox.w / 2, exBox.y + exBox.h, exBox.y + exBox.h + 0.24);
-  rectNode(s, "Underwriter decides\n(AI prepares, never decides)", exBox.x, exBox.y + exBox.h + 0.24, exBox.w, HUM_FILL, HUM_STROKE, HUM_TEXT, { fontSize: 7.6 });
-  edgeLabel(s, "No", RC + 0.12, dY + 0.73, 1.0, { align: "left" });
-  vArrow(s, RC, dY + 0.70, 5.30);
-  continues(s, RC, 5.40, "▼ continues, part 3 · Outcome Drafting Agent");
-
-  s.addShape(pres.ShapeType.roundRect, { x: RIGHT_X, y: 6.05, w: 3.3, h: 0.72, rectRadius: 0.05, fill: { color: PAPER }, line: { color: LINE, width: 1 } });
-  s.addText("3 sequential gates, each with its own rework loop, become 1 parallel check.", {
-    x: RIGHT_X + 0.1, y: 6.05, w: 3.1, h: 0.72, fontFace: FONT_BODY, fontSize: 8.4, color: "3A4250", isTextBox: true, margin: 4, valign: "middle", align: "center", lineSpacingMultiple: 1.2,
-  });
-}
-
-// =========================================================================
-// SLIDE 3 of 3 — Escalation & Close-Out
-// =========================================================================
-{
-  const s = pres.addSlide();
-  s.background = { color: WHITE };
-  slideHeader(s, "The AI writes the draft; the handler still makes the decision", "From a system warning to a closed claim or a fully opened one — nothing that can go against a claimant is automated", "FNOL REDESIGN · 3 OF 3");
-  columnHeaders(s);
-  footer(s, 4);
-
-  continues(s, LC, 1.40, "▲ continued from part 2");
-  vArrow(s, LC, 1.62, 1.80);
-
-  diamondNode(s, "Red warning\non claim?", LC, 1.80, 0.7);
-  const d1 = branch(s, LC, 2.15, "left", "Yes", "On hold: check with UW before it can move on", "exception", { fontSize: 7.6 });
-  rejoinSimple(s, d1, LC, 3.05);
-  edgeLabel(s, "No", LC + 0.12, 2.45, 1.0, { align: "left" });
-  vArrow(s, LC, 2.42, 3.05);
-
-  diamondNode(s, "Injury minor?", LC, 3.05, 0.7);
-  branch(s, LC, 3.40, "left", "Yes, ~65% (likely more)", "Close at intake — letter, no permanent injury", "exit", { fontSize: 7.6 });
-  branch(s, LC, 3.40, "right", "No", "Claim in IDB: fields checked, task opened, questionnaire", "exit", { fontSize: 7.6 });
-
-  s.addShape(pres.ShapeType.roundRect, { x: LEFT_X, y: 4.55, w: COL_W, h: 0.75, rectRadius: 0.05, fill: { color: PAPER }, line: { color: LINE, width: 1 } });
-  s.addText("Today: 7 decision gates, 3 entry channels, 10 exception or exit branches across the full FNOL flow.", {
-    x: LEFT_X + 0.15, y: 4.55, w: COL_W - 0.3, h: 0.75, fontFace: FONT_BODY, fontSize: 9, color: "3A4250", isTextBox: true, margin: 4, valign: "middle", align: "center", lineSpacingMultiple: 1.2,
-  });
-
-  const boxW = COL_W - 0.6, boxX = RC - boxW / 2;
-  continues(s, RC, 1.40, "▲ continued from part 2");
-  vArrow(s, RC, 1.62, 1.80);
-
-  const h1 = rectNode(s, "Outcome Drafting Agent\ndrafts the close-out letter, or the full IDB record, with its reasoning attached",
-    boxX, 1.80, boxW, AI_FILL, AI_STROKE, AI_TEXT, { fontSize: 10, bold: true });
-  vArrow(s, RC, 1.80 + h1, 1.80 + h1 + 0.22);
-  const humY = 1.80 + h1 + 0.22;
-  const hH = rectNode(s, "Handler approves before anything sends — edit rate is the monitored metric, not model accuracy",
-    boxX + 0.5, humY, boxW - 1.0, HUM_FILL, HUM_STROKE, HUM_TEXT, { fontSize: 8.6, bold: true });
-  vArrow(s, RC, humY + hH, humY + hH + 0.32);
-  const dY = humY + hH + 0.32;
-
-  diamondNode(s, "Injury minor?\n(~65%)", RC, dY, 0.7);
-  branch(s, RC, dY + 0.35, "left", "Yes", "Close at intake — AI-drafted, handler approved", "exit", { fontSize: 7.6 });
-  branch(s, RC, dY + 0.35, "right", "No", "Claim in IDB — runs parallel with Coverage Check", "exit", { fontSize: 7.6 });
-
-  s.addShape(pres.ShapeType.roundRect, { x: boxX - 0.2, y: dY + 1.15, w: boxW + 0.4, h: 1.0, rectRadius: 0.05, fill: { color: PAPER }, line: { color: LINE, width: 1 } });
-  s.addText([
-    { text: "Net result:  ", options: { bold: true, color: INK } },
-    { text: "3 entry channels → 1 · 3 sequential gates → 1 parallel check · the Coverage Check handoff disappears, it runs on the same state", options: { color: "3A4250" } },
-  ], { x: boxX - 0.05, y: dY + 1.15, w: boxW + 0.1, h: 1.0, fontFace: FONT_BODY, fontSize: 9, isTextBox: true, margin: 4, valign: "middle", lineSpacingMultiple: 1.2, align: "center" });
-}
-
-// =========================================================================
-// SLIDE 5 — Sequencing quadrant (decluttered: 2 items max per quadrant)
-// palette validated for colour-vision separation, not eyeballed
-// =========================================================================
-{
-  const s = pres.addSlide();
-  s.background = { color: "FAFAF8" };
-
-  s.addText("Start where a mistake is cheap — that is what earns the trust the bigger wins depend on", {
-    x: 0.4, y: 0.13, w: 10.2, h: 0.34, fontFace: FONT_HEAD, fontSize: 14, bold: true, color: INK, isTextBox: true, margin: 0,
-  });
-  s.addText("SEQUENCING", { x: 10.4, y: 0.16, w: 2.53, h: 0.3, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: MUTED, charSpacing: 1.4, align: "right", isTextBox: true, margin: 0 });
-  s.addText("“Hard” means build effort and regulatory exposure together, not just weeks of work", {
-    x: 0.4, y: 0.5, w: 12.5, h: 0.26, fontFace: FONT_BODY, fontSize: 9.5, color: MUTED, isTextBox: true, margin: 0 });
-
-  const gx = 1.15, gy = 1.0, gw = 8.6, gh = 5.0;
-  const hw = gw / 2, hh = gh / 2;
-
-  s.addText("HOW OFTEN IT HAPPENS  →", { x: 0.02, y: gy + gh / 2 - 0.14, w: 1.75, h: 0.28, fontFace: FONT_BODY, fontSize: 8, bold: true, color: MUTED, align: "center", isTextBox: true, margin: 0, rotate: 270 });
-  s.addText("HOW HARD AND HOW RISKY IT IS  →", { x: gx, y: gy + gh + 0.1, w: gw, h: 0.24, fontFace: FONT_BODY, fontSize: 8, bold: true, color: MUTED, align: "center", isTextBox: true, margin: 0 });
-
-  function quad(qx, qy, bg, stroke, label, sub, items) {
-    s.addShape(pres.ShapeType.rect, { x: qx, y: qy, w: hw, h: hh, fill: { color: bg }, line: { color: "FFFFFF", width: 2.5 } });
-    s.addText(label.toUpperCase(), { x: qx + 0.2, y: qy + 0.16, w: hw - 0.4, h: 0.26, fontFace: FONT_BODY, fontSize: 10, bold: true, color: stroke, charSpacing: 0.8, isTextBox: true, margin: 0 });
-    s.addText(sub, { x: qx + 0.2, y: qy + 0.42, w: hw - 0.4, h: 0.24, fontFace: FONT_BODY, fontSize: 8, italic: true, color: MUTED, isTextBox: true, margin: 0 });
-    items.forEach(([title, meta], i) => {
-      const w = hw - 0.5, h = 0.62, y = qy + 0.78 + i * (h + 0.14);
-      s.addShape(pres.ShapeType.roundRect, { x: qx + 0.25, y, w, h, rectRadius: 0.05, fill: { color: "FFFFFF" }, line: { color: stroke, width: 1.2 } });
-      s.addText([
-        { text: title + "\n", options: { bold: true, color: INK, fontSize: 9.2, breakLine: true } },
-        { text: meta, options: { color: MUTED, fontSize: 8 } },
-      ], { x: qx + 0.4, y, w: w - 0.3, h, fontFace: FONT_BODY, isTextBox: true, margin: 0, valign: "middle", lineSpacingMultiple: 1.15 });
-    });
-  }
-
-  quad(gx, gy, "FDF3E3", "D97706", "Wave 1 — start here", "cheap to get wrong, happens constantly", [
-    ["Detect failed EASY → IDB imports", "nobody is alerted today — a claim can go missing unseen"],
-    ["Read, classify, check CPR and policy", "one agent plus plain rules — ends the teeth dependency"],
-  ]);
-  quad(gx + hw, gy, "E4F4F8", "0891B2", "Wave 2 — once trusted", "the real prize, but needs the audit trail live", [
-    ["Draft the close-out letter", "~65% of claims · a handler still approves"],
-    ["Read AES secure mail", "the only channel with no automation today"],
-  ]);
-  quad(gx, gy + hh, "EDECFB", "4338CA", "Then fix the import itself", "an IT defect, once you can see it", [
-    ["Retry, park and replay", "detection first — you cannot fix what nobody reports"],
-  ]);
-  quad(gx + hw, gy + hh, "FBE9F1", "BE185D", "Leave manual", "too rare to earn the effort", [
-    ["\"Violence cover\" entitlement letter", "~2 claims ever · a checklist beats a model"],
-  ]);
-
-  // How the one IT item actually gets fixed -- the detail an engineer would ask for
-  s.addShape(pres.ShapeType.roundRect, { x: 10.05, y: 1.0, w: 2.88, h: 5.0, rectRadius: 0.06, fill: { color: "EDECFB" }, line: { color: "4338CA", width: 1.3 } });
-  s.addText("THE IMPORT FAILURES", { x: 10.27, y: 1.16, w: 2.44, h: 0.24, fontFace: FONT_BODY, fontSize: 9, bold: true, color: "4338CA", charSpacing: 0.7, isTextBox: true, margin: 0 });
-  s.addText("Not noticed today (GGW) — so detection comes before retries:", { x: 10.27, y: 1.42, w: 2.44, h: 0.34, fontFace: FONT_BODY, fontSize: 7.8, italic: true, color: "4A4A5E", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
-  // numbered-pill list -- one badge, one short label, one 3-5 word caption.
-  // no paragraphs: the reader gets the sequence at a glance, not a read.
-  const fixes = [
-    ["Count what should arrive", "daily reconciliation catches gaps"],
-    ["Sort the failure", "timeout vs. missing field"],
-    ["Retry with backoff", "1s, 2s, 4s + jitter"],
-    ["One key per claim", "no duplicate replays"],
-    ["Park, don't drop", "holding queue for review"],
-    ["Alert on the rate", "20/hour \u2260 1/day"],
-  ];
-  let fy = 1.86;
-  fixes.forEach(([t, d], i) => {
-    s.addShape(pres.ShapeType.ellipse, { x: 10.27, y: fy, w: 0.30, h: 0.30, fill: { color: "4338CA" }, line: { type: "none" } });
-    s.addText(String(i + 1), { x: 10.27, y: fy, w: 0.30, h: 0.30, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: "FFFFFF", align: "center", valign: "middle", isTextBox: true, margin: 0 });
-    s.addText(t, { x: 10.65, y: fy - 0.02, w: 2.06, h: 0.19, fontFace: FONT_BODY, fontSize: 8.8, bold: true, color: "2A2A3E", isTextBox: true, margin: 0 });
-    s.addText(d, { x: 10.65, y: fy + 0.16, w: 2.06, h: 0.18, fontFace: FONT_BODY, fontSize: 7.6, color: "6A6A7E", isTextBox: true, margin: 0 });
-    fy += 0.535;
-  });
-
-  s.addText("AES rulings and underwriting authority are deliberately absent — those decisions are not ours to make · frequencies from the case study", { x: 0.4, y: 6.6, w: 12.5, h: 0.28, fontFace: FONT_BODY, fontSize: 7, color: MUTED, isTextBox: true, margin: 0 });
-  footer(s, 5);
-}
-
-// =========================================================================
-// SLIDE 6 — System at a glance: four lanes, who does what, in what order.
+// SLIDE 2 — System at a glance: four lanes, who does what, in what order.
 // Adapted from a reference deck's swimlane technique (input / deterministic
 // functions / AI agents / experts in the loop) onto GGW's own five agents,
-// using the same colour code as the flowcharts on slides 2-4 so a reader
+// using the same colour code as the flowcharts on slides 3-5, which a reader
 // who has already seen those needs no new legend to read this one.
 // =========================================================================
 {
   const s = pres.addSlide();
   s.background = { color: "FAFAF8" };
 
-  s.addText("System at a glance — four lanes, seven stations, one shared claim state", {
+  s.addText("Six stations share one claim record — no handoffs, and nothing is read twice", {
     x: 0.4, y: 0.13, w: 9.6, h: 0.30, fontFace: FONT_HEAD, fontSize: 14, bold: true, color: INK, isTextBox: true, margin: 0 });
   s.addText("SYSTEM AT A GLANCE", { x: 9.0, y: 0.16, w: 3.93, h: 0.26, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: MUTED, charSpacing: 1.4, align: "right", isTextBox: true, margin: 0 });
 
-  // legend -- same three chips used on slides 2-4, plus "input", so the
+  // legend -- same three chips reused on slides 3-5, plus "input", so the
   // colour code is one language across the whole deck, not relearned here
   legendChip(s, 0.4, 0.56, START_FILL, START_STROKE, "Input / trigger");
   legendChip(s, 2.15, 0.56, AI_FILL, AI_STROKE, "AI agent (LLM call)");
@@ -596,6 +353,249 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
     { x: 0.4, y: 5.92, w: 12.53, h: 0.22, fontFace: FONT_BODY, fontSize: 8.4, italic: true, bold: true, color: "2A2A3E", isTextBox: true, margin: 0 });
   s.addText("One shared claim record carries every field and decision through the whole run, so a failed step resumes rather than restarts.",
     { x: 0.4, y: 6.16, w: 12.53, h: 0.22, fontFace: FONT_BODY, fontSize: 7.6, color: MUTED, isTextBox: true, margin: 0 });
+  footer(s, 2);
+}
+
+// =========================================================================
+// SLIDE 3 (FNOL 1 of 3) — Entry & Classification
+// =========================================================================
+{
+  const s = pres.addSlide();
+  s.background = { color: WHITE };
+  slideHeader(s, "Three ways in and a separate side-track diagram become one classified intake", "FNOL as it runs today (left) against the redesign (right) · first report to an opened, policy-linked claim", "FNOL REDESIGN · 1 OF 3");
+  columnHeaders(s);
+  footer(s, 3);
+
+  // ---- LEFT: today ----
+  rectNode(s, "First report filed\n(employer almost always; sometimes union or injured)", LC - 2.3, 1.55, 4.6, START_FILL, START_STROKE, START_TEXT, { fontSize: 9.5 });
+  vArrow(s, LC, 1.95, 2.35);
+
+  diamondNode(s, "Channel?", LC, 2.35, 0.7);
+  const b1r = branch(s, LC, 2.70, "right", "Direct to AES, secure mail", "AES already gathered the info — insurer only re-checks coverage", "exit", { fontSize: 7.6 });
+  branch(s, LC, 2.70, "left", "Teeth/glasses: 'tooth' · email + invoices", "Side track — not PD/LOEC, see 1.1", "exception", { dashed: true, fontSize: 7.8 });
+  edgeLabel(s, "EASY / IDB auto-import", LC + 0.12, 3.06, 2.4, { align: "left" });
+  vArrow(s, LC, 3.05, 3.55);
+
+  diamondNode(s, "Auto-import\nworked?", LC, 3.55, 0.7);
+  const b2l = branch(s, LC, 3.90, "left", "No", "Manual claim creation", "exception", { fontSize: 8.5 });
+  rejoinSimple(s, b2l, LC, 4.55);
+  edgeLabel(s, "Yes", LC + 0.12, 4.28, 1.0, { align: "left" });
+
+  vArrow(s, LC, 4.25, 4.7);
+  rejoinElbow(s, b1r, LC, 4.68);
+  continues(s, LC, 4.80, "▼ continues, part 2 · Data / Policy / Duplicate checks");
+
+  // ---- RIGHT: AI-native ----
+  const boxW = COL_W - 0.6, boxX = RC - boxW / 2;
+  rectNode(s, "Claim arrives — any channel, any format (EASY, AES secure mail, email)", boxX, 1.55, boxW, START_FILL, START_STROKE, START_TEXT, { fontSize: 9.5 });
+  vArrow(s, RC, 1.95, 2.35);
+
+  const h1 = rectNode(s, "Extraction Agent\nreads any channel/format · extracts structured fields · matches CPR / CVR",
+    boxX, 2.35, boxW, AI_FILL, AI_STROKE, AI_TEXT, { fontSize: 10, bold: true });
+  vArrow(s, RC, 2.35 + h1, 2.35 + h1 + 0.2);
+  const y2 = 2.35 + h1 + 0.2;
+  const h2 = rectNode(s, "Classification Agent\nlabels claim type (standard, teeth, glasses, violence-cover) with a confidence score",
+    boxX, y2, boxW, AI_FILL, AI_STROKE, AI_TEXT, { fontSize: 10, bold: true });
+  vArrow(s, RC, y2 + h2, y2 + h2 + 0.35);
+  const dY = y2 + h2 + 0.35;
+
+  diamondNode(s, "Confidence ≥\nthreshold?", RC, dY, 0.7);
+  edgeLabel(s, "threshold starts strict, loosens as override-rate data accumulates",
+    RC + DIA_HALF + 0.15, dY + 0.12, 1.85, { align: "left", italic: true, fontSize: 7.2, h: 0.46 });
+  branch(s, RC, dY + 0.35, "left", "No", "Falls back to today's manual queue — never silently wrong", "exception", { fontSize: 7.8 });
+  edgeLabel(s, "Yes", RC + 0.12, dY + 0.73, 1.0, { align: "left" });
+  vArrow(s, RC, dY + 0.70, dY + 1.15);
+  continues(s, RC, dY + 1.23, "▼ continues, part 2 · Parallel Validation");
+
+  const cardY = dY + 1.55;
+  s.addShape(pres.ShapeType.roundRect, { x: boxX - 0.2, y: cardY, w: boxW + 0.4, h: 0.62, rectRadius: 0.05, fill: { color: PAPER }, line: { color: LINE, width: 1 } });
+  s.addText("These two agents together replace 3 entry channels, the auto-import failure path, and the entire 1.1 side-track diagram.", {
+    x: boxX - 0.05, y: cardY, w: boxW + 0.1, h: 0.62, fontFace: FONT_BODY, fontSize: 8.6, color: "3A4250", isTextBox: true, margin: 4, valign: "middle", align: "center", lineSpacingMultiple: 1.15,
+  });
+}
+
+// =========================================================================
+// SLIDE 4 (FNOL 2 of 3) — Validation Gates
+// =========================================================================
+{
+  const s = pres.addSlide();
+  s.background = { color: WHITE };
+  slideHeader(s, "Three checks done one after another become one check done all at once", "Is it complete, linked to the right policy, and not already in the system? None of the three depends on the others", "FNOL REDESIGN · 2 OF 3");
+  columnHeaders(s);
+  footer(s, 4);
+
+  continues(s, LC, 1.40, "▲ continued from part 1");
+  vArrow(s, LC, 1.62, 1.80);
+
+  diamondNode(s, "Data correct\nand complete?", LC, 1.80, 0.7);
+  const c1 = branch(s, LC, 2.15, "left", "Missing CPR", "Ask / fill fields (via questionnaire)", "exception", { fontSize: 7.8 });
+  rejoinSimple(s, c1, LC, 2.90);
+  edgeLabel(s, "OK", LC + 0.12, 2.45, 1.0, { align: "left" });
+  vArrow(s, LC, 2.42, 2.90);
+
+  diamondNode(s, "Valid policy\nattached?", LC, 2.90, 0.7);
+  const c2l = branch(s, LC, 3.25, "left", "Wrong / old policy", "Reattach correct policy", "exception", { fontSize: 8 });
+  rejoinSimple(s, c2l, LC, 4.08);
+  branch(s, LC, 3.25, "right", "No valid policy", "Back to employer: correct insurer", "exit", { fontSize: 7.8 });
+  edgeLabel(s, "Yes", LC + 0.12, 3.63, 1.0, { align: "left" });
+  vArrow(s, LC, 3.60, 4.08);
+
+  diamondNode(s, "Earlier or\nduplicate?", LC, 4.08, 0.7);
+  const c3 = branch(s, LC, 4.43, "left", "Duplicate", "Dedup / connect same-CPR claims", "exception", { fontSize: 7.8 });
+  rejoinSimple(s, c3, LC, 5.30);
+  edgeLabel(s, "New", LC + 0.12, 4.81, 1.0, { align: "left" });
+  vArrow(s, LC, 4.78, 5.30);
+  continues(s, LC, 5.40, "▼ continues, part 3 · Escalation & Close-Out");
+
+  const boxW = COL_W - 0.6, boxX = RC - boxW / 2;
+  continues(s, RC, 1.40, "▲ continued from part 1");
+  vArrow(s, RC, 1.62, 1.80);
+
+  const h1 = rectNode(s, "Validation Node — rules only\nCPR dedup · policy in force · completeness — three lookups at once, no model call",
+    boxX, 1.80, boxW, DET_FILL, DET_STROKE, DET_TEXT, { fontSize: 10, bold: true });
+  vArrow(s, RC, 1.80 + h1, 1.80 + h1 + 0.35);
+  const dY = 1.80 + h1 + 0.35;
+
+  diamondNode(s, "Any check\nfailed?", RC, dY, 0.7);
+  const exBox = branch(s, RC, dY + 0.35, "right", "Yes", "Exception Research Agent — gathers CVR / fuzzy-match candidates as evidence", "exception", { fontSize: 7.6 });
+  vArrow(s, exBox.x + exBox.w / 2, exBox.y + exBox.h, exBox.y + exBox.h + 0.24);
+  rectNode(s, "Underwriter decides\n(AI prepares, never decides)", exBox.x, exBox.y + exBox.h + 0.24, exBox.w, HUM_FILL, HUM_STROKE, HUM_TEXT, { fontSize: 7.6 });
+  edgeLabel(s, "No", RC + 0.12, dY + 0.73, 1.0, { align: "left" });
+  vArrow(s, RC, dY + 0.70, 5.30);
+  continues(s, RC, 5.40, "▼ continues, part 3 · Outcome Drafting Agent");
+
+  s.addShape(pres.ShapeType.roundRect, { x: RIGHT_X, y: 6.05, w: 3.3, h: 0.72, rectRadius: 0.05, fill: { color: PAPER }, line: { color: LINE, width: 1 } });
+  s.addText("3 sequential gates, each with its own rework loop, become 1 parallel check.", {
+    x: RIGHT_X + 0.1, y: 6.05, w: 3.1, h: 0.72, fontFace: FONT_BODY, fontSize: 8.4, color: "3A4250", isTextBox: true, margin: 4, valign: "middle", align: "center", lineSpacingMultiple: 1.2,
+  });
+}
+
+// =========================================================================
+// SLIDE 5 (FNOL 3 of 3) — Escalation & Close-Out
+// =========================================================================
+{
+  const s = pres.addSlide();
+  s.background = { color: WHITE };
+  slideHeader(s, "The AI writes the draft; the handler still makes the decision", "From a system warning to a closed claim or a fully opened one — nothing that can go against a claimant is automated", "FNOL REDESIGN · 3 OF 3");
+  columnHeaders(s);
+  footer(s, 5);
+
+  continues(s, LC, 1.40, "▲ continued from part 2");
+  vArrow(s, LC, 1.62, 1.80);
+
+  diamondNode(s, "Red warning\non claim?", LC, 1.80, 0.7);
+  const d1 = branch(s, LC, 2.15, "left", "Yes", "On hold: check with UW before it can move on", "exception", { fontSize: 7.6 });
+  rejoinSimple(s, d1, LC, 3.05);
+  edgeLabel(s, "No", LC + 0.12, 2.45, 1.0, { align: "left" });
+  vArrow(s, LC, 2.42, 3.05);
+
+  diamondNode(s, "Injury minor?", LC, 3.05, 0.7);
+  branch(s, LC, 3.40, "left", "Yes, ~65% (likely more)", "Close at intake — letter, no permanent injury", "exit", { fontSize: 7.6 });
+  branch(s, LC, 3.40, "right", "No", "Claim in IDB: fields checked, task opened, questionnaire", "exit", { fontSize: 7.6 });
+
+  s.addShape(pres.ShapeType.roundRect, { x: LEFT_X, y: 4.55, w: COL_W, h: 0.75, rectRadius: 0.05, fill: { color: PAPER }, line: { color: LINE, width: 1 } });
+  s.addText("Today: 7 decision gates, 3 entry channels, 10 exception or exit branches across the full FNOL flow.", {
+    x: LEFT_X + 0.15, y: 4.55, w: COL_W - 0.3, h: 0.75, fontFace: FONT_BODY, fontSize: 9, color: "3A4250", isTextBox: true, margin: 4, valign: "middle", align: "center", lineSpacingMultiple: 1.2,
+  });
+
+  const boxW = COL_W - 0.6, boxX = RC - boxW / 2;
+  continues(s, RC, 1.40, "▲ continued from part 2");
+  vArrow(s, RC, 1.62, 1.80);
+
+  const h1 = rectNode(s, "Outcome Drafting Agent\ndrafts the close-out letter, or the full IDB record, with its reasoning attached",
+    boxX, 1.80, boxW, AI_FILL, AI_STROKE, AI_TEXT, { fontSize: 10, bold: true });
+  vArrow(s, RC, 1.80 + h1, 1.80 + h1 + 0.22);
+  const humY = 1.80 + h1 + 0.22;
+  const hH = rectNode(s, "Handler approves before anything sends — edit rate is the monitored metric, not model accuracy",
+    boxX + 0.5, humY, boxW - 1.0, HUM_FILL, HUM_STROKE, HUM_TEXT, { fontSize: 8.6, bold: true });
+  vArrow(s, RC, humY + hH, humY + hH + 0.32);
+  const dY = humY + hH + 0.32;
+
+  diamondNode(s, "Injury minor?\n(~65%)", RC, dY, 0.7);
+  branch(s, RC, dY + 0.35, "left", "Yes", "Close at intake — AI-drafted, handler approved", "exit", { fontSize: 7.6 });
+  branch(s, RC, dY + 0.35, "right", "No", "Claim in IDB — runs parallel with Coverage Check", "exit", { fontSize: 7.6 });
+
+  s.addShape(pres.ShapeType.roundRect, { x: boxX - 0.2, y: dY + 1.15, w: boxW + 0.4, h: 1.0, rectRadius: 0.05, fill: { color: PAPER }, line: { color: LINE, width: 1 } });
+  s.addText([
+    { text: "Net result:  ", options: { bold: true, color: INK } },
+    { text: "3 entry channels → 1 · 3 sequential gates → 1 parallel check · the Coverage Check handoff disappears, it runs on the same state", options: { color: "3A4250" } },
+  ], { x: boxX - 0.05, y: dY + 1.15, w: boxW + 0.1, h: 1.0, fontFace: FONT_BODY, fontSize: 9, isTextBox: true, margin: 4, valign: "middle", lineSpacingMultiple: 1.2, align: "center" });
+}
+
+// =========================================================================
+// SLIDE 6 — Sequencing quadrant (decluttered: 2 items max per quadrant)
+// palette validated for colour-vision separation, not eyeballed
+// =========================================================================
+{
+  const s = pres.addSlide();
+  s.background = { color: "FAFAF8" };
+
+  s.addText("Start where a mistake is cheap — that is what earns the trust the bigger wins depend on", {
+    x: 0.4, y: 0.13, w: 10.2, h: 0.34, fontFace: FONT_HEAD, fontSize: 14, bold: true, color: INK, isTextBox: true, margin: 0,
+  });
+  s.addText("SEQUENCING", { x: 10.4, y: 0.16, w: 2.53, h: 0.3, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: MUTED, charSpacing: 1.4, align: "right", isTextBox: true, margin: 0 });
+  s.addText("“Hard” means build effort and regulatory exposure together, not just weeks of work", {
+    x: 0.4, y: 0.5, w: 12.5, h: 0.26, fontFace: FONT_BODY, fontSize: 9.5, color: MUTED, isTextBox: true, margin: 0 });
+
+  const gx = 1.15, gy = 1.0, gw = 8.6, gh = 5.0;
+  const hw = gw / 2, hh = gh / 2;
+
+  s.addText("HOW OFTEN IT HAPPENS  →", { x: 0.02, y: gy + gh / 2 - 0.14, w: 1.75, h: 0.28, fontFace: FONT_BODY, fontSize: 8, bold: true, color: MUTED, align: "center", isTextBox: true, margin: 0, rotate: 270 });
+  s.addText("HOW HARD AND HOW RISKY IT IS  →", { x: gx, y: gy + gh + 0.1, w: gw, h: 0.24, fontFace: FONT_BODY, fontSize: 8, bold: true, color: MUTED, align: "center", isTextBox: true, margin: 0 });
+
+  function quad(qx, qy, bg, stroke, label, sub, items) {
+    s.addShape(pres.ShapeType.rect, { x: qx, y: qy, w: hw, h: hh, fill: { color: bg }, line: { color: "FFFFFF", width: 2.5 } });
+    s.addText(label.toUpperCase(), { x: qx + 0.2, y: qy + 0.16, w: hw - 0.4, h: 0.26, fontFace: FONT_BODY, fontSize: 10, bold: true, color: stroke, charSpacing: 0.8, isTextBox: true, margin: 0 });
+    s.addText(sub, { x: qx + 0.2, y: qy + 0.42, w: hw - 0.4, h: 0.24, fontFace: FONT_BODY, fontSize: 8, italic: true, color: MUTED, isTextBox: true, margin: 0 });
+    items.forEach(([title, meta], i) => {
+      const w = hw - 0.5, h = 0.62, y = qy + 0.78 + i * (h + 0.14);
+      s.addShape(pres.ShapeType.roundRect, { x: qx + 0.25, y, w, h, rectRadius: 0.05, fill: { color: "FFFFFF" }, line: { color: stroke, width: 1.2 } });
+      s.addText([
+        { text: title + "\n", options: { bold: true, color: INK, fontSize: 9.2, breakLine: true } },
+        { text: meta, options: { color: MUTED, fontSize: 8 } },
+      ], { x: qx + 0.4, y, w: w - 0.3, h, fontFace: FONT_BODY, isTextBox: true, margin: 0, valign: "middle", lineSpacingMultiple: 1.15 });
+    });
+  }
+
+  quad(gx, gy, "FDF3E3", "D97706", "Wave 1 — start here", "cheap to get wrong, happens constantly", [
+    ["Detect failed EASY → IDB imports", "nobody is alerted today — a claim can go missing unseen"],
+    ["Read, classify, check CPR and policy", "one agent plus plain rules — ends the teeth dependency"],
+  ]);
+  quad(gx + hw, gy, "E4F4F8", "0891B2", "Wave 2 — once trusted", "the real prize, but needs the audit trail live", [
+    ["Draft the close-out letter", "~65% of claims · a handler still approves"],
+    ["Read AES secure mail", "the only channel with no automation today"],
+  ]);
+  quad(gx, gy + hh, "EDECFB", "4338CA", "Then fix the import itself", "an IT defect, once you can see it", [
+    ["Retry, park and replay", "detection first — you cannot fix what nobody reports"],
+  ]);
+  quad(gx + hw, gy + hh, "FBE9F1", "BE185D", "Leave manual", "too rare to earn the effort", [
+    ["\"Violence cover\" entitlement letter", "~2 claims ever · a checklist beats a model"],
+  ]);
+
+  // How the one IT item actually gets fixed -- the detail an engineer would ask for
+  s.addShape(pres.ShapeType.roundRect, { x: 10.05, y: 1.0, w: 2.88, h: 5.0, rectRadius: 0.06, fill: { color: "EDECFB" }, line: { color: "4338CA", width: 1.3 } });
+  s.addText("THE IMPORT FAILURES", { x: 10.27, y: 1.16, w: 2.44, h: 0.24, fontFace: FONT_BODY, fontSize: 9, bold: true, color: "4338CA", charSpacing: 0.7, isTextBox: true, margin: 0 });
+  s.addText("Not noticed today (GGW) — so detection comes before retries:", { x: 10.27, y: 1.42, w: 2.44, h: 0.34, fontFace: FONT_BODY, fontSize: 7.8, italic: true, color: "4A4A5E", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
+  // numbered-pill list -- one badge, one short label, one 3-5 word caption.
+  // no paragraphs: the reader gets the sequence at a glance, not a read.
+  const fixes = [
+    ["Count what should arrive", "daily reconciliation catches gaps"],
+    ["Sort the failure", "timeout vs. missing field"],
+    ["Retry with backoff", "1s, 2s, 4s + jitter"],
+    ["One key per claim", "no duplicate replays"],
+    ["Park, don't drop", "holding queue for review"],
+    ["Alert on the rate", "20/hour \u2260 1/day"],
+  ];
+  let fy = 1.86;
+  fixes.forEach(([t, d], i) => {
+    s.addShape(pres.ShapeType.ellipse, { x: 10.27, y: fy, w: 0.30, h: 0.30, fill: { color: "4338CA" }, line: { type: "none" } });
+    s.addText(String(i + 1), { x: 10.27, y: fy, w: 0.30, h: 0.30, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: "FFFFFF", align: "center", valign: "middle", isTextBox: true, margin: 0 });
+    s.addText(t, { x: 10.65, y: fy - 0.02, w: 2.06, h: 0.19, fontFace: FONT_BODY, fontSize: 8.8, bold: true, color: "2A2A3E", isTextBox: true, margin: 0 });
+    s.addText(d, { x: 10.65, y: fy + 0.16, w: 2.06, h: 0.18, fontFace: FONT_BODY, fontSize: 7.6, color: "6A6A7E", isTextBox: true, margin: 0 });
+    fy += 0.535;
+  });
+
+  s.addText("AES rulings and underwriting authority are deliberately absent — those decisions are not ours to make · frequencies from the case study", { x: 0.4, y: 6.6, w: 12.5, h: 0.28, fontFace: FONT_BODY, fontSize: 7, color: MUTED, isTextBox: true, margin: 0 });
   footer(s, 6);
 }
 
@@ -683,7 +683,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   const s = pres.addSlide();
   s.background = { color: "FAFAF8" };
 
-  s.addText("Two numbers carry this case: the minutes saved, and what they're worth", {
+  s.addText("Every minute is observed, and the redesign pays for itself in 14 months", {
     x: 0.4, y: 0.13, w: 10.2, h: 0.34, fontFace: FONT_HEAD, fontSize: 14, bold: true, color: INK, isTextBox: true, margin: 0 });
   s.addText("APPENDIX · HOW THE NUMBERS ARE BUILT", { x: 7.0, y: 0.16, w: 5.93, h: 0.3, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: MUTED, charSpacing: 1.4, align: "right", isTextBox: true, margin: 0 });
 
@@ -756,8 +756,8 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   const s = pres.addSlide();
   s.background = { color: "FAFAF8" };
 
-  s.addText("Sources and assumptions", {
-    x: 0.4, y: 0.16, w: 8.0, h: 0.34, fontFace: FONT_HEAD, fontSize: 16, bold: true, color: INK, isTextBox: true, margin: 0 });
+  s.addText("Every number is sourced, dated, or named as an assumption we'd test first", {
+    x: 0.4, y: 0.16, w: 10.0, h: 0.34, fontFace: FONT_HEAD, fontSize: 15, bold: true, color: INK, isTextBox: true, margin: 0 });
   s.addText("APPENDIX", { x: 10.53, y: 0.20, w: 2.4, h: 0.26, fontFace: FONT_BODY, fontSize: 9, bold: true, color: MUTED, charSpacing: 1.4, align: "right", isTextBox: true, margin: 0 });
 
   const SRC = [
