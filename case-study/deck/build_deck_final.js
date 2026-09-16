@@ -171,19 +171,37 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
     s.addText(eyebrow.toUpperCase(), { x: x + 0.22, y: py + 0.15, w: w - 0.44, h: 0.24, fontFace: FONT_BODY, fontSize: 8.8, bold: true, color: accent, charSpacing: 1, isTextBox: true, margin: 0 });
   }
 
+  // short bullet chips replace a paragraph -- scannable, not readable
+  function chips(x, y, w, items, color) {
+    let cy = y;
+    items.forEach((t) => {
+      s.addShape(pres.ShapeType.ellipse, { x, y: cy + 0.06, w: 0.06, h: 0.06, fill: { color }, line: { type: "none" } });
+      s.addText(t, { x: x + 0.16, y: cy, w: w - 0.16, h: 0.2, fontFace: FONT_BODY, fontSize: 8.6, color: "3A3A3A", isTextBox: true, margin: 0 });
+      cy += 0.255;
+    });
+  }
+
   panel(pA, pw, AMBER_BG, AMBER, "Today");
   s.addText("What one claim costs one claim handler", { x: pA + 0.22, y: py + 0.44, w: pw - 0.44, h: 0.4, fontFace: FONT_BODY, fontSize: 9, color: "44403A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
   s.addText([{ text: F.stdTodayInt, options: { fontSize: 42, bold: true, color: AMBER } }, { text: "  minutes per claim", options: { fontSize: 12, color: "6B6257" } }],
     { x: pA + 0.22, y: py + 0.86, w: pw - 0.44, h: 0.6, fontFace: FONT_HEAD, isTextBox: true, margin: 0 });
-  s.addText("Reading and re-reading the report, opening attachments, chasing a missing CPR, switching between EASY, IDB, e-mail and paper. Plus 30% for breaks and interruptions.",
-    { x: pA + 0.22, y: py + 1.5, w: pw - 0.44, h: 1.08, fontFace: FONT_BODY, fontSize: 8.4, color: "44403A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.18 });
+  chips(pA + 0.22, py + 1.5, pw - 0.44, [
+    "Re-reads the report, opens attachments",
+    "Chases a missing CPR",
+    "Switches EASY \u00b7 IDB \u00b7 e-mail \u00b7 paper",
+    "+30% for breaks and interruptions",
+  ], AMBER);
 
   panel(pB, pw, TEAL_BG, TEAL, "Redesigned");
   s.addText("The same checks and the same exits, reordered", { x: pB + 0.22, y: py + 0.44, w: pw - 0.44, h: 0.4, fontFace: FONT_BODY, fontSize: 9, color: "34474A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
   s.addText([{ text: F.bankedAfterInt, options: { fontSize: 42, bold: true, color: TEAL } }, { text: "  minutes per claim", options: { fontSize: 12, color: "5A6E70" } }],
     { x: pB + 0.22, y: py + 0.86, w: pw - 0.44, h: 0.6, fontFace: FONT_HEAD, isTextBox: true, margin: 0 });
-  s.addText(`A ${F.cutPct}% cut, not the ${F.designCutPct}% the design allows: handlers will re-check drafts before they trust them. Four AI agents, one rules-only step, two human checkpoints.`,
-    { x: pB + 0.22, y: py + 1.5, w: pw - 0.44, h: 1.08, fontFace: FONT_BODY, fontSize: 8.4, color: "34474A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.18 });
+  chips(pB + 0.22, py + 1.5, pw - 0.44, [
+    `${F.cutPct}% cut, not the ${F.designCutPct}% max`,
+    "4 AI agents, 1 rules-only step",
+    "2 human checkpoints kept",
+    "Handlers re-check before they trust it",
+  ], TEAL);
 
   panel(pC, pwC, INDIGO_BG, INDIGO, "Where the effort actually goes");
   const split = [
@@ -453,20 +471,24 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   // How the one IT item actually gets fixed -- the detail an engineer would ask for
   s.addShape(pres.ShapeType.roundRect, { x: 10.05, y: 1.0, w: 2.88, h: 5.0, rectRadius: 0.06, fill: { color: "EDECFB" }, line: { color: "4338CA", width: 1.3 } });
   s.addText("THE IMPORT FAILURES", { x: 10.27, y: 1.16, w: 2.44, h: 0.24, fontFace: FONT_BODY, fontSize: 9, bold: true, color: "4338CA", charSpacing: 0.7, isTextBox: true, margin: 0 });
-  s.addText("GGW confirm these are not noticed today. That makes detection the first fix, not retries:", { x: 10.27, y: 1.42, w: 2.44, h: 0.40, fontFace: FONT_BODY, fontSize: 8, italic: true, color: "4A4A5E", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
+  s.addText("Not noticed today (GGW) — so detection comes before retries:", { x: 10.27, y: 1.42, w: 2.44, h: 0.34, fontFace: FONT_BODY, fontSize: 7.8, italic: true, color: "4A4A5E", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
+  // numbered-pill list -- one badge, one short label, one 3-5 word caption.
+  // no paragraphs: the reader gets the sequence at a glance, not a read.
   const fixes = [
-    ["Count what should have arrived", "Reconcile EASY sends against IDB claims daily. A gap is a lost claim nobody sees."],
-    ["Sort the failure", "A timeout is worth retrying. A missing field never is — it just fails again."],
-    ["Retry with growing gaps", "1s, 2s, 4s, plus a random offset, so stuck claims do not all retry at once."],
-    ["One reference per claim", "The same key every attempt, so a replay cannot create the claim twice."],
-    ["Park failures, never drop them", "A holding queue with the error, so someone can fix and replay."],
-    ["Alert on the rate, not the count", "One stuck claim is normal. Twenty in an hour is not."],
+    ["Count what should arrive", "daily reconciliation catches gaps"],
+    ["Sort the failure", "timeout vs. missing field"],
+    ["Retry with backoff", "1s, 2s, 4s + jitter"],
+    ["One key per claim", "no duplicate replays"],
+    ["Park, don't drop", "holding queue for review"],
+    ["Alert on the rate", "20/hour \u2260 1/day"],
   ];
-  let fy = 1.88;
-  fixes.forEach(([t, d]) => {
-    s.addText(t, { x: 10.27, y: fy, w: 2.44, h: 0.2, fontFace: FONT_BODY, fontSize: 8.4, bold: true, color: "2A2A3E", isTextBox: true, margin: 0 });
-    s.addText(d, { x: 10.27, y: fy + 0.18, w: 2.44, h: 0.46, fontFace: FONT_BODY, fontSize: 7.6, color: "4A4A5E", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
-    fy += 0.66;
+  let fy = 1.86;
+  fixes.forEach(([t, d], i) => {
+    s.addShape(pres.ShapeType.ellipse, { x: 10.27, y: fy, w: 0.30, h: 0.30, fill: { color: "4338CA" }, line: { type: "none" } });
+    s.addText(String(i + 1), { x: 10.27, y: fy, w: 0.30, h: 0.30, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: "FFFFFF", align: "center", valign: "middle", isTextBox: true, margin: 0 });
+    s.addText(t, { x: 10.65, y: fy - 0.02, w: 2.06, h: 0.19, fontFace: FONT_BODY, fontSize: 8.8, bold: true, color: "2A2A3E", isTextBox: true, margin: 0 });
+    s.addText(d, { x: 10.65, y: fy + 0.16, w: 2.06, h: 0.18, fontFace: FONT_BODY, fontSize: 7.6, color: "6A6A7E", isTextBox: true, margin: 0 });
+    fy += 0.535;
   });
 
   s.addText("AES rulings and underwriting authority are deliberately absent — those decisions are not ours to make · frequencies from the case study", { x: 0.4, y: 6.6, w: 12.5, h: 0.28, fontFace: FONT_BODY, fontSize: 7, color: MUTED, isTextBox: true, margin: 0 });
