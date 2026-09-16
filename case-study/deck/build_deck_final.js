@@ -735,8 +735,8 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   });
   s.addText(`We bank ${F.bankedAfterInt} min, not the ${F.stdAfter} the design allows: the business case runs on a three-point estimate of best, likely and worst case.`,
     { x: L, y: 4.30, w: CW, h: 0.30, fontFace: FONT_BODY, fontSize: 8.6, italic: true, color: "6A6A6A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
-  s.addText(`Basis: at ${F.stdTodayInt} minutes a claim, today's standard time, an 8-hour shift holds capacity for 12 claims; at ${F.bankedAfterInt} (the banked, most-likely estimate), capacity is ~25, roughly double. That's a ceiling, not the 52 minutes freed above, which is actual time freed on today's claim volume. Confirmed by GGW (8 Sep 2026).`,
-    { x: L, y: 4.62, w: CW, h: 0.56, fontFace: FONT_BODY, fontSize: 8.6, color: "6A6A6A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
+  s.addText(`Basis: at ${F.stdTodayInt} minutes a claim, an 8-hour shift holds capacity for 12; at ${F.bankedAfterInt}, roughly 25. A ceiling, not the 52 minutes freed above. Confirmed by GGW (8 Sep 2026).`,
+    { x: L, y: 4.62, w: CW, h: 0.42, fontFace: FONT_BODY, fontSize: 8.6, color: "6A6A6A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
 
   // ---------- B: the business case ----------
   s.addText("B · THE BUSINESS CASE", { x: R, y: 0.58, w: CW, h: 0.24, fontFace: FONT_BODY, fontSize: 10, bold: true, color: MAG, charSpacing: 0.6, isTextBox: true, margin: 0 });
