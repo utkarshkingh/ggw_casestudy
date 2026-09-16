@@ -102,7 +102,7 @@ function columnHeaders(slide) {
 }
 function footer(slide, pageNum) {
   slide.addText("GGW Claims Workflow Redesign · FNOL", { x: 0.4, y: 7.22, w: 6, h: 0.24, fontFace: FONT_BODY, fontSize: 8, color: MUTED, isTextBox: true, margin: 0 });
-  slide.addText(String(pageNum) + " / 8", { x: 12.3, y: 7.22, w: 0.65, h: 0.24, fontFace: FONT_BODY, fontSize: 8, color: MUTED, align: "right", isTextBox: true, margin: 0 });
+  slide.addText(String(pageNum) + " / 9", { x: 12.3, y: 7.22, w: 0.65, h: 0.24, fontFace: FONT_BODY, fontSize: 8, color: MUTED, align: "right", isTextBox: true, margin: 0 });
 }
 function continues(slide, cx, y, text) {
   slide.addText(text, { x: cx - 1.6, y, w: 3.2, h: 0.22, fontFace: FONT_BODY, fontSize: 8.3, italic: true, color: MUTED, align: "center", isTextBox: true, margin: 0 });
@@ -238,7 +238,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   s.addShape(pres.ShapeType.roundRect, { x: 0.5, y: 5.52, w: 6.15, h: 1.0, rectRadius: 0.06, fill: { color: "FFFFFF" }, line: { color: LINE, width: 1 } });
   s.addText([
     { text: `What “€${F.valueYrK}k” means:  `, options: { bold: true, color: MAG } },
-    { text: `${F.hoursYr} handler-hours a year, at the loaded cost of a handler-hour. Capacity, not cash — it becomes money only if the hours go to the backlog or are absorbed by normal staff turnover. Full build-up on slide 7.`, options: { color: "3A3A3A" } },
+    { text: `${F.hoursYr} handler-hours a year, at the loaded cost of a handler-hour. Capacity, not cash — it becomes money only if the hours go to the backlog or are absorbed by normal staff turnover. Full build-up on slide 8.`, options: { color: "3A3A3A" } },
   ], { x: 0.68, y: 5.52, w: 5.8, h: 1.0, fontFace: FONT_BODY, fontSize: 8.5, isTextBox: true, margin: 0, valign: "middle", lineSpacingMultiple: 1.18 });
 
   s.addShape(pres.ShapeType.roundRect, { x: 6.85, y: 5.52, w: 5.98, h: 1.0, rectRadius: 0.06, fill: { color: MAG_BG }, line: { color: MAG, width: 1.2 } });
@@ -247,7 +247,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
     { text: `cost is not what decides this — the value released covers running and maintaining it ${F.ratio} times over. What decides it is governance: proving a person reviewed anything that can go against a claimant, and whether handlers trust the drafts.`, options: { color: "3A2A32" } },
   ], { x: 7.03, y: 5.52, w: 5.62, h: 1.0, fontFace: FONT_BODY, fontSize: 8.5, isTextBox: true, margin: 0, valign: "middle", lineSpacingMultiple: 1.18 });
 
-  s.addText(`Conservative throughout: the ${F.pertInt}-minute-per-claim saving is a three-point estimate (best ${F.pertO} / likely ${F.pertM} / worst ${F.pertP}), not the design maximum. Build-up on slide 7, sources on slide 8.`,
+  s.addText(`Conservative throughout: the ${F.pertInt}-minute-per-claim saving is a three-point estimate (best ${F.pertO} / likely ${F.pertM} / worst ${F.pertP}), not the design maximum. Build-up on slide 8, sources on slide 9.`,
     { x: 0.5, y: 6.62, w: 12.33, h: 0.28, fontFace: FONT_BODY, fontSize: 7.6, italic: true, color: "6A6A6A", isTextBox: true, margin: 0 });
   footer(s, 1);
 }
@@ -496,52 +496,146 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
 }
 
 // =========================================================================
-// SLIDE 6 — Technical implementation, one slide, drawn rather than written.
-// GGW: "more interested in how you do the technical implementation ...
-//       we would deploy in the cloud".
+// SLIDE 6 — System at a glance: four lanes, who does what, in what order.
+// Adapted from a reference deck's swimlane technique (input / deterministic
+// functions / AI agents / experts in the loop) onto GGW's own five agents,
+// using the same colour code as the flowcharts on slides 2-4 so a reader
+// who has already seen those needs no new legend to read this one.
 // =========================================================================
 {
   const s = pres.addSlide();
   s.background = { color: "FAFAF8" };
 
-  s.addText("One graph, one typed state object, and a person before anything leaves the building", {
-    x: 0.4, y: 0.13, w: 10.2, h: 0.34, fontFace: FONT_HEAD, fontSize: 14, bold: true, color: INK, isTextBox: true, margin: 0 });
-  s.addText("TECHNICAL IMPLEMENTATION", { x: 9.0, y: 0.16, w: 3.93, h: 0.3, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: MUTED, charSpacing: 1.4, align: "right", isTextBox: true, margin: 0 });
+  s.addText("System at a glance — four lanes, seven stations, one shared claim state", {
+    x: 0.4, y: 0.13, w: 9.6, h: 0.30, fontFace: FONT_HEAD, fontSize: 14, bold: true, color: INK, isTextBox: true, margin: 0 });
+  s.addText("SYSTEM AT A GLANCE", { x: 9.0, y: 0.16, w: 3.93, h: 0.26, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: MUTED, charSpacing: 1.4, align: "right", isTextBox: true, margin: 0 });
 
-  const BX = [0.4, 2.525, 4.65, 6.775, 8.90, 11.025], BW = 1.885;
-  const BY = 1.78, BH = 1.24;
+  // legend -- same three chips used on slides 2-4, plus "input", so the
+  // colour code is one language across the whole deck, not relearned here
+  legendChip(s, 0.4, 0.56, START_FILL, START_STROKE, "Input / trigger");
+  legendChip(s, 2.15, 0.56, AI_FILL, AI_STROKE, "AI agent (LLM call)");
+  legendChip(s, 4.55, 0.56, DET_FILL, DET_STROKE, "Rules only, no model");
+  legendChip(s, 7.15, 0.56, HUM_FILL, HUM_STROKE, "Human checkpoint");
+  s.addShape(pres.ShapeType.line, { x: 9.55, y: 0.63, w: 0.35, h: 0, line: { color: ARROW, width: 1, dashType: "dash", endArrowType: "triangle" } });
+  s.addText("conditional path (~20% of claims)", { x: 9.95, y: 0.50, w: 2.98, h: 0.26, fontFace: FONT_BODY, fontSize: 8, color: MUTED, isTextBox: true, margin: 0, valign: "middle" });
 
-  // bracket over the four graph nodes
-  s.addShape(pres.ShapeType.roundRect, { x: BX[1], y: 1.14, w: BX[4] + BW - BX[1], h: 0.44, rectRadius: 0.05, fill: { color: "EEF3F8" }, line: { color: AI_STROKE, width: 1 } });
-  s.addText("LangGraph state graph  ·  one ClaimState carries fields, confidence and the audit trail", {
-    x: BX[1], y: 1.14, w: BX[4] + BW - BX[1], h: 0.44, fontFace: FONT_BODY, fontSize: 8.6, bold: true, color: AI_STROKE, align: "center", valign: "middle", isTextBox: true, margin: 0 });
-
-  const steps = [
-    ["Claim arrives", "EASY · AES mail · e-mail", START_FILL, START_STROKE, START_TEXT],
-    ["Read it", "Extraction agent", AI_FILL, AI_STROKE, AI_TEXT],
-    ["Sort it", "Classification agent", AI_FILL, AI_STROKE, AI_TEXT],
-    ["Check it", "Rules only — no model", DET_FILL, DET_STROKE, DET_TEXT],
-    ["Draft the outcome", "Drafting agent", AI_FILL, AI_STROKE, AI_TEXT],
-    ["A person approves", "then written to IDB", HUM_FILL, HUM_STROKE, HUM_TEXT],
+  // four lane bands
+  const LX = 0.4, LW = 12.53, LY = [0.94, 2.18, 3.42, 4.66], LH = 1.10;
+  const lanes = [
+    ["INPUT", START_STROKE, "F2FAF9"],
+    ["DETERMINISTIC — NO MODEL", DET_STROKE, "F4F5F6"],
+    ["AI AGENTS", AI_STROKE, "F1F5FA"],
+    ["A PERSON DECIDES", HUM_STROKE, "FAF3F6"],
   ];
-  steps.forEach(([big, small, fill, stroke, tc], i) => {
-    s.addShape(pres.ShapeType.roundRect, { x: BX[i], y: BY, w: BW, h: BH, rectRadius: 0.06, fill: { color: fill }, line: { color: stroke, width: 1.4 } });
-    s.addText(big, { x: BX[i] + 0.1, y: BY + 0.26, w: BW - 0.2, h: 0.42, fontFace: FONT_BODY, fontSize: 10, bold: true, color: tc, align: "center", isTextBox: true, margin: 0, lineSpacingMultiple: 1.1 });
-    s.addText(small, { x: BX[i] + 0.1, y: BY + 0.72, w: BW - 0.2, h: 0.36, fontFace: FONT_BODY, fontSize: 7.8, color: MUTED, align: "center", isTextBox: true, margin: 0, lineSpacingMultiple: 1.1 });
-    if (i < 5) elbowAcross(s, BX[i] + BW + 0.03, BX[i + 1] - 0.03, BY + BH / 2);
+  // label x-offset per lane: the deterministic lane's only boxes start past
+  // x=6.7, so its label sits clear of the long input-to-agent jump that
+  // would otherwise cross straight through the text at the default position
+  const laneLabelX = [LX + 0.16, 4.20, LX + 0.16, LX + 0.16];
+  lanes.forEach(([label, accent, bg], i) => {
+    s.addShape(pres.ShapeType.roundRect, { x: LX, y: LY[i], w: LW, h: LH, rectRadius: 0.04, fill: { color: bg }, line: { type: "none" } });
+    s.addShape(pres.ShapeType.rect, { x: LX, y: LY[i], w: 0.06, h: LH, fill: { color: accent }, line: { type: "none" } });
+    s.addText(label, { x: laneLabelX[i], y: LY[i] + 0.06, w: 2.4, h: 0.18, fontFace: FONT_BODY, fontSize: 8, bold: true, color: accent, charSpacing: 0.8, isTextBox: true, margin: 0 });
   });
 
-  // what sits underneath the graph -- persistence and reliability, kept short
-  s.addShape(pres.ShapeType.roundRect, { x: BX[0], y: 3.12, w: BW, h: 0.38, rectRadius: 0.05, fill: { color: "FDF3E3" }, line: { color: AMBER, width: 1 } });
-  s.addText("Service Bus\nfailures park, nothing is lost", { x: BX[0] + 0.06, y: 3.12, w: BW - 0.12, h: 0.38, fontFace: FONT_BODY, fontSize: 7.4, bold: true, color: "9A5A0A", align: "center", valign: "middle", isTextBox: true, margin: 0, lineSpacingMultiple: 1.05 });
-  s.addShape(pres.ShapeType.roundRect, { x: BX[1], y: 3.12, w: BX[5] + BW - BX[1], h: 0.38, rectRadius: 0.05, fill: { color: "ECEFF3" }, line: { color: DET_STROKE, width: 1 } });
-  s.addText("PostgreSQL  ·  graph checkpoint and audit log in one place — every decision, its inputs and its confidence", {
-    x: BX[1], y: 3.12, w: BX[5] + BW - BX[1], h: 0.38, fontFace: FONT_BODY, fontSize: 8, bold: true, color: DET_TEXT, align: "center", valign: "middle", isTextBox: true, margin: 0 });
+  // seven stations -- six main columns (reusing the same x-grid the pipeline
+  // used before) plus one conditional branch sharing column 4 with Validation
+  const BX = [0.4, 2.525, 4.65, 6.775, 8.90, 11.025], BW = 1.885, BH = 0.68;
+  const boxY = (lane) => LY[lane] + LH - BH - 0.08;
 
-  // Operating model -- who owns what, in the graph above. Same three colours as
-  // the pipeline boxes, so the reader maps this straight back to what they just
-  // saw, then the whole slide is answered in one line underneath.
-  s.addText("OPERATING MODEL — WHO OWNS WHAT", { x: 0.4, y: 3.60, w: 6.0, h: 0.20, fontFace: FONT_BODY, fontSize: 9, bold: true, color: INDIGO, charSpacing: 0.8, isTextBox: true, margin: 0 });
+  function station(col, lane, big, small, fill, stroke, tc, dashed) {
+    const x = BX[col], y = boxY(lane);
+    s.addShape(pres.ShapeType.roundRect, {
+      x, y, w: BW, h: BH, rectRadius: 0.06, fill: { color: fill },
+      line: { color: stroke, width: dashed ? 1.1 : 1.4, dashType: dashed ? "dash" : "solid" },
+    });
+    s.addText(big, { x: x + 0.08, y: y + 0.08, w: BW - 0.16, h: 0.28, fontFace: FONT_BODY, fontSize: 9.6, bold: true, color: tc, align: "center", isTextBox: true, margin: 0, lineSpacingMultiple: 1.0 });
+    s.addText(small, { x: x + 0.08, y: y + 0.36, w: BW - 0.16, h: 0.30, fontFace: FONT_BODY, fontSize: 7.4, color: MUTED, align: "center", isTextBox: true, margin: 0, lineSpacingMultiple: 1.02 });
+    return { x, y, w: BW, h: BH, cx: x + BW / 2, cy: y + BH / 2, lane };
+  }
+
+  // connect two stations, choosing the entry/exit edge from their relative
+  // lane position rather than a fixed guess -- same lane = left/right edge,
+  // different lane = top/bottom edge on whichever side actually faces the
+  // other box, so the line reaches the near side instead of cutting through
+  function link(a, b, dash) {
+    if (a.lane === b.lane) diagArrow(s, a.x + a.w, a.cy, b.x, b.cy, dash);
+    else if (b.lane > a.lane) diagArrow(s, a.cx, a.y + a.h, b.cx, b.y, dash);
+    else diagArrow(s, a.cx, a.y, b.cx, b.y + b.h, dash);
+  }
+
+  const b0 = station(0, 0, "Claim arrives", "EASY · AES mail · e-mail", START_FILL, START_STROKE, START_TEXT);
+  const b1 = station(1, 2, "Extraction Agent", "any format → structured fields", AI_FILL, AI_STROKE, AI_TEXT);
+  const b2 = station(2, 2, "Classification Agent", "claim type + confidence score", AI_FILL, AI_STROKE, AI_TEXT);
+  const b3 = station(3, 1, "Validation", "CPR · policy · duplicates", DET_FILL, DET_STROKE, DET_TEXT);
+  const b3x = station(3, 2, "Exception Research", "gathers evidence · ~20% of claims", "FCEFD6", "EF9F27", "6B4A10", true);
+  const b4 = station(4, 2, "Drafting Agent", "writes the letter, cites its reasoning", AI_FILL, AI_STROKE, AI_TEXT);
+  const b5 = station(5, 3, "Handler approves", "before anything sends", HUM_FILL, HUM_STROKE, HUM_TEXT);
+
+  // numbered station markers -- small filled circles at the top-left corner,
+  // read left to right, matching the reference deck's numbering device
+  // number badges sit fully inside each box's top-left corner -- contained,
+  // not straddling any border, so they cannot collide with the lane labels
+  [b0, b1, b2, b3, b4, b5].forEach((b, i) => {
+    const bx = b.x + 0.05, by = b.y + 0.05;
+    s.addShape(pres.ShapeType.ellipse, { x: bx, y: by, w: 0.18, h: 0.18, fill: { color: INK }, line: { type: "none" } });
+    s.addText(String(i + 1), { x: bx, y: by, w: 0.18, h: 0.18, fontFace: FONT_BODY, fontSize: 7.4, bold: true, color: "FFFFFF", align: "center", valign: "middle", isTextBox: true, margin: 0 });
+  });
+
+  // flow -- solid for the main path, dashed for the ~20% exception detour.
+  // Validation forks: most claims go straight to Drafting; the ~20% flagged
+  // detour through Exception Research first, then rejoins at Drafting.
+  link(b0, b1);
+  link(b1, b2);
+  link(b2, b3);
+  link(b3, b4);            // clear, ~80%
+  link(b3, b3x, true);     // flagged, ~20%
+  link(b3x, b4, true);     // research findings feed the draft
+  link(b4, b5);
+
+  s.addText("AI owns the drafting. Rules own the facts. A person owns every call that can go against a claimant.",
+    { x: 0.4, y: 5.92, w: 12.53, h: 0.22, fontFace: FONT_BODY, fontSize: 8.4, italic: true, bold: true, color: "2A2A3E", isTextBox: true, margin: 0 });
+  s.addText("One typed ClaimState carries fields, confidence and the audit trail through every station · LangGraph checkpoints it in PostgreSQL, so a failed run resumes rather than restarts",
+    { x: 0.4, y: 6.16, w: 12.53, h: 0.22, fontFace: FONT_BODY, fontSize: 7.6, color: MUTED, isTextBox: true, margin: 0 });
+  s.addText("The stack, hosting and rollout gates are on the next slide",
+    { x: 0.4, y: 6.40, w: 12.53, h: 0.22, fontFace: FONT_BODY, fontSize: 7.6, italic: true, color: MUTED, isTextBox: true, margin: 0 });
+  footer(s, 6);
+}
+
+// =========================================================================
+// SLIDE 7 — The stack, hosting, and how it goes live without breaking.
+// =========================================================================
+{
+  const s = pres.addSlide();
+  s.background = { color: "FAFAF8" };
+
+  s.addText("Deployed on the cloud GGW already run, released in three gated steps, never blind", {
+    x: 0.4, y: 0.13, w: 10.2, h: 0.34, fontFace: FONT_HEAD, fontSize: 14, bold: true, color: INK, isTextBox: true, margin: 0 });
+  s.addText("STACK & ROLLOUT", { x: 9.4, y: 0.16, w: 3.53, h: 0.3, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: MUTED, charSpacing: 1.4, align: "right", isTextBox: true, margin: 0 });
+
+  // reliability band -- persistence, kept short
+  const RX = [0.4, 2.525], RW = [1.885, 10.045];
+  s.addShape(pres.ShapeType.roundRect, { x: RX[0], y: 0.70, w: RW[0], h: 0.52, rectRadius: 0.05, fill: { color: "FDF3E3" }, line: { color: AMBER, width: 1 } });
+  s.addText("Service Bus\nfailures park, nothing is lost", { x: RX[0] + 0.08, y: 0.70, w: RW[0] - 0.16, h: 0.52, fontFace: FONT_BODY, fontSize: 8, bold: true, color: "9A5A0A", align: "center", valign: "middle", isTextBox: true, margin: 0, lineSpacingMultiple: 1.08 });
+  s.addShape(pres.ShapeType.roundRect, { x: RX[1], y: 0.70, w: RW[1], h: 0.52, rectRadius: 0.05, fill: { color: "ECEFF3" }, line: { color: DET_STROKE, width: 1 } });
+  s.addText("PostgreSQL  ·  graph checkpoint and audit log in one place — every decision, its inputs and its confidence",
+    { x: RX[1], y: 0.70, w: RW[1], h: 0.52, fontFace: FONT_BODY, fontSize: 9, bold: true, color: DET_TEXT, align: "center", valign: "middle", isTextBox: true, margin: 0 });
+
+  // the stack, as names only
+  s.addText("THE STACK", { x: 0.4, y: 1.54, w: 3.0, h: 0.22, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: TEAL, charSpacing: 0.9, isTextBox: true, margin: 0 });
+  const chips = ["FastAPI", "LangGraph", "Pydantic", "PostgreSQL", "Service Bus", "Container Apps", "Blob + Key Vault", "Azure OpenAI", "Azure DevOps"];
+  const cw = (12.53 - 8 * 0.18) / 9;
+  chips.forEach((c, i) => {
+    const x = 0.4 + i * (cw + 0.18);
+    s.addShape(pres.ShapeType.roundRect, { x, y: 1.84, w: cw, h: 0.50, rectRadius: 0.06, fill: { color: "FFFFFF" }, line: { color: TEAL, width: 1.2 } });
+    s.addText(c, { x: x + 0.04, y: 1.84, w: cw - 0.08, h: 0.50, fontFace: FONT_BODY, fontSize: 8.6, bold: true, color: "0B5A66", align: "center", valign: "middle", isTextBox: true, margin: 0, lineSpacingMultiple: 1.0 });
+  });
+  s.addText("Deployed to the cloud GGW already use · infrastructure as code · one on/off switch per agent · model version pinned",
+    { x: 0.4, y: 2.46, w: 12.53, h: 0.24, fontFace: FONT_BODY, fontSize: 8.2, italic: true, color: MUTED, isTextBox: true, margin: 0 });
+
+  // operating model -- kept from the pipeline slide, restated once more here
+  // right next to the infrastructure, because "who owns the call" is part of
+  // how this is operated, not just how it is designed
+  s.addText("OPERATING MODEL", { x: 0.4, y: 2.94, w: 4.0, h: 0.22, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: INDIGO, charSpacing: 0.9, isTextBox: true, margin: 0 });
   const roles = [
     ["AI agents", "draft, classify, extract — never decide", AI_FILL, AI_STROKE, AI_TEXT],
     ["Rules, no model", "check the record — pass or fail, nothing in between", DET_FILL, DET_STROKE, DET_TEXT],
@@ -550,50 +644,39 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   const rw = (12.53 - 2 * 0.2) / 3;
   roles.forEach(([t, d, fill, stroke, tc], i) => {
     const x = 0.4 + i * (rw + 0.2);
-    s.addShape(pres.ShapeType.roundRect, { x, y: 3.82, w: rw, h: 0.42, rectRadius: 0.05, fill: { color: fill }, line: { color: stroke, width: 1.2 } });
-    s.addText(t, { x: x + 0.14, y: 3.82, w: 1.7, h: 0.42, fontFace: FONT_BODY, fontSize: 9, bold: true, color: tc, valign: "middle", isTextBox: true, margin: 0 });
-    s.addText(d, { x: x + 1.85, y: 3.82, w: rw - 1.95, h: 0.42, fontFace: FONT_BODY, fontSize: 7.8, color: tc, valign: "middle", isTextBox: true, margin: 0, lineSpacingMultiple: 1.05 });
+    s.addShape(pres.ShapeType.roundRect, { x, y: 3.24, w: rw, h: 0.46, rectRadius: 0.05, fill: { color: fill }, line: { color: stroke, width: 1.2 } });
+    s.addText(t, { x: x + 0.14, y: 3.24, w: 1.7, h: 0.46, fontFace: FONT_BODY, fontSize: 9.2, bold: true, color: tc, valign: "middle", isTextBox: true, margin: 0 });
+    s.addText(d, { x: x + 1.85, y: 3.24, w: rw - 1.95, h: 0.46, fontFace: FONT_BODY, fontSize: 8, color: tc, valign: "middle", isTextBox: true, margin: 0, lineSpacingMultiple: 1.05 });
   });
-  s.addText("AI owns the drafting. Rules own the facts. A person owns every call that can go against a claimant.",
-    { x: 0.4, y: 4.28, w: 12.53, h: 0.20, fontFace: FONT_BODY, fontSize: 8, italic: true, bold: true, color: "2A2A3E", isTextBox: true, margin: 0 });
-
-  // the stack, as names only
-  s.addText("THE STACK", { x: 0.4, y: 4.60, w: 3.0, h: 0.20, fontFace: FONT_BODY, fontSize: 9, bold: true, color: TEAL, charSpacing: 0.9, isTextBox: true, margin: 0 });
-  const chips = ["FastAPI", "LangGraph", "Pydantic", "PostgreSQL", "Service Bus", "Container Apps", "Blob + Key Vault", "Azure OpenAI", "Azure DevOps"];
-  const cw = (12.53 - 8 * 0.16) / 9;
-  chips.forEach((c, i) => {
-    const x = 0.4 + i * (cw + 0.16);
-    s.addShape(pres.ShapeType.roundRect, { x, y: 4.82, w: cw, h: 0.38, rectRadius: 0.05, fill: { color: "FFFFFF" }, line: { color: TEAL, width: 1.1 } });
-    s.addText(c, { x: x + 0.04, y: 4.82, w: cw - 0.08, h: 0.38, fontFace: FONT_BODY, fontSize: 7.8, bold: true, color: "0B5A66", align: "center", valign: "middle", isTextBox: true, margin: 0 });
-  });
-  s.addText("Deployed to the cloud GGW already use · infrastructure as code · one on/off switch per agent · model version pinned",
-    { x: 0.4, y: 5.26, w: 12.53, h: 0.20, fontFace: FONT_BODY, fontSize: 7.6, italic: true, color: MUTED, isTextBox: true, margin: 0 });
 
   // how it goes live
-  s.addText("HOW IT GOES LIVE", { x: 0.4, y: 5.58, w: 3.0, h: 0.20, fontFace: FONT_BODY, fontSize: 9, bold: true, color: MAG, charSpacing: 0.9, isTextBox: true, margin: 0 });
-  const gw = (12.53 - 3 * 0.24) / 4, gy = 5.80, gh = 0.70;
+  s.addText("HOW IT GOES LIVE", { x: 0.4, y: 3.98, w: 3.0, h: 0.22, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: MAG, charSpacing: 0.9, isTextBox: true, margin: 0 });
+  const gw = (12.53 - 3 * 0.24) / 4, gy = 4.24, gh = 0.92;
   const gates = [
-    ["Shadow", "weeks 1–8", "Runs on live claims. Nobody sees the output.", AMBER, AMBER_BG],
-    ["Suggest", "weeks 9–16", "The handler must edit or approve. Nothing sends itself.", TEAL, TEAL_BG],
-    ["Approve", "months 5–6", "Minor claims pre-filled. One click accepts.", INDIGO, INDIGO_BG],
-    ["Never", "by design", "Nothing adverse to a claimant is ever automatic.", MAG, MAG_BG],
+    ["Shadow", "weeks 1–8", "Runs on live claims. Nobody sees the output.", "Exit: extraction agrees with the handler on 95% of fields.", AMBER, AMBER_BG],
+    ["Suggest", "weeks 9–16", "The handler must edit or approve. Nothing sends itself.", "Exit: edit rate on minor claims settles below 20%.", TEAL, TEAL_BG],
+    ["Approve", "months 5–6", "Minor claims pre-filled. One click accepts.", "Exit criteria reviewed monthly with the claims lead.", INDIGO, INDIGO_BG],
+    ["Never", "by design", "Nothing adverse to a claimant is ever automatic.", "This is a boundary, not a phase.", MAG, MAG_BG],
   ];
-  gates.forEach(([t, when, d, col, bg], i) => {
+  gates.forEach(([t, when, d, gate, col, bg], i) => {
     const x = 0.4 + i * (gw + 0.24);
     s.addShape(pres.ShapeType.roundRect, { x, y: gy, w: gw, h: gh, rectRadius: 0.06, fill: { color: bg }, line: { color: col, width: 1.2 } });
-    s.addText(t, { x: x + 0.16, y: gy + 0.08, w: gw - 0.32, h: 0.20, fontFace: FONT_BODY, fontSize: 9.6, bold: true, color: col, isTextBox: true, margin: 0 });
-    s.addText(when, { x: x + 0.16, y: gy + 0.08, w: gw - 0.32, h: 0.20, fontFace: FONT_BODY, fontSize: 7.4, italic: true, color: MUTED, align: "right", isTextBox: true, margin: 0 });
-    s.addText(d, { x: x + 0.16, y: gy + 0.28, w: gw - 0.32, h: gh - 0.34, fontFace: FONT_BODY, fontSize: 7.6, color: "3A3A3A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.1 });
+    s.addText(t, { x: x + 0.16, y: gy + 0.10, w: gw - 0.32, h: 0.22, fontFace: FONT_BODY, fontSize: 10.5, bold: true, color: col, isTextBox: true, margin: 0 });
+    s.addText(when, { x: x + 0.16, y: gy + 0.10, w: gw - 0.32, h: 0.22, fontFace: FONT_BODY, fontSize: 7.8, italic: true, color: MUTED, align: "right", isTextBox: true, margin: 0 });
+    s.addText(d, { x: x + 0.16, y: gy + 0.34, w: gw - 0.32, h: 0.28, fontFace: FONT_BODY, fontSize: 8.2, color: "3A3A3A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.12 });
+    s.addShape(pres.ShapeType.rect, { x: x + 0.16, y: gy + 0.66, w: gw - 0.32, h: 0.01, fill: { color: col }, line: { type: "none" } });
+    s.addText(gate, { x: x + 0.16, y: gy + 0.70, w: gw - 0.32, h: 0.20, fontFace: FONT_BODY, fontSize: 7.2, italic: true, color: col === MAG ? "6A1F42" : "4A4A4A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.05 });
     if (i < 3) elbowAcross(s, x + gw + 0.03, x + gw + 0.21, gy + gh / 2);
   });
 
-  s.addText("If an agent fails or is unsure, the claim drops into today's manual queue — slower, never wrong · what it costs is on slide 7",
-    { x: 0.4, y: gy + gh + 0.10, w: 12.5, h: 0.24, fontFace: FONT_BODY, fontSize: 7, color: MUTED, isTextBox: true, margin: 0 });
-  footer(s, 6);
+  s.addText("If an agent fails or is unsure, the claim drops into today's manual queue — slower, never wrong · a model or prompt change re-runs 200 historical claims before it can deploy · what it costs is on slide 8",
+    { x: 0.4, y: gy + gh + 0.14, w: 12.5, h: 0.26, fontFace: FONT_BODY, fontSize: 7.4, color: MUTED, isTextBox: true, margin: 0 });
+  footer(s, 7);
 }
 
 // =========================================================================
-// SLIDE 6 — How the numbers are built (backup / defensible detail)
+// =========================================================================
+// SLIDE 8 — How the numbers are built (backup / defensible detail)
 // Three accent colours only: AMBER = time, TEAL = cost, MAG = conclusion.
 // =========================================================================
 {
@@ -699,10 +782,10 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
     [B("Time back, each, per day"), "", "", B(`${F.freedMinPersonDay} min`)],
   ], R, 5.62, [2.1, 1.35, 1.3, 1.25]);
 
-  footer(s, 7);
+  footer(s, 8);
 }
 // =========================================================================
-// SLIDE 7 — Sources (clickable) and what is assumption vs. fact
+// SLIDE 9 — Sources (clickable) and what is assumption vs. fact
 // Two columns: the list outgrew one after GGW's answers were added.
 // =========================================================================
 {
@@ -748,7 +831,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   s.addShape(pres.ShapeType.roundRect, { x: 0.4, y: 4.36, w: 12.53, h: 1.26, rectRadius: 0.06, fill: { color: "FDF3E3" }, line: { color: AMBER, width: 1.2 } });
   s.addText("STILL OUR ASSUMPTIONS — AND THE FIRST THING WE WOULD TEST", {
     x: 0.6, y: 4.47, w: 12.1, h: 0.24, fontFace: FONT_BODY, fontSize: 8.6, bold: true, color: "9A5A0A", charSpacing: 0.6, isTextBox: true, margin: 0 });
-  s.addText("Every per-step minute on slide 7 · the 30% allowance for breaks and interruptions · how often a CPR is missing (30%) or underwriting is asked (25%) · how often the redesign raises an exception (20%) · the tokens a typical claim needs · the €146k build · the 0.25 FTE upkeep.\n\nWho does intake is no longer among them — GGW answered it, and every per-person figure in this deck is rebuilt on that answer. Two weeks of watching live intake would replace the rest with measurements.",
+  s.addText("Every per-step minute on slide 8 · the 30% allowance for breaks and interruptions · how often a CPR is missing (30%) or underwriting is asked (25%) · how often the redesign raises an exception (20%) · the tokens a typical claim needs · the €146k build · the 0.25 FTE upkeep.\n\nWho does intake is no longer among them — GGW answered it, and every per-person figure in this deck is rebuilt on that answer. Two weeks of watching live intake would replace the rest with measurements.",
     { x: 0.6, y: 4.72, w: 12.1, h: 0.82, fontFace: FONT_BODY, fontSize: 8.4, color: "44403A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.2 });
 
   s.addShape(pres.ShapeType.rect, { x: 0.4, y: 5.80, w: 0.05, h: 0.2, fill: { color: MAG }, line: { type: "none" } });
@@ -758,7 +841,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
 
   s.addText("Prices checked September 2026 · US$ converted at €0.92 · every euro figure is fully loaded — gross pay plus employer contributions",
     { x: 0.4, y: 6.18, w: 12.5, h: 0.26, fontFace: FONT_BODY, fontSize: 7, color: MUTED, isTextBox: true, margin: 0 });
-  footer(s, 8);
+  footer(s, 9);
 }
 
 pres.writeFile({ fileName: "/tmp/claude-0/-home-user-ggw-casestudy/2b8e5a67-8934-50d1-9acc-621207f6c407/scratchpad/deck/GGW_FNOL_Redesign.pptx" })
