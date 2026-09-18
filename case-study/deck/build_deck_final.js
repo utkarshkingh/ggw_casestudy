@@ -221,7 +221,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
 
   // KPI strip
   const kpis = [
-    [`${F.freedMinPersonDay} min`, `freed per claim handler per day, out of ${F.prodHPerDay} productive hours`, AMBER],
+    [`${F.capToday} → ${F.capAfter}`, `claims/day capacity per handler, a ${F.capHours}-hour day (ceiling, not added demand)`, AMBER],
     [`${F.hoursDay} h`, `across the ${F.handlers} claim handlers, or ${F.fte} full-time people`, TEAL],
     [`€${F.valueYrK}k a year`, `what the ${F.hoursYr} freed handler-hours are worth, at €${F.hourly} fully loaded`, MAG],
     [`${F.payback} mths`, `to pay back the one-off build of €${F.buildK}k`, INDIGO],
@@ -735,7 +735,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   });
   s.addText(`We bank ${F.bankedAfterInt} min, not the ${F.stdAfter} the design allows: the business case runs on a three-point estimate of best, likely and worst case.`,
     { x: L, y: 4.30, w: CW, h: 0.30, fontFace: FONT_BODY, fontSize: 8.6, italic: true, color: "6A6A6A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
-  s.addText(`Basis: a 6-hour day holds capacity for 9 claims at ${F.stdTodayInt} min each, ~19 claims at ${F.bankedAfterInt} min each. A ceiling, not the 52 minutes freed above. Confirmed by GGW (8 Sep 2026).`,
+  s.addText(`Basis: a ${F.capHours}-hour day holds capacity for ${F.capToday} claims at ${F.stdTodayInt} min each, ~${F.capAfter} at ${F.bankedAfterInt} min each. A ceiling: 50 claims/day actually arrive, not ${F.capToday * 20}. Confirmed by GGW (8 Sep 2026).`,
     { x: L, y: 4.62, w: CW, h: 0.42, fontFace: FONT_BODY, fontSize: 8.6, color: "6A6A6A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
 
   // ---------- B: the business case ----------

@@ -156,6 +156,14 @@ intake_h_person_day   = claims_per_person_day * today_std / 60
 freed_h_person_day    = claims_per_person_day * saving / 60
 prod_h_per_day        = PRODUCTIVE_HOURS / WORKING_DAYS
 
+# Capacity ceiling: if a handler's whole productive day went to nothing but
+# intake, at each era's standard time. Not a claim about real throughput --
+# actual daily volume is fixed by how many claims arrive, not by capacity --
+# but it is the direct evidence behind "capacity roughly doubles."
+cap_min_day    = prod_h_per_day * 60
+cap_today      = cap_min_day / today_std
+cap_after      = cap_min_day / after_banked
+
 # triangulation, both ways
 today_hours_yr = claims_yr * today_std / 60
 share_support  = today_hours_yr / (INTAKE_STAFF * PRODUCTIVE_HOURS)
@@ -336,6 +344,8 @@ FIGURES = {
     "freedMinExact": f"{freed_h_person_day*60:.1f}",
     "afterMinPersonDay": f"{claims_per_person_day*after_banked:.0f}",
     "prodHPerDay": f"{prod_h_per_day:.1f}",
+    "capToday": f"{cap_today:.0f}", "capAfter": f"{cap_after:.0f}",
+    "capHours": f"{prod_h_per_day:.0f}",
     "shareDayTodayPct": f"{intake_h_person_day/prod_h_per_day*100:.0f}",
     "shareDayAfterPct": f"{claims_per_person_day*after_banked/60/prod_h_per_day*100:.0f}",
     "shareDayDeltaPts": f"{(intake_h_person_day-claims_per_person_day*after_banked/60)/prod_h_per_day*100:.0f}",
