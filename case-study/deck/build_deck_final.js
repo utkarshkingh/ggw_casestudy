@@ -706,7 +706,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   const s = pres.addSlide();
   s.background = { color: "FAFAF8" };
 
-  s.addText("Every minute is observed, and the redesign pays for itself in 14 months", {
+  s.addText(`Every minute is observed, and the redesign pays for itself in ${F.payback} months`, {
     x: 0.4, y: 0.13, w: 10.2, h: 0.34, fontFace: FONT_HEAD, fontSize: 14, bold: true, color: INK, isTextBox: true, margin: 0 });
   s.addText("APPENDIX · HOW THE NUMBERS ARE BUILT", { x: 7.0, y: 0.16, w: 5.93, h: 0.3, fontFace: FONT_BODY, fontSize: 9.5, bold: true, color: MUTED, charSpacing: 1.4, align: "right", isTextBox: true, margin: 0 });
 
@@ -735,7 +735,7 @@ const AMBER_BG = "FDF3E3", TEAL_BG = "E4F4F8", MAG_BG = "FBE9F1", INDIGO_BG = "E
   });
   s.addText(`We bank ${F.bankedAfterInt} min, not the ${F.stdAfter} the design allows: the business case runs on a three-point estimate of best, likely and worst case.`,
     { x: L, y: 4.30, w: CW, h: 0.30, fontFace: FONT_BODY, fontSize: 8.6, italic: true, color: "6A6A6A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
-  s.addText(`Basis: at ${F.stdTodayInt} minutes a claim, an 8-hour shift holds capacity for 12; at ${F.bankedAfterInt}, roughly 25. A ceiling, not the 52 minutes freed above. Confirmed by GGW (8 Sep 2026).`,
+  s.addText(`Basis: a 6-hour day holds capacity for 9 claims at ${F.stdTodayInt} min each, ~19 claims at ${F.bankedAfterInt} min each. A ceiling, not the 52 minutes freed above. Confirmed by GGW (8 Sep 2026).`,
     { x: L, y: 4.62, w: CW, h: 0.42, fontFace: FONT_BODY, fontSize: 8.6, color: "6A6A6A", isTextBox: true, margin: 0, lineSpacingMultiple: 1.15 });
 
   // ---------- B: the business case ----------

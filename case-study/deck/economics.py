@@ -38,13 +38,8 @@ USD_EUR          = 0.92
 # deliberately NOT deducted here -- a 38h tariff week is already paid time with
 # unpaid breaks excluded, and break time is separately inside the +30% allowance
 # on task time. Deducting it in both places would count it twice.
-WEEKS            = 52
-TARIFF_HOURS_WK  = 38
-LEAVE_DAYS       = 30
-PUBLIC_HOLIDAYS  = 10
-SICK_DAYS        = 11
-HOURS_PER_DAY    = TARIFF_HOURS_WK / 5
-PRODUCTIVE_HOURS = WEEKS * TARIFF_HOURS_WK - (LEAVE_DAYS + PUBLIC_HOLIDAYS + SICK_DAYS) * HOURS_PER_DAY
+WORK_HOURS_PER_DAY = 6.0    # assumed effective hours/day
+PRODUCTIVE_HOURS   = WORK_HOURS_PER_DAY * WORKING_DAYS
 
 # ===================================================== TIME STUDY (minutes)
 # One row per step a handler actually performs, costed separately for the two
@@ -227,7 +222,7 @@ print(f"  Productive hours / handler / yr  {PRODUCTIVE_HOURS:,.0f}")
 print(f"  Loaded cost per handler-hour     EUR {hourly:,.2f}")
 print(f"  Hours released / working day     {hours_day:,.1f}")
 print(f"  Hours released / year            {hours_yr:,.0f}  = {fte:.1f} FTE")
-print(f"  Per handler / year               {per_handler:,.0f} h  (~{per_handler/HOURS_PER_DAY/5:.1f} weeks)")
+print(f"  Per handler / year               {per_handler:,.0f} h  (~{per_handler/WORK_HOURS_PER_DAY/5:.1f} weeks)")
 print(f"  Per handler / working day        {per_handler/WORKING_DAYS*60:,.0f} minutes")
 print(f"  Capacity value / year            EUR {value_yr:,.0f}")
 print()
